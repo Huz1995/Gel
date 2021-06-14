@@ -9,15 +9,13 @@ class RegisterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
+      width: MediaQuery.of(context).size.width * .80,
       height: 60,
-      margin: EdgeInsets.all(20),
+      margin: EdgeInsets.fromLTRB(20, 0, 20, 30),
       child: ElevatedButton(
         child: Text(
           _buttonTitle,
-          style: TextStyle(
-            fontSize: 15,
-          ),
+          style: Theme.of(context).textTheme.button,
         ),
         onPressed: () => {},
         style: ButtonStyle(
@@ -31,7 +29,7 @@ class RegisterButton extends StatelessWidget {
             (Set<MaterialState> states) {
               if (states.contains(MaterialState.pressed)) {
                 print("pressed");
-                //if hair artist then main color is red and click is blue, vise versa
+                //if hair artist then main color is red and click is blue, vise versa"
                 return _isHairArtist
                     ? Theme.of(context).primaryColor
                     : Theme.of(context).accentColor;
