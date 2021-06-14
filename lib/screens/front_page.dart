@@ -11,9 +11,39 @@ class FrontPage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: MediaQuery.of(context).size.height / 2),
-            RegisterButton(),
-            RegisterButton()
+            Row(
+              children: [
+                Spacer(flex: 1),
+                Text("Skip"),
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * (6 / 10),
+            ),
+            RegisterButton("Join.", false),
+            RegisterButton("Join as Hair Artist.", true),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Already have an account?",
+                ),
+                GestureDetector(
+                  onTap: () => {
+                    print(
+                      "Gone to login",
+                    ),
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(3),
+                    child: Text(
+                      "Login",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),
