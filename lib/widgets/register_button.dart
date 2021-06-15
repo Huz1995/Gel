@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/text_size_provider.dart';
 
 class RegisterButton extends StatelessWidget {
   String _buttonTitle;
@@ -9,13 +12,18 @@ class RegisterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * .80,
-      height: 60,
-      margin: EdgeInsets.fromLTRB(20, 0, 20, 30),
+      width: MediaQuery.of(context).size.width * .75,
+      height: MediaQuery.of(context).size.height * .075,
+      margin: EdgeInsets.fromLTRB(
+        20,
+        0,
+        20,
+        MediaQuery.of(context).size.height * .03,
+      ),
       child: ElevatedButton(
         child: Text(
           _buttonTitle,
-          style: Theme.of(context).textTheme.button,
+          style: Provider.of<FontSize>(context).button,
         ),
         onPressed: () => {},
         style: ButtonStyle(

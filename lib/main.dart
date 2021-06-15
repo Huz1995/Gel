@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitDown,
     ]);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Gel',
@@ -24,13 +25,6 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.red.shade500,
         cardColor: Colors.grey.shade900,
         fontFamily: 'Poppins',
-        textTheme: TextTheme(
-          headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-          headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-          bodyText1: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-          bodyText2: TextStyle(fontSize: 16.0),
-          button: TextStyle(fontSize: 20.0, color: Colors.white),
-        ),
       ),
       home: FrontPage(),
     );

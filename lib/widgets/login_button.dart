@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/text_size_provider.dart';
 
 class Login extends StatelessWidget {
-  const Login({
-    Key? key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -12,7 +11,7 @@ class Login extends StatelessWidget {
       children: [
         Text(
           "Already have an account?",
-          style: Theme.of(context).textTheme.bodyText2,
+          style: Provider.of<FontSize>(context).bodyText2,
         ),
         GestureDetector(
           onTap: () => {
@@ -24,7 +23,7 @@ class Login extends StatelessWidget {
             margin: EdgeInsets.all(3),
             child: Text(
               "Login",
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Provider.of<FontSize>(context).bodyText1,
             ),
           ),
         )
