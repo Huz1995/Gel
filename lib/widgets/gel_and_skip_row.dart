@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './register_button.dart';
+
 class GelAndSkip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,9 +27,18 @@ class GelAndSkip extends StatelessWidget {
             ),
           ),
           Spacer(flex: 1),
-          FloatingActionButton(
+          ElevatedButton(
             onPressed: () => print("Skip"),
-            backgroundColor: Theme.of(context).cardColor.withOpacity(0.6),
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (states) => Theme.of(context).cardColor.withOpacity(0.6),
+              ),
+            ),
             child: Text(
               "Skip",
               style: Theme.of(context).textTheme.button,

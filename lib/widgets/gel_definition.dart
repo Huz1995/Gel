@@ -20,7 +20,7 @@ class GelDefinition extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 60,
+            height: 70,
             child: RotateAnimatedTextKit(
                 repeatForever: true,
                 duration: const Duration(milliseconds: 5000),

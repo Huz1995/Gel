@@ -67,9 +67,9 @@ flutter:
       fonts: 
         - asset: assets/fonts/AttackGraffiti-3zRBM.ttf
           weight: 400
-    - family: Saira
+    - family: Poppins
       fonts: 
-        - asset: assets/fonts/Saira-Regular.ttf
+        - asset: assets/fonts/Poppins-Regular.ttf
           weight: 400          
   #   - family: Trajan Pro
   #     fonts:
