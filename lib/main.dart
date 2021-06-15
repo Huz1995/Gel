@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import './screens/front_page.dart';
+import 'package:gel/screens/unauth_map_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Poppins',
       ),
       home: FrontPage(),
+      routes: {
+        '/map': (context) => MapPage(),
+      },
     );
   }
 }

@@ -27,7 +27,10 @@ class GelAndSkip extends StatelessWidget {
           Container(
             height: MediaQuery.of(context).size.height * .06,
             child: ElevatedButton(
-              onPressed: () => print("skip"),
+              onPressed: () => Navigator.pushNamed(
+                context,
+                '/map',
+              ),
               style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(

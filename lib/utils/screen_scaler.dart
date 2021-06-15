@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
+//this class gives scales depending on the dimenions of the device
+//we can create a safe soze for the dimensions
 class SizeConfig {
   BuildContext context;
 
-  // double _safeAreaHorizontal;
-  // double _safeAreaVertical;
-  // double safeBlockHorizontal;
-  // double safeBlockVertical;
-
-  SizeConfig(this.context) {}
+  SizeConfig(this.context);
 
   MediaQueryData get _mediaQueryData {
     return MediaQuery.of(context);
