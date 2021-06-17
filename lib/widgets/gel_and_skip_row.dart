@@ -38,8 +38,7 @@ class GelAndSkip extends StatelessWidget {
                   ),
                 ),
                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (states) => Theme.of(context).cardColor.withOpacity(0.6),
-                ),
+                    (states) => Theme.of(context).cardColor),
               ),
               child: Text(
                 "Skip",

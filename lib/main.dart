@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
       ),
       home: FrontPage(),
       routes: {
+        '/landing': (context) => FrontPage(),
         '/map': (context) => MapPage(),
       },
     );
