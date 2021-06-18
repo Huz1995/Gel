@@ -5,17 +5,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MapPage extends StatefulWidget {
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(51.4545, 2.5879),
-    zoom: 10,
-  );
-
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
-  final Completer<GoogleMapController> _controller = Completer();
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(51.4545, 2.5879),
+    zoom: 10,
+  );
 
   void _onMapCreated(GoogleMapController _ctr) {
     Geolocator.checkPermission().then((allowed) {
@@ -45,11 +43,10 @@ class _MapPageState extends State<MapPage> {
         children: [
           GoogleMap(
             mapType: MapType.normal,
-            initialCameraPosition: MapPage._kGooglePlex,
+            initialCameraPosition: _kGooglePlex,
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
             onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
               _onMapCreated(controller);
             },
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/text_size_provider.dart';
+import '../../providers/text_size_provider.dart';
 
 class Login extends StatelessWidget {
   @override

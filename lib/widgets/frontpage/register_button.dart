@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import '../providers/text_size_provider.dart';
+import '../../providers/text_size_provider.dart';
 
 class RegisterButton extends StatelessWidget {
   String _buttonTitle;
   bool _isHairArtist;
+  PanelController _pc;
 
-  RegisterButton(this._buttonTitle, this._isHairArtist);
+  RegisterButton(this._buttonTitle, this._isHairArtist, this._pc);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class RegisterButton extends StatelessWidget {
           _buttonTitle,
           style: Provider.of<FontSize>(context).button,
         ),
-        onPressed: () => {},
+        onPressed: () => {_pc.open()},
         style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
@@ -36,7 +38,6 @@ class RegisterButton extends StatelessWidget {
           backgroundColor: MaterialStateProperty.resolveWith<Color>(
             (Set<MaterialState> states) {
               if (states.contains(MaterialState.pressed)) {
-                print("pressed");
                 //if hair artist then main color is red and click is blue, vise versa"
                 return _isHairArtist
                     ? Theme.of(context).primaryColor

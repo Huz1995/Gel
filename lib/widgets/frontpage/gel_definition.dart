@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/text_size_provider.dart';
+import '../../providers/text_size_provider.dart';
 
 class GelDefinition extends StatelessWidget {
   @override
