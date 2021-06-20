@@ -17,6 +17,7 @@ class FrontPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => FontSize(context),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Center(
           child: SlidingUpPanel(
             boxShadow: [
@@ -28,7 +29,7 @@ class FrontPage extends StatelessWidget {
             ),
             controller: _pc,
             minHeight: 0,
-            maxHeight: MediaQuery.of(context).size.height * 2 / 3,
+            maxHeight: MediaQuery.of(context).size.height * 11 / 12,
             panel: Center(
               child: HProfRefForm(),
             ),

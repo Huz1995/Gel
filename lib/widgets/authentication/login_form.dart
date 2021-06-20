@@ -5,7 +5,7 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: Text("HP REG"),
+        child: Text("Login"),
       ),
     );
   }
