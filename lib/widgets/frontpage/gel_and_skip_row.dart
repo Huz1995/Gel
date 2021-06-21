@@ -15,19 +15,23 @@ class GelAndSkip extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.1,
+            width: MediaQuery.of(context).size.width * 0.075,
           ),
-          Text(
-            "GEL",
-            textScaleFactor: MediaQuery.of(context).textScaleFactor * 0.8,
-            style: TextStyle(
-              fontFamily: 'AttackGraffiti',
-              fontSize: 80,
-            ),
+          Image(
+            width: MediaQuery.of(context).size.width * 0.19,
+            image: AssetImage("assets/images/logo.png"),
           ),
+          // Text(
+          //   "GEL",
+          //   textScaleFactor: MediaQuery.of(context).textScaleFactor * 0.8,
+          //   style: TextStyle(
+          //     fontFamily: 'AttackGraffiti',
+          //     fontSize: 80,
+          //   ),
+          // ),
           Spacer(flex: 1),
           Container(
-            height: MediaQuery.of(context).size.height * .06,
+            height: MediaQuery.of(context).size.height * .05,
             child: ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(
@@ -51,7 +55,7 @@ class GelAndSkip extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.1,
+            width: MediaQuery.of(context).size.width * 0.075,
           ),
         ],
       ),

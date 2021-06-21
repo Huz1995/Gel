@@ -17,8 +17,8 @@ class RegisterButton extends StatelessWidget {
     final _slideUpState = Provider.of<SlideUpState>(context, listen: false);
 
     return Container(
-      width: MediaQuery.of(context).size.width * .75,
-      height: MediaQuery.of(context).size.height * .075,
+      width: MediaQuery.of(context).size.width * 0.85,
+      height: MediaQuery.of(context).size.height * .065,
       margin: EdgeInsets.fromLTRB(
         20,
         0,
@@ -35,13 +35,13 @@ class RegisterButton extends StatelessWidget {
           the user has the appriopate form to register ie hair prof or user*/
           if (!_isHairArtist)
             {
-              _slideUpState.mapButtonEventToState(
-                  FrontPageFormState(true, false, false)),
+              _slideUpState
+                  .mapButtonEventToState(Authentication.userRegistration),
             }
           else
             {
-              _slideUpState.mapButtonEventToState(
-                  FrontPageFormState(false, true, false)),
+              _slideUpState
+                  .mapButtonEventToState(Authentication.hairProfRegistration),
             },
           /*use the panel controller to open slide up panel*/
           _pc.open(),

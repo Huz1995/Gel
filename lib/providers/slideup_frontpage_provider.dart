@@ -10,17 +10,38 @@ class FrontPageFormState {
   FrontPageFormState(this.userReg, this.hpReg, this.login);
 }
 
+enum Authentication {
+  userRegistration,
+  hairProfRegistration,
+  login,
+}
+
+enum Panel {
+  closed,
+  open,
+}
+
 class SlideUpState with ChangeNotifier {
   FrontPageFormState _formState = FrontPageFormState(false, false, false);
-  bool _isSlideUpPanelActive = false;
+  bool _isSlideUpPanelOpen = false;
 
-  void mapButtonEventToState(FrontPageFormState event) {
-    _formState = event;
+  void mapButtonEventToState(Authentication event) {
+    if (event == Authentication.userRegistration) {
+      _formState = FrontPageFormState(true, false, false);
+    } else if (event == Authentication.hairProfRegistration) {
+      _formState = FrontPageFormState(false, true, false);
+    } else if (event == Authentication.login) {
+      _formState = FrontPageFormState(false, false, true);
+    }
     notifyListeners();
   }
 
-  void setSlideUpPanelActive(bool event) {
-    _isSlideUpPanelActive = event;
+  void setPanelState(Panel event) {
+    if (event == Panel.open) {
+      _isSlideUpPanelOpen = true;
+    } else if (event == Panel.closed) {
+      _isSlideUpPanelOpen = false;
+    }
     notifyListeners();
   }
 
@@ -28,8 +49,8 @@ class SlideUpState with ChangeNotifier {
     return _formState;
   }
 
-  bool get isSlideUpPanelActive {
-    return _isSlideUpPanelActive;
+  bool get isSlideUpPanelOpen {
+    return _isSlideUpPanelOpen;
     ;
   }
 }

@@ -19,8 +19,8 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _slideUpPanel = Provider.of<SlideUpState>(context);
     return SlidingUpPanel(
-      onPanelClosed: () => _slideUpPanel.setSlideUpPanelActive(false),
-      onPanelOpened: () => _slideUpPanel.setSlideUpPanelActive(true),
+      onPanelClosed: () => _slideUpPanel.setPanelState(Panel.closed),
+      onPanelOpened: () => _slideUpPanel.setPanelState(Panel.open),
       boxShadow: [
         BoxShadow(blurRadius: 50, color: Colors.grey),
       ],
@@ -39,7 +39,7 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
             if (value.formState.userReg) {
               return NormRegForm();
             } else if (value.formState.hpReg) {
-              return HProfRefForm();
+              return HProfRegForm();
             } else {
               return LoginForm();
             }
@@ -59,7 +59,7 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
           ),
           GelDefinition(),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.025,
+            height: MediaQuery.of(context).size.height * 0.015,
           ),
           RegisterButton("Join.", false, _pc),
           RegisterButton("Join as Hair Artist.", true, _pc),

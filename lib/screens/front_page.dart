@@ -22,8 +22,18 @@ class FrontPage extends StatelessWidget {
       ],
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Center(
-          child: SlidingUpPanelFrontPage(_pc),
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: new ColorFilter.mode(
+                  Colors.black.withOpacity(0.4), BlendMode.darken),
+              image: AssetImage("assets/images/background.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Center(
+            child: SlidingUpPanelFrontPage(_pc),
+          ),
         ),
       ),
     );

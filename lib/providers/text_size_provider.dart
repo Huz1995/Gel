@@ -22,15 +22,15 @@ class FontSize extends ChangeNotifier {
 
   TextStyle get bodyText1 {
     return TextStyle(
-      fontSize: MediaQuery.of(context).size.width * 0.045,
-      fontWeight: FontWeight.bold,
-      color: Colors.blue.shade900,
+      fontSize: MediaQuery.of(context).size.width * 0.06,
+      color: Theme.of(context).primaryColor,
     );
   }
 
   TextStyle get bodyText2 {
     return TextStyle(
-      fontSize: MediaQuery.of(context).size.width * 0.04,
+      fontSize: MediaQuery.of(context).size.width * 0.05,
+      color: Colors.white,
     );
   }
 }

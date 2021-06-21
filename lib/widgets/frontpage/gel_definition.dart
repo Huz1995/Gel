@@ -9,32 +9,32 @@ class GelDefinition extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(5),
-      width: MediaQuery.of(context).size.width * .75,
+      width: MediaQuery.of(context).size.width * .85,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            child: Text(
-              "gel",
-              style: Provider.of<FontSize>(context).bodyText1,
-            ),
-            margin: EdgeInsets.only(
-              bottom: 10,
-            ),
-          ),
+          // Container(
+          //   child: Text(
+          //     "GEL",
+          //     style: Provider.of<FontSize>(context).bodyText1,
+          //   ),
+          //   margin: EdgeInsets.only(
+          //     bottom: 10,
+          //   ),
+          // ),
           SizedBox(
             height: 70,
-            child: RotateAnimatedTextKit(
-                repeatForever: true,
-                duration: const Duration(milliseconds: 5000),
-                text: [
-                  "verb: \ntake a definite form or begin to work well.",
-                  "noun: \nis used to harden hair into a particular hairstyle.",
-                ],
-                textStyle: Provider.of<FontSize>(context).bodyText2,
-                textAlign: TextAlign.start,
-                alignment: AlignmentDirectional.topStart // or Alignment.topLeft
+            child: AnimatedTextKit(
+              animatedTexts: [
+                TyperAnimatedText(
+                  "The GEL between you \n\nand your Hair Professional...",
+                  textAlign: TextAlign.start,
+                  textStyle: Provider.of<FontSize>(context).bodyText2,
+                  speed: const Duration(milliseconds: 70),
                 ),
+              ],
+              repeatForever: true,
+            ),
           ),
         ],
       ),

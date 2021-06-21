@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         primaryColor: Colors.blueAccent.shade700,
         accentColor: Colors.red.shade500,
-        cardColor: Colors.grey.shade900,
-        fontFamily: 'Poppins',
+        cardColor: Colors.grey.shade800,
+        fontFamily: 'Omegle',
       ),
       home: FrontPage(),
       routes: {
