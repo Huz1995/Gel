@@ -19,7 +19,7 @@ class GelAndSkip extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.075,
           ),
           Image(
-            width: MediaQuery.of(context).size.width * 0.19,
+            width: MediaQuery.of(context).size.width * 0.2,
             image: AssetImage("assets/images/logo.png"),
           ),
           Spacer(flex: 1),

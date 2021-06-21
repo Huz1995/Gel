@@ -25,56 +25,64 @@ class _LoginFormState extends State<LoginForm> {
 
     return Container(
       child: Center(
-          child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: EdgeInsets.all(MediaQuery.of(context).size.width / 15),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Text(
-                          "Login",
-                          style: Provider.of<FontSize>(context).headline1,
-                          textAlign: TextAlign.left,
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 15),
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          labelText: 'Username',
-                          contentPadding:
-                              EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0)),
-                        ),
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: EdgeInsets.all(MediaQuery.of(context).size.width / 15),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height * 0.02),
+                      child: Text(
+                        "Login",
+                        style: Provider.of<FontSize>(context).headline1,
+                        textAlign: TextAlign.left,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15.0),
-                      child: TextFormField(
-                        obscureText: true,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          contentPadding:
-                              EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0)),
-                        ),
-                      ),
-                    ),
-                    SmallButton(
-                      buttonTitle: "Submit",
-                      backgroundColor: Theme.of(context).primaryColor,
-                      onPressed: () => print("submit"),
                     ),
                   ],
                 ),
-              ))),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: TextFormField(
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      labelText: 'Username',
+                      contentPadding:
+                          EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0)),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0),
+                  child: TextFormField(
+                    obscureText: true,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      contentPadding:
+                          EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0)),
+                    ),
+                  ),
+                ),
+                SmallButton(
+                  buttonTitle: "Submit",
+                  backgroundColor: Theme.of(context).primaryColor,
+                  onPressed: () => print("submit"),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -30,6 +30,7 @@ class _NormRegFormState extends State<NormRegForm> {
         child: RegisterFormFields(
           formKey: _formKey,
           formTitle: "Sign Up \nAs Hair Client",
+          isHairArtist: false,
         ),
       )),
     );
