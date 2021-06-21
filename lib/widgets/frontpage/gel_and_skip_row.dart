@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../providers/text_size_provider.dart';
 
 class GelAndSkip extends StatelessWidget {
-  PanelController _pc;
-
-  GelAndSkip(this._pc);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,7 +34,6 @@ class GelAndSkip extends StatelessWidget {
                   context,
                   '/map',
                 );
-                _pc.close();
               },
               style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
