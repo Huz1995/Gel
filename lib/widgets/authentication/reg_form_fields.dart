@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:gel/widgets/frontpage/small_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/text_size_provider.dart';
 
 class RegisterFormFields extends StatelessWidget {
-  final GlobalKey<FormState> _formKey;
-  final String _title;
+  const RegisterFormFields({
+    Key? key,
+    required GlobalKey<FormState> formKey,
+    required String formTitle,
+  })  : _formKey = formKey,
+        _formTitle = formTitle,
+        super(key: key);
 
-  RegisterFormFields(this._formKey, this._title);
+  final GlobalKey<FormState> _formKey;
+  final String _formTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +25,7 @@ class RegisterFormFields extends StatelessWidget {
           Row(
             children: [
               Text(
-                _title,
+                _formTitle,
                 style: Provider.of<FontSize>(context).headline1,
                 textAlign: TextAlign.left,
               ),
@@ -75,15 +82,10 @@ class RegisterFormFields extends StatelessWidget {
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              // Validate returns true if the form is valid, or false otherwise.
-              if (_formKey.currentState!.validate()) {
-// If the form is valid, display a snackbar. In the real world,
-                // you'd often call a server or save the information in a database.
-              }
-            },
-            child: Text('Submit'),
+          SmallButton(
+            buttonTitle: "Submit",
+            backgroundColor: Theme.of(context).primaryColor,
+            onPressed: () => print("submit"),
           ),
         ],
       ),

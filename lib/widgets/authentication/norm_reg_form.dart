@@ -27,7 +27,10 @@ class _NormRegFormState extends State<NormRegForm> {
       child: Center(
           child: Form(
         key: _formKey,
-        child: RegisterFormFields(_formKey, "Sign Up \nAs Hair Client"),
+        child: RegisterFormFields(
+          formKey: _formKey,
+          formTitle: "Sign Up \nAs Hair Client",
+        ),
       )),
     );
   }

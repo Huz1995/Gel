@@ -6,9 +6,13 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../providers/text_size_provider.dart';
 
 class Login extends StatelessWidget {
-  PanelController _pc;
+  const Login({
+    Key? key,
+    required PanelController panelController,
+  })  : _panelController = panelController,
+        super(key: key);
 
-  Login(this._pc);
+  final PanelController _panelController;
   @override
   Widget build(BuildContext context) {
     final _slideUpState = Provider.of<SlideUpState>(context, listen: false);
@@ -23,7 +27,7 @@ class Login extends StatelessWidget {
         GestureDetector(
           onTap: () => {
             _slideUpState.mapButtonEventToState(Authentication.login),
-            _pc.open(),
+            _panelController.open(),
           },
           child: Container(
             margin: EdgeInsets.all(3),

@@ -3,11 +3,12 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 //form state of the slide up panel when user is reg or log in
 class FrontPageFormState {
-  bool userReg;
-  bool hpReg;
+  bool userRegistration;
+  bool hairProfRegistration;
   bool login;
 
-  FrontPageFormState(this.userReg, this.hpReg, this.login);
+  FrontPageFormState(
+      this.userRegistration, this.hairProfRegistration, this.login);
 }
 
 enum Authentication {

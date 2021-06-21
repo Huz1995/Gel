@@ -13,15 +13,6 @@ class GelDefinition extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Container(
-          //   child: Text(
-          //     "GEL",
-          //     style: Provider.of<FontSize>(context).bodyText1,
-          //   ),
-          //   margin: EdgeInsets.only(
-          //     bottom: 10,
-          //   ),
-          // ),
           SizedBox(
             height: 70,
             child: AnimatedTextKit(

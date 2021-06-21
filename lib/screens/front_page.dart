@@ -7,7 +7,7 @@ import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/widgets/frontpage/sliding_up_panel.dart';
 
 class FrontPage extends StatelessWidget {
-  final PanelController _pc = new PanelController();
+  final PanelController _panelController = new PanelController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,9 @@ class FrontPage extends StatelessWidget {
             ),
           ),
           child: Center(
-            child: SlidingUpPanelFrontPage(_pc),
+            child: SlidingUpPanelFrontPage(
+              panelController: _panelController,
+            ),
           ),
         ),
       ),

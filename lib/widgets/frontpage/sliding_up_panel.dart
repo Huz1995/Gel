@@ -12,8 +12,13 @@ import 'package:gel/widgets/authentication/norm_reg_form.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SlidingUpPanelFrontPage extends StatelessWidget {
-  final PanelController _pc;
-  SlidingUpPanelFrontPage(this._pc);
+  const SlidingUpPanelFrontPage({
+    Key? key,
+    required PanelController panelController,
+  })  : _panelController = panelController,
+        super(key: key);
+
+  final PanelController _panelController;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,7 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
         topLeft: Radius.circular(50),
         topRight: Radius.circular(50),
       ),
-      controller: _pc,
+      controller: _panelController,
       minHeight: 0,
       maxHeight: MediaQuery.of(context).size.height * 11 / 12,
       panel: Center(
@@ -36,9 +41,9 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
         appropiate form on the slide up panel*/
         child: Consumer<SlideUpState>(
           builder: (context, value, child) {
-            if (value.formState.userReg) {
+            if (value.formState.userRegistration) {
               return NormRegForm();
-            } else if (value.formState.hpReg) {
+            } else if (value.formState.hairProfRegistration) {
               return HProfRegForm();
             } else {
               return LoginForm();
@@ -61,9 +66,16 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.015,
           ),
-          RegisterButton("Join.", false, _pc),
-          RegisterButton("Join as Hair Artist.", true, _pc),
-          Login(_pc),
+          RegisterButton(
+            buttonTitle: "Join.",
+            isHairArtist: false,
+            panelController: _panelController,
+          ),
+          RegisterButton(
+              buttonTitle: "Join as Hair Artist.",
+              isHairArtist: true,
+              panelController: _panelController),
+          Login(panelController: _panelController),
           SizedBox(
             height: 50,
           ),

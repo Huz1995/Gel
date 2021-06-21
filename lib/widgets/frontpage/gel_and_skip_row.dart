@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
+import 'package:gel/widgets/frontpage/small_button.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -21,38 +22,16 @@ class GelAndSkip extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.19,
             image: AssetImage("assets/images/logo.png"),
           ),
-          // Text(
-          //   "GEL",
-          //   textScaleFactor: MediaQuery.of(context).textScaleFactor * 0.8,
-          //   style: TextStyle(
-          //     fontFamily: 'AttackGraffiti',
-          //     fontSize: 80,
-          //   ),
-          // ),
           Spacer(flex: 1),
-          Container(
-            height: MediaQuery.of(context).size.height * .05,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  '/map',
-                );
-              },
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (states) => Theme.of(context).cardColor),
-              ),
-              child: Text(
-                "Skip",
-                style: Provider.of<FontSize>(context).button,
-              ),
-            ),
+          SmallButton(
+            buttonTitle: "Skip",
+            backgroundColor: Theme.of(context).cardColor,
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                '/map',
+              );
+            },
           ),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.075,

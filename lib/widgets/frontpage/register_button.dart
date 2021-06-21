@@ -6,11 +6,19 @@ import '../../providers/text_size_provider.dart';
 import '../../providers/slideup_frontpage_provider.dart';
 
 class RegisterButton extends StatelessWidget {
-  String _buttonTitle;
-  bool _isHairArtist;
-  PanelController _pc;
+  const RegisterButton({
+    Key? key,
+    required String buttonTitle,
+    required bool isHairArtist,
+    required PanelController panelController,
+  })  : _buttonTitle = buttonTitle,
+        _isHairArtist = isHairArtist,
+        _panelController = panelController,
+        super(key: key);
 
-  RegisterButton(this._buttonTitle, this._isHairArtist, this._pc);
+  final String _buttonTitle;
+  final bool _isHairArtist;
+  final PanelController _panelController;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +52,7 @@ class RegisterButton extends StatelessWidget {
                   .mapButtonEventToState(Authentication.hairProfRegistration),
             },
           /*use the panel controller to open slide up panel*/
-          _pc.open(),
+          _panelController.open(),
         },
         style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(

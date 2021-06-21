@@ -27,7 +27,10 @@ class _HProfRegFormState extends State<HProfRegForm> {
       child: Center(
           child: Form(
         key: _formKey,
-        child: RegisterFormFields(_formKey, "Sign Up \nAs Hair Professional"),
+        child: RegisterFormFields(
+          formKey: _formKey,
+          formTitle: "Sign Up \nAs Hair Professional",
+        ),
       )),
     );
   }
