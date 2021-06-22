@@ -33,6 +33,7 @@ dependencies:
   google_maps_flutter: ^2.0.6
   geolocator: ^7.1.0
   sliding_up_panel: ^2.0.0+1
+  email_validator: ^2.0.1
 
 dev_dependencies:
   flutter_test:

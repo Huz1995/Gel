@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
-import 'package:gel/widgets/frontpage/small_button.dart';
+import 'package:gel/widgets/small_button.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 

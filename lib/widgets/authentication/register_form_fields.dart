@@ -1,7 +1,8 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:gel/models/both_type_user_auth_model.dart';
-import 'package:gel/widgets/authentication/revamp_form_field.dart';
-import 'package:gel/widgets/frontpage/small_button.dart';
+import 'package:gel/widgets/authentication/revamped_form_field.dart';
+import 'package:gel/widgets/small_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/text_size_provider.dart';
@@ -30,12 +31,14 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
   final _passwordFocusNode = FocusNode();
   final _rpasswordFocusNode = FocusNode();
   final authData = BothTypeUserAuthData();
+  /*used to store entered password for validation*/
+  late String _password;
 
   void _saveForm() {
-    widget._formKey.currentState?.save();
-    print("form saved");
-    print(authData.username);
-    print(authData.password);
+    final isValid = widget._formKey.currentState?.validate();
+    if (isValid!) {
+      widget._formKey.currentState?.save();
+    }
   }
 
   @override
@@ -65,6 +68,12 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             onSaved: (value) => {
               authData.setUsername(value),
             },
+            validator: (value) {
+              if (value!.length < 2) {
+                return "Please enter a username greater then two characters";
+              }
+              return null;
+            },
           ),
           RevampFormField(
             fieldTitle: "Email",
@@ -73,6 +82,12 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             obscureText: false,
             onSaved: (value) => {
               authData.setEmail(value),
+            },
+            validator: (value) {
+              if (!EmailValidator.validate(value!, true, true)) {
+                return "Please enter a valid email address";
+              }
+              return null;
             },
           ),
           RevampFormField(
@@ -83,6 +98,13 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             onSaved: (value) => {
               authData.setPassword(value),
             },
+            validator: (value) {
+              if (value!.length <= 8) {
+                return "Password has to have more then 7 characters";
+              }
+              _password = value;
+              return null;
+            },
           ),
           RevampFormField(
             fieldTitle: "Repeat Password",
@@ -90,6 +112,12 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             nextFieldFocudNode: FocusNode(),
             obscureText: true,
             onSaved: (value) => {},
+            validator: (value) {
+              if (_password != value) {
+                return "Passwords do not match";
+              }
+              return null;
+            },
           ),
           SmallButton(
             buttonTitle: "Submit",

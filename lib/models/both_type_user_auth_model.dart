@@ -2,6 +2,7 @@ class BothTypeUserAuthData {
   String? _username;
   String? _email;
   String? _password;
+  bool? _isHairArtist;
 
   void setUsername(String? username) {
     _username = username;
@@ -15,6 +16,10 @@ class BothTypeUserAuthData {
     _password = password;
   }
 
+  void setIsHairArtist(bool? isHairArtist) {
+    _isHairArtist = _isHairArtist;
+  }
+
   String? get username {
     return _username;
   }
@@ -25,5 +30,9 @@ class BothTypeUserAuthData {
 
   String? get password {
     return _password;
+  }
+
+  bool? get isHairArtist {
+    return _isHairArtist;
   }
 }

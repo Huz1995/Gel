@@ -8,11 +8,13 @@ class RevampFormField extends StatelessWidget {
     required FocusNode nextFieldFocudNode,
     required bool obscureText,
     required void Function(String?)? onSaved,
+    required String? Function(String?)? validator,
   })  : _fieldFocusNode = fieldFocusNode,
         _nextFieldFocusNode = nextFieldFocudNode,
         _fieldTitle = fieldTitle,
         _obscureText = obscureText,
         _onSaved = onSaved,
+        _validator = validator,
         super(key: key);
 
   final FocusNode _fieldFocusNode;
@@ -20,7 +22,7 @@ class RevampFormField extends StatelessWidget {
   final String _fieldTitle;
   final bool _obscureText;
   final void Function(String?)? _onSaved;
-
+  final String? Function(String?)? _validator;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,6 +33,7 @@ class RevampFormField extends StatelessWidget {
         textInputAction: TextInputAction.next,
         focusNode: _fieldFocusNode,
         onSaved: _onSaved,
+        validator: _validator,
         onFieldSubmitted: (_) {
           FocusScope.of(context).unfocus();
           FocusScope.of(context).requestFocus(_nextFieldFocusNode);

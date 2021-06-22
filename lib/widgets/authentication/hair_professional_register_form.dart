@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gel/providers/slideup_frontpage_provider.dart';
-import 'package:gel/widgets/authentication/reg_form_fields.dart';
+import 'package:gel/widgets/authentication/register_form_fields.dart';
 
 class HProfRegForm extends StatefulWidget {
   @override

@@ -5,10 +5,10 @@ import './register_button.dart';
 import './login_button.dart';
 import './gel_and_skip_row.dart';
 import './gel_definition.dart';
-import '../authentication/hp_reg_form.dart';
+import '../authentication/hair_professional_register_form.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/widgets/authentication/login_form.dart';
-import 'package:gel/widgets/authentication/norm_reg_form.dart';
+import 'package:gel/widgets/authentication/hair_client_register_form.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SlidingUpPanelFrontPage extends StatelessWidget {
