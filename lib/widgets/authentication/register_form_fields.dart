@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:gel/models/both_type_user_auth_model.dart';
+import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/widgets/authentication/revamped_form_field.dart';
 import 'package:gel/widgets/small_button.dart';
 import 'package:provider/provider.dart';
@@ -34,15 +37,26 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
   /*used to store entered password for validation*/
   late String _password;
 
-  void _saveForm() {
-    final isValid = widget._formKey.currentState?.validate();
-    if (isValid!) {
-      widget._formKey.currentState?.save();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final slideUpState = Provider.of<SlideUpState>(context);
+
+    void _saveForm() {
+      /*validate the form*/
+      final isValid = widget._formKey.currentState?.validate();
+      if (isValid!) {
+        widget._formKey.currentState?.save();
+        slideUpState.panelController.close();
+        slideUpState.mapButtonEventToState(Authentication.login);
+        Timer(
+          Duration(seconds: 1),
+          () => {
+            slideUpState.panelController.open(),
+          },
+        );
+      }
+    }
+
     return Padding(
       padding: EdgeInsets.all(MediaQuery.of(context).size.width / 15),
       child: Column(

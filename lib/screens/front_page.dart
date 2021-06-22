@@ -17,7 +17,7 @@ class FrontPage extends StatelessWidget {
           create: (context) => FontSize(context),
         ),
         ChangeNotifierProvider(
-          create: (_) => SlideUpState(),
+          create: (_) => SlideUpState(_panelController),
         ),
       ],
       child: Scaffold(

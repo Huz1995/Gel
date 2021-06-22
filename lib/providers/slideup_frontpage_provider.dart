@@ -25,6 +25,9 @@ enum Panel {
 class SlideUpState with ChangeNotifier {
   FrontPageFormState _formState = FrontPageFormState(false, false, false);
   bool _isSlideUpPanelOpen = false;
+  PanelController _panelController;
+
+  SlideUpState(this._panelController);
 
   void mapButtonEventToState(Authentication event) {
     if (event == Authentication.userRegistration) {
@@ -52,6 +55,9 @@ class SlideUpState with ChangeNotifier {
 
   bool get isSlideUpPanelOpen {
     return _isSlideUpPanelOpen;
-    ;
+  }
+
+  PanelController get panelController {
+    return _panelController;
   }
 }
