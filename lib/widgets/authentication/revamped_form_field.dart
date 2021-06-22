@@ -7,16 +7,19 @@ class RevampFormField extends StatelessWidget {
     required FocusNode fieldFocusNode,
     required FocusNode nextFieldFocudNode,
     required bool obscureText,
+    required void Function(String?)? onSaved,
   })  : _fieldFocusNode = fieldFocusNode,
         _nextFieldFocusNode = nextFieldFocudNode,
         _fieldTitle = fieldTitle,
         _obscureText = obscureText,
+        _onSaved = onSaved,
         super(key: key);
 
   final FocusNode _fieldFocusNode;
   final FocusNode _nextFieldFocusNode;
   final String _fieldTitle;
   final bool _obscureText;
+  final void Function(String?)? _onSaved;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,7 @@ class RevampFormField extends StatelessWidget {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,
         focusNode: _fieldFocusNode,
+        onSaved: _onSaved,
         onFieldSubmitted: (_) {
           FocusScope.of(context).unfocus();
           FocusScope.of(context).requestFocus(_nextFieldFocusNode);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gel/models/both_type_user_auth_model.dart';
 import 'package:gel/widgets/authentication/revamp_form_field.dart';
 import 'package:gel/widgets/frontpage/small_button.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,6 @@ class RegisterFormFields extends StatefulWidget {
   final GlobalKey<FormState> _formKey;
   final String _formTitle;
   final bool _isHairArtist;
-
   @override
   _RegisterFormFieldsState createState() => _RegisterFormFieldsState();
 }
@@ -29,6 +29,14 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _rpasswordFocusNode = FocusNode();
+  final authData = BothTypeUserAuthData();
+
+  void _saveForm() {
+    widget._formKey.currentState?.save();
+    print("form saved");
+    print(authData.username);
+    print(authData.password);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,31 +62,41 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             fieldFocusNode: _usernameFocusNode,
             nextFieldFocudNode: _emailFocusNode,
             obscureText: false,
+            onSaved: (value) => {
+              authData.setUsername(value),
+            },
           ),
           RevampFormField(
             fieldTitle: "Email",
             fieldFocusNode: _emailFocusNode,
             nextFieldFocudNode: _passwordFocusNode,
             obscureText: false,
+            onSaved: (value) => {
+              authData.setEmail(value),
+            },
           ),
           RevampFormField(
             fieldTitle: "Password",
             fieldFocusNode: _passwordFocusNode,
             nextFieldFocudNode: _rpasswordFocusNode,
             obscureText: true,
+            onSaved: (value) => {
+              authData.setPassword(value),
+            },
           ),
           RevampFormField(
             fieldTitle: "Repeat Password",
             fieldFocusNode: _rpasswordFocusNode,
             nextFieldFocudNode: FocusNode(),
             obscureText: true,
+            onSaved: (value) => {},
           ),
           SmallButton(
             buttonTitle: "Submit",
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () => {
               FocusScope.of(context).unfocus(),
-              print("submit"),
+              _saveForm(),
             },
           ),
         ],
