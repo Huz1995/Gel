@@ -11,7 +11,7 @@ class FrontPageFormState {
       this.userRegistration, this.hairProfRegistration, this.login);
 }
 
-enum Authentication {
+enum AuthenticationForm {
   userRegistration,
   hairProfRegistration,
   login,
@@ -29,12 +29,12 @@ class SlideUpState with ChangeNotifier {
 
   SlideUpState(this._panelController);
 
-  void mapButtonEventToState(Authentication event) {
-    if (event == Authentication.userRegistration) {
+  void setFormOnPanel(AuthenticationForm event) {
+    if (event == AuthenticationForm.userRegistration) {
       _formState = FrontPageFormState(true, false, false);
-    } else if (event == Authentication.hairProfRegistration) {
+    } else if (event == AuthenticationForm.hairProfRegistration) {
       _formState = FrontPageFormState(false, true, false);
-    } else if (event == Authentication.login) {
+    } else if (event == AuthenticationForm.login) {
       _formState = FrontPageFormState(false, false, true);
     }
     notifyListeners();

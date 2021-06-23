@@ -24,7 +24,10 @@ class GelAndSkip extends StatelessWidget {
           ),
           Spacer(flex: 1),
           SmallButton(
-            buttonTitle: "Skip",
+            child: Text(
+              "Skip",
+              style: Provider.of<FontSize>(context).button,
+            ),
             backgroundColor: Theme.of(context).cardColor,
             onPressed: () {
               Navigator.pushNamed(

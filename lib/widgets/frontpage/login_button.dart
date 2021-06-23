@@ -26,7 +26,7 @@ class Login extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () => {
-            _slideUpState.mapButtonEventToState(Authentication.login),
+            _slideUpState.setFormOnPanel(AuthenticationForm.login),
             _panelController.open(),
           },
           child: Container(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gel/models/login_auth_model.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/small_button.dart';
@@ -11,6 +12,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   static final _formKey = GlobalKey<FormState>();
+  final loginData = LoginAuthData();
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,16 @@ class _LoginFormState extends State<LoginForm> {
     if (!_slideUpState.isSlideUpPanelOpen) {
       _formKey.currentState?.reset();
       FocusScope.of(context).unfocus();
+    }
+
+    void _saveForm() {
+      /*validate the form*/
+      final isValid = _formKey.currentState?.validate();
+      if (isValid!) {
+        _formKey.currentState?.save();
+        _slideUpState.panelController.close();
+        print(loginData.username);
+      }
     }
 
     return Container(
@@ -49,6 +61,15 @@ class _LoginFormState extends State<LoginForm> {
                   child: TextFormField(
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
+                    onSaved: (value) => {
+                      loginData.setUsername(value),
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Username field is blank";
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
                       labelText: 'Username',
                       contentPadding:
@@ -64,6 +85,15 @@ class _LoginFormState extends State<LoginForm> {
                     obscureText: true,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
+                    onSaved: (value) => {
+                      loginData.setPassword(value),
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Password field is empty";
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
                       labelText: 'Password',
                       contentPadding:
@@ -74,9 +104,14 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                 ),
                 SmallButton(
-                  buttonTitle: "Submit",
+                  child: Text(
+                    "Submit",
+                    style: Provider.of<FontSize>(context).button,
+                  ),
                   backgroundColor: Theme.of(context).primaryColor,
-                  onPressed: () => print("submit"),
+                  onPressed: () => {
+                    _saveForm(),
+                  },
                 ),
               ],
             ),

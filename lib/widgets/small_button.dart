@@ -6,15 +6,15 @@ class SmallButton extends StatelessWidget {
   const SmallButton(
       {Key? key,
       required Color backgroundColor,
-      required String buttonTitle,
+      required Widget child,
       required void Function() onPressed})
       : _backgroundColor = backgroundColor,
-        _title = buttonTitle,
+        _child = child,
         _onPressed = onPressed,
         super(key: key);
 
   final Color _backgroundColor;
-  final String _title;
+  final Widget _child;
   final void Function() _onPressed;
   @override
   Widget build(BuildContext context) {
@@ -29,10 +29,7 @@ class SmallButton extends StatelessWidget {
         backgroundColor: MaterialStateProperty.resolveWith<Color>(
             (states) => _backgroundColor),
       ),
-      child: Text(
-        _title,
-        style: Provider.of<FontSize>(context).button,
-      ),
+      child: _child,
     );
   }
 }

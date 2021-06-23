@@ -47,7 +47,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
       if (isValid!) {
         widget._formKey.currentState?.save();
         slideUpState.panelController.close();
-        slideUpState.mapButtonEventToState(Authentication.login);
+        slideUpState.setFormOnPanel(AuthenticationForm.login);
         Timer(
           Duration(seconds: 1),
           () => {
@@ -134,7 +134,10 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             },
           ),
           SmallButton(
-            buttonTitle: "Submit",
+            child: Text(
+              "Submit",
+              style: Provider.of<FontSize>(context).button,
+            ),
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () => {
               FocusScope.of(context).unfocus(),

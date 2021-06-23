@@ -43,13 +43,12 @@ class RegisterButton extends StatelessWidget {
           the user has the appriopate form to register ie hair prof or user*/
           if (!_isHairArtist)
             {
-              _slideUpState
-                  .mapButtonEventToState(Authentication.userRegistration),
+              _slideUpState.setFormOnPanel(AuthenticationForm.userRegistration),
             }
           else
             {
               _slideUpState
-                  .mapButtonEventToState(Authentication.hairProfRegistration),
+                  .setFormOnPanel(AuthenticationForm.hairProfRegistration),
             },
           /*use the panel controller to open slide up panel*/
           _panelController.open(),
@@ -67,10 +66,10 @@ class RegisterButton extends StatelessWidget {
                 //if hair artist then main color is red and onclick is blue, vise versa"
                 return _isHairArtist
                     ? Theme.of(context).primaryColor
-                    : Theme.of(context).accentColor;
+                    : Theme.of(context).accentColor.withOpacity(0.7);
               }
               return _isHairArtist
-                  ? Theme.of(context).accentColor
+                  ? Theme.of(context).accentColor.withOpacity(0.7)
                   : Theme.of(context).primaryColor;
             },
           ),

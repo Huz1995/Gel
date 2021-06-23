@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:gel/widgets/small_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -53,17 +54,14 @@ class _MapPageState extends State<MapPage> {
           Positioned(
             left: MediaQuery.of(context).size.width / 13,
             top: MediaQuery.of(context).size.height / 13,
-            child: FloatingActionButton(
-                elevation: 10,
-                backgroundColor: Theme.of(context).cardColor.withOpacity(0.8),
-                onPressed: () => Navigator.pop(context),
-                child: Container(
-                  margin: EdgeInsets.only(left: 6),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    size: MediaQuery.of(context).size.width * 0.045,
-                  ),
-                )),
+            child: SmallButton(
+              backgroundColor: Theme.of(context).cardColor.withOpacity(0.8),
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: MediaQuery.of(context).size.width * 0.045,
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
           )
         ],
       ),
