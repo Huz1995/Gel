@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:gel/models/both_type_user_auth_model.dart';
+import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/widgets/authentication/revamped_form_field.dart';
 import 'package:gel/widgets/small_button.dart';
@@ -29,29 +30,45 @@ class RegisterFormFields extends StatefulWidget {
 }
 
 class _RegisterFormFieldsState extends State<RegisterFormFields> {
-  final _usernameFocusNode = FocusNode();
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _rpasswordFocusNode = FocusNode();
-  final authData = BothTypeUserAuthData();
+  final _registerData = UserRegisterFormData();
   /*used to store entered password for validation*/
-  late String _password;
+  late String _password = '';
+  bool _emailTaken = false;
 
   @override
   Widget build(BuildContext context) {
-    final slideUpState = Provider.of<SlideUpState>(context);
+    final _slideUpState = Provider.of<SlideUpState>(context);
+    final _authenticationProvider =
+        Provider.of<AuthenticationProvider>(context);
 
     void _saveForm() {
       /*validate the form*/
       final isValid = widget._formKey.currentState?.validate();
       if (isValid!) {
+        /*save form at the new object authData*/
         widget._formKey.currentState?.save();
-        slideUpState.panelController.close();
-        slideUpState.setFormOnPanel(AuthenticationForm.login);
-        Timer(
-          Duration(seconds: 1),
-          () => {
-            slideUpState.panelController.open(),
+        /*use auth provider to complete registration and deal with any errors*/
+        _authenticationProvider.registerEmailPassword(_registerData).then(
+          (_) {
+            /*if auth sucessfull then return to login screen*/
+            _slideUpState.panelController.close();
+            _slideUpState.setFormOnPanel(AuthenticationForm.login);
+            Timer(
+              Duration(seconds: 1),
+              () => {
+                _slideUpState.panelController.open(),
+              },
+            );
+          },
+        ).catchError(
+          (onError) {
+            /*if login not sucessfull then show in validation*/
+            _emailTaken = true;
+            widget._formKey.currentState?.validate();
+            _emailTaken = false;
           },
         );
       }
@@ -75,31 +92,16 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             ],
           ),
           RevampFormField(
-            fieldTitle: "Username",
-            fieldFocusNode: _usernameFocusNode,
-            nextFieldFocudNode: _emailFocusNode,
-            obscureText: false,
-            onSaved: (value) => {
-              authData.setUsername(value),
-            },
-            validator: (value) {
-              if (value!.length < 2) {
-                return "Please enter a username greater then two characters";
-              }
-              return null;
-            },
-          ),
-          RevampFormField(
             fieldTitle: "Email",
             fieldFocusNode: _emailFocusNode,
             nextFieldFocudNode: _passwordFocusNode,
             obscureText: false,
-            onSaved: (value) => {
-              authData.setEmail(value),
-            },
+            onSaved: (value) => {_registerData.setEmail(value), 11},
             validator: (value) {
               if (!EmailValidator.validate(value!, true, true)) {
                 return "Please enter a valid email address";
+              } else if (_emailTaken) {
+                return "Sorry this email is already in use";
               }
               return null;
             },
@@ -110,7 +112,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             nextFieldFocudNode: _rpasswordFocusNode,
             obscureText: true,
             onSaved: (value) => {
-              authData.setPassword(value),
+              _registerData.setPassword(value),
             },
             validator: (value) {
               if (value!.length <= 8) {
@@ -125,7 +127,10 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             fieldFocusNode: _rpasswordFocusNode,
             nextFieldFocudNode: FocusNode(),
             obscureText: true,
-            onSaved: (value) => {},
+            onSaved: (value) => {
+              _registerData.setIsHairArtist(widget._isHairArtist),
+              print(widget._isHairArtist),
+            },
             validator: (value) {
               if (_password != value) {
                 return "Passwords do not match";

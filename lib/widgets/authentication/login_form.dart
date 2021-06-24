@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gel/models/login_auth_model.dart';
+import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/small_button.dart';
@@ -12,12 +13,13 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   static final _formKey = GlobalKey<FormState>();
-  final loginData = LoginAuthData();
+  final _loginData = LoginFormData();
 
   @override
   Widget build(BuildContext context) {
     final _slideUpState = Provider.of<SlideUpState>(context);
-
+    final _authenticationProvider =
+        Provider.of<AuthenticationProvider>(context);
     /*detectes if the slide up panel is not active so deletes the form
     data and focusnode*/
     if (!_slideUpState.isSlideUpPanelOpen) {
@@ -30,8 +32,8 @@ class _LoginFormState extends State<LoginForm> {
       final isValid = _formKey.currentState?.validate();
       if (isValid!) {
         _formKey.currentState?.save();
+        _authenticationProvider.loginUserIn(_loginData);
         _slideUpState.panelController.close();
-        print(loginData.username);
       }
     }
 
@@ -62,7 +64,7 @@ class _LoginFormState extends State<LoginForm> {
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     onSaved: (value) => {
-                      loginData.setUsername(value),
+                      _loginData.setEmail(value),
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -71,7 +73,7 @@ class _LoginFormState extends State<LoginForm> {
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: 'Username',
+                      labelText: 'Email',
                       contentPadding:
                           EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                       border: OutlineInputBorder(
@@ -86,7 +88,7 @@ class _LoginFormState extends State<LoginForm> {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     onSaved: (value) => {
-                      loginData.setPassword(value),
+                      _loginData.setPassword(value),
                     },
                     validator: (value) {
                       if (value!.isEmpty) {

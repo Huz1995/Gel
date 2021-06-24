@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import './screens/front_page.dart';
 import 'package:gel/screens/unauth_map_page.dart';
+import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/providers/text_size_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -17,21 +24,28 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Gel',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        primaryColor: Colors.blueAccent.shade700,
-        accentColor: Colors.red.shade500,
-        cardColor: Colors.grey.shade800,
-        fontFamily: 'Omegle',
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthenticationProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Gel',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          primaryColor: Colors.blueAccent.shade700,
+          accentColor: Colors.red.shade500,
+          cardColor: Colors.grey.shade800,
+          fontFamily: 'Omegle',
+        ),
+        home: FrontPage(),
+        routes: {
+          '/landing': (context) => FrontPage(),
+          '/map': (context) => MapPage(),
+        },
       ),
-      home: FrontPage(),
-      routes: {
-        '/landing': (context) => FrontPage(),
-        '/map': (context) => MapPage(),
-      },
     );
   }
 }

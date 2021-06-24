@@ -1,4 +1,4 @@
-class BothTypeUserAuthData {
+class UserRegisterFormData {
   String? _username;
   String? _email;
   String? _password;
@@ -17,7 +17,7 @@ class BothTypeUserAuthData {
   }
 
   void setIsHairArtist(bool? isHairArtist) {
-    _isHairArtist = _isHairArtist;
+    _isHairArtist = isHairArtist;
   }
 
   String? get username {
