@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1057403587134",
+    "project_id": "gel-auth-dev",
+    "storage_bucket": "gel-auth-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057403587134:android:734ae275447d271ccf9f6f",
+        "android_client_info": {
+          "package_name": "com.haripatel8895.gel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057403587134-6lrrnk9h8dijqq139niu5hq7qu912c6t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACL_AGjGWStRzPw4dzolBYz6693T8G0tA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057403587134-6lrrnk9h8dijqq139niu5hq7qu912c6t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
