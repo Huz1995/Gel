@@ -1,11 +1,11 @@
 class UserRegisterFormData {
-  String? _username;
+  String? _uid;
   String? _email;
   String? _password;
   bool? _isHairArtist;
 
-  void setUsername(String? username) {
-    _username = username;
+  void setUID(String? uid) {
+    _uid = uid;
   }
 
   void setEmail(String? email) {
@@ -20,8 +20,8 @@ class UserRegisterFormData {
     _isHairArtist = isHairArtist;
   }
 
-  String? get username {
-    return _username;
+  String? get uid {
+    return _uid;
   }
 
   String? get email {
@@ -34,5 +34,13 @@ class UserRegisterFormData {
 
   bool? get isHairArtist {
     return _isHairArtist;
+  }
+
+  Map<String, String> toObject() {
+    return {
+      'uid': _uid!,
+      'email': _email!,
+      'isHairArtist': _isHairArtist!.toString(),
+    };
   }
 }

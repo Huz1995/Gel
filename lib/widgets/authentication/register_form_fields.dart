@@ -36,7 +36,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
   final _registerData = UserRegisterFormData();
   /*used to store entered password for validation*/
   late String _password = '';
-  bool _emailTaken = false;
+  bool _registrationError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +66,10 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
         ).catchError(
           (onError) {
             /*if login not sucessfull then show in validation*/
-            _emailTaken = true;
+            print(onError);
+            _registrationError = true;
             widget._formKey.currentState?.validate();
-            _emailTaken = false;
+            _registrationError = false;
           },
         );
       }
@@ -100,7 +101,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             validator: (value) {
               if (!EmailValidator.validate(value!, true, true)) {
                 return "Please enter a valid email address";
-              } else if (_emailTaken) {
+              } else if (_registrationError) {
                 return "Sorry this email is already in use";
               }
               return null;
@@ -129,7 +130,6 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             obscureText: true,
             onSaved: (value) => {
               _registerData.setIsHairArtist(widget._isHairArtist),
-              print(widget._isHairArtist),
             },
             validator: (value) {
               if (_password != value) {
