@@ -14,6 +14,10 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   static final _formKey = GlobalKey<FormState>();
   final _loginData = LoginFormData();
+  bool _wrongPassword = false;
+  bool _userDoesntExist = false;
+  bool _invalidEmail = false;
+  bool _blockedAccount = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +31,39 @@ class _LoginFormState extends State<LoginForm> {
       FocusScope.of(context).unfocus();
     }
 
+    void errorValidation(dynamic onError) {
+      if (onError.toString() ==
+          "[firebase_auth/wrong-password] The password is invalid or the user does not have a password.") {
+        _wrongPassword = true;
+      } else if (onError.toString() ==
+          "[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.") {
+        _userDoesntExist = true;
+      } else if (onError.toString() ==
+          "[firebase_auth/invalid-email] The email address is badly formatted.") {
+        _invalidEmail = true;
+      } else if (onError.toString() ==
+          "[firebase_auth/too-many-requests] Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.") {
+        _blockedAccount = true;
+      }
+      _formKey.currentState?.validate();
+      _wrongPassword = false;
+      _userDoesntExist = false;
+      _invalidEmail = false;
+    }
+
     void _saveForm() {
       /*validate the form*/
       final isValid = _formKey.currentState?.validate();
       if (isValid!) {
         _formKey.currentState?.save();
-        _authenticationProvider.loginUserIn(_loginData);
-        _slideUpState.panelController.close();
+        _authenticationProvider
+            .loginUserIn(_loginData)
+            .then((_) => _slideUpState.panelController.close())
+            .catchError(
+          (onError) {
+            errorValidation(onError);
+          },
+        );
       }
     }
 
@@ -68,7 +98,11 @@ class _LoginFormState extends State<LoginForm> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Username field is blank";
+                        return "Email field is blank";
+                      } else if (_invalidEmail) {
+                        return "This is not a real email address";
+                      } else if (_userDoesntExist) {
+                        return "User doesn't exist";
                       }
                       return null;
                     },
@@ -93,6 +127,10 @@ class _LoginFormState extends State<LoginForm> {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Password field is empty";
+                      } else if (_wrongPassword) {
+                        return "Password is incorrect";
+                      } else if (_blockedAccount) {
+                        return "Password entered incorrectly - account blocked";
                       }
                       return null;
                     },

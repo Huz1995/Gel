@@ -6,6 +6,9 @@ import 'package:http/http.dart' as http;
 
 class AuthenticationProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _isLoggedIn = false;
+  late UserCredential _loggedInUser;
+  late bool _isHairArtist;
 
   //register with email
   Future registerEmailPassword(UserRegisterFormData registerData) async {
@@ -16,17 +19,15 @@ class AuthenticationProvider with ChangeNotifier {
         password: registerData.password!,
       );
       registerData.setUID(result.user!.uid);
-      print(result.user!.uid);
     } catch (e) {
       return Future.error(e);
     }
     /*send registration data to our api to store the user in mongoDb*/
     try {
-      var response = await http.post(
+      await http.post(
         Uri.parse("http://localhost:3000/api/user/registration"),
-        body: registerData.userObject(),
+        body: registerData.toObject(),
       );
-      print(response.body);
     } catch (e) {
       print(e);
     }
@@ -36,13 +37,27 @@ class AuthenticationProvider with ChangeNotifier {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: loginData.email!, password: loginData.password!);
-      print(result);
-      _auth.signOut();
+      _loggedInUser = result;
+      _isLoggedIn = true;
     } catch (e) {
       return Future.error(e);
     }
+    try {
+      var response = await http.get(
+        Uri.parse("http://localhost:3000/api/user/" + _loggedInUser.user!.uid),
+      );
+      _isHairArtist = (response.body == 'true');
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
   }
 
-  //sing out
+  bool get isLoggedIn {
+    return _isLoggedIn;
+  }
 
+  bool get isHairArtist {
+    return _isHairArtist;
+  }
 }
