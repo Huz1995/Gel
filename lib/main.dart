@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gel/screens/hair_client_after_login.dart';
+import 'package:gel/screens/hair_professional_after_login.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -40,7 +42,17 @@ class MyApp extends StatelessWidget {
           cardColor: Colors.grey.shade800,
           fontFamily: 'Omegle',
         ),
-        home: FrontPage(),
+        home: Consumer<AuthenticationProvider>(
+          builder: (context, value, child) {
+            if (value.isLoggedIn && value.isHairArtist) {
+              return HPdemo();
+            } else if (value.isLoggedIn && !value.isHairArtist) {
+              return ClientDemo();
+            } else {
+              return FrontPage();
+            }
+          },
+        ),
         routes: {
           '/landing': (context) => FrontPage(),
           '/map': (context) => MapPage(),

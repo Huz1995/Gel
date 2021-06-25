@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gel/models/both_type_user_auth_model.dart';
@@ -7,8 +9,8 @@ import 'package:http/http.dart' as http;
 class AuthenticationProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isLoggedIn = false;
-  late UserCredential _loggedInUser;
-  late bool _isHairArtist;
+  late UserCredential? _loggedInUser;
+  bool _isHairArtist = false;
 
   //register with email
   Future registerEmailPassword(UserRegisterFormData registerData) async {
@@ -44,13 +46,23 @@ class AuthenticationProvider with ChangeNotifier {
     }
     try {
       var response = await http.get(
-        Uri.parse("http://localhost:3000/api/user/" + _loggedInUser.user!.uid),
+        Uri.parse("http://localhost:3000/api/user/" + _loggedInUser!.user!.uid),
       );
       _isHairArtist = (response.body == 'true');
-      notifyListeners();
+      Timer(
+        Duration(seconds: 1),
+        () => {notifyListeners()},
+      );
     } catch (e) {
       print(e);
     }
+  }
+
+  void logUserOut() {
+    _isLoggedIn = false;
+    _isHairArtist = false;
+    _loggedInUser = null;
+    notifyListeners();
   }
 
   bool get isLoggedIn {
