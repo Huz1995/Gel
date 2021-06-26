@@ -55,13 +55,6 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
           (_) {
             /*if auth sucessfull then return to login screen*/
             _slideUpState.panelController.close();
-            _slideUpState.setFormOnPanel(AuthenticationForm.login);
-            Timer(
-              Duration(seconds: 1),
-              () => {
-                _slideUpState.panelController.open(),
-              },
-            );
           },
         ).catchError(
           (onError) {

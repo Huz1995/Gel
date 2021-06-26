@@ -3,7 +3,7 @@ import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/widgets/small_button.dart';
 import 'package:provider/provider.dart';
 
-class ClientDemo extends StatelessWidget {
+class HairClientHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);

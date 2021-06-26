@@ -8,7 +8,6 @@ import 'package:firebase_core/firebase_core.dart';
 import './screens/front_page.dart';
 import 'package:gel/screens/unauth_map_page.dart';
 import 'package:gel/providers/authentication_provider.dart';
-import 'package:gel/providers/text_size_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,9 +44,9 @@ class MyApp extends StatelessWidget {
         home: Consumer<AuthenticationProvider>(
           builder: (context, value, child) {
             if (value.isLoggedIn && value.isHairArtist) {
-              return HPdemo();
+              return HairArtistHomePage();
             } else if (value.isLoggedIn && !value.isHairArtist) {
-              return ClientDemo();
+              return HairClientHomePage();
             } else {
               return FrontPage();
             }

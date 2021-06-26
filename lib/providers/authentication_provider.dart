@@ -21,6 +21,12 @@ class AuthenticationProvider with ChangeNotifier {
         password: registerData.password!,
       );
       registerData.setUID(result.user!.uid);
+      _isLoggedIn = true;
+      _isHairArtist = registerData.isHairArtist!;
+      Timer(
+        Duration(seconds: 1),
+        () => {notifyListeners()},
+      );
     } catch (e) {
       return Future.error(e);
     }
