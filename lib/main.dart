@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import './screens/front_page.dart';
 import 'package:gel/screens/unauth_map_page.dart';
 import 'package:gel/providers/authentication_provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.blueAccent.shade700,
           accentColor: Colors.red.shade500,
           cardColor: Colors.grey.shade800,
-          fontFamily: 'Omegle',
+          textTheme: GoogleFonts.poppinsTextTheme(),
         ),
         home: Consumer<AuthenticationProvider>(
           builder: (context, value, child) {

@@ -3,7 +3,7 @@ import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
 import 'package:gel/widgets/general/small_button.dart';
-import 'package:gel/widgets/hairartistprofile/main_page.dart';
+import 'package:gel/widgets/hairartistprofile/hair_artist_profile_main_page.dart';
 import 'package:provider/provider.dart';
 
 class HairArtistHomePage extends StatefulWidget {

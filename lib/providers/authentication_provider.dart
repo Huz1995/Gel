@@ -90,7 +90,7 @@ class AuthenticationProvider with ChangeNotifier {
     return _isHairArtist;
   }
 
-  User get userCredentials {
+  User get loggedInUser {
     return _loggedInUser!;
   }
 
