@@ -78,4 +78,8 @@ class AuthenticationProvider with ChangeNotifier {
   bool get isHairArtist {
     return _isHairArtist;
   }
+
+  UserCredential get userCredentials {
+    return _loggedInUser!;
+  }
 }

@@ -6,7 +6,7 @@ import 'package:gel/models/both_type_user_auth_model.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/widgets/authentication/revamped_form_field.dart';
-import 'package:gel/widgets/small_button.dart';
+import 'package:gel/widgets/general/small_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/text_size_provider.dart';

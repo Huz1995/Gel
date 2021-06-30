@@ -3,7 +3,7 @@ import 'package:gel/models/login_auth_model.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
-import 'package:gel/widgets/small_button.dart';
+import 'package:gel/widgets/general/small_button.dart';
 import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {

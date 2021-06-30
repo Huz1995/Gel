@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
-import 'package:gel/widgets/small_button.dart';
+import 'package:gel/widgets/general/bottom_nav_bar.dart';
+import 'package:gel/widgets/general/small_button.dart';
+import 'package:gel/widgets/hairartistprofile/main_page.dart';
 import 'package:provider/provider.dart';
 
 class HairArtistHomePage extends StatefulWidget {
@@ -10,11 +12,12 @@ class HairArtistHomePage extends StatefulWidget {
 }
 
 class _HairArtistHomePageState extends State<HairArtistHomePage> {
-  int _selectedIndex = 3;
+  int _selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
+
     final List<Widget> _widgetOptions = <Widget>[
       Text(
         'Index 1: Explore',
@@ -22,9 +25,7 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
       Text(
         'Index 2: Messages',
       ),
-      Text(
-        'Index 3: Profile',
-      ),
+      HairArtistProfileMainPage(),
       SmallButton(
         backgroundColor: Colors.red,
         child: Text(
@@ -36,7 +37,7 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
       ),
     ];
 
-    void _onItemTapped(int index) {
+    void _onIconTapped(int index) {
       setState(() {
         _selectedIndex = index;
       });
@@ -63,32 +64,9 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
               ),
             ],
           ),
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            elevation: 100,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search),
-                label: 'Explore',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.message_outlined),
-                label: 'Messages',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.face),
-                label: 'Profile',
-                backgroundColor: Colors.purple,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
-                backgroundColor: Colors.pink,
-              ),
-            ],
-            onTap: _onItemTapped,
-            currentIndex: _selectedIndex,
-            selectedItemColor: Theme.of(context).primaryColor,
+          child: BottomNavBar(
+            selectedIndex: _selectedIndex,
+            onIconTapped: _onIconTapped,
           ),
         ),
       ),

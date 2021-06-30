@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:gel/widgets/small_button.dart';
+import 'package:gel/widgets/general/small_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -17,24 +17,28 @@ class _MapPageState extends State<MapPage> {
   );
 
   void _onMapCreated(GoogleMapController _ctr) {
-    Geolocator.checkPermission().then((allowed) {
-      if (allowed == LocationPermission.deniedForever) {
-        print("using old coords");
-      } else {
-        print("functioncall");
-        Geolocator.getCurrentPosition().then((pos) {
-          print(pos);
-          _ctr.animateCamera(
-            CameraUpdate.newCameraPosition(
-              CameraPosition(
-                target: LatLng(pos.latitude, pos.longitude),
-                zoom: 10,
-              ),
-            ),
+    Geolocator.checkPermission().then(
+      (allowed) {
+        if (allowed == LocationPermission.deniedForever) {
+          print("using old coords");
+        } else {
+          print("functioncall");
+          Geolocator.getCurrentPosition().then(
+            (pos) {
+              print(pos);
+              _ctr.animateCamera(
+                CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: LatLng(pos.latitude, pos.longitude),
+                    zoom: 10,
+                  ),
+                ),
+              );
+            },
           );
-        });
-      }
-    });
+        }
+      },
+    );
   }
 
   @override

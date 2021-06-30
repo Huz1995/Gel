@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
-import 'package:gel/widgets/small_button.dart';
+import 'package:gel/widgets/general/small_button.dart';
 import 'package:provider/provider.dart';
 
 class HairClientHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-
+    print(_authProvider.userCredentials);
+    print(_authProvider.isHairArtist);
     return Scaffold(
       body: Center(
         child: SmallButton(
