@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/widgets/general/small_button.dart';
+import 'package:provider/provider.dart';
 
 class HairArtistProfileMainPage extends StatelessWidget {
   const HairArtistProfileMainPage({
@@ -7,6 +10,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthenticationProvider>(context, listen: false);
     return Container(
       height: double.infinity,
       width: double.infinity,
@@ -19,29 +23,34 @@ class HairArtistProfileMainPage extends StatelessWidget {
           Stack(
             children: [
               Container(
-                width: MediaQuery.of(context).size.width / 4,
-                height: MediaQuery.of(context).size.width / 4,
+                width: MediaQuery.of(context).size.width / 5,
+                height: MediaQuery.of(context).size.width / 5,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor.withOpacity(0.3),
+                  color: Theme.of(context).cardColor.withOpacity(0.2),
                   borderRadius: BorderRadius.all(
                     Radius.circular(
-                      MediaQuery.of(context).size.width / 4,
+                      MediaQuery.of(context).size.width / 5,
                     ),
                   ),
                 ),
               ),
               Positioned(
-                left: MediaQuery.of(context).size.width * 0.078,
-                bottom: MediaQuery.of(context).size.width * 0.078,
+                left: MediaQuery.of(context).size.width * 0.060,
+                bottom: MediaQuery.of(context).size.width * 0.060,
 
                 //bottom: MediaQuery.of(context).size.width / 4,
                 child: Icon(
                   Icons.person,
-                  size: 40,
+                  size: 35,
                 ),
-              )
+              ),
             ],
           ),
+          SmallButton(
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Text("      Edit Profile      "),
+            onPressed: () => print(auth.idToken),
+          )
         ],
       ),
     );

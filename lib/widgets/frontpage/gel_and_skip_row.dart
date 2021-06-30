@@ -24,7 +24,7 @@ class GelAndSkip extends StatelessWidget {
           SmallButton(
             child: Text(
               "Skip",
-              style: Provider.of<FontSize>(context).button,
+              style: Provider.of<FontSizeProvider>(context).button,
             ),
             backgroundColor: Theme.of(context).cardColor,
             onPressed: () {

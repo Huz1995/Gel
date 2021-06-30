@@ -22,12 +22,12 @@ enum Panel {
   open,
 }
 
-class SlideUpState with ChangeNotifier {
+class SlideUpStateProvider with ChangeNotifier {
   FrontPageFormState _formState = FrontPageFormState(false, false, false);
   bool _isSlideUpPanelOpen = false;
   PanelController _panelController;
 
-  SlideUpState(this._panelController);
+  SlideUpStateProvider(this._panelController);
 
   void setFormOnPanel(AuthenticationForm event) {
     if (event == AuthenticationForm.userRegistration) {

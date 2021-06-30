@@ -22,7 +22,7 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _slideUpPanel = Provider.of<SlideUpState>(context);
+    final _slideUpPanel = Provider.of<SlideUpStateProvider>(context);
     return SlidingUpPanel(
       onPanelClosed: () => _slideUpPanel.setPanelState(Panel.closed),
       onPanelOpened: () => _slideUpPanel.setPanelState(Panel.open),
@@ -39,7 +39,7 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
       panel: Center(
         /*consumer is listening to the changes in formstate and rebuils 
         appropiate form on the slide up panel*/
-        child: Consumer<SlideUpState>(
+        child: Consumer<SlideUpStateProvider>(
           builder: (context, value, child) {
             if (value.formState.userRegistration) {
               return NormRegForm();

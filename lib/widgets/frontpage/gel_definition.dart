@@ -20,7 +20,7 @@ class GelDefinition extends StatelessWidget {
                 TyperAnimatedText(
                   "The GEL between you \n\nand your Hair Professional...",
                   textAlign: TextAlign.start,
-                  textStyle: Provider.of<FontSize>(context).bodyText2,
+                  textStyle: Provider.of<FontSizeProvider>(context).bodyText2,
                   speed: const Duration(milliseconds: 70),
                 ),
               ],

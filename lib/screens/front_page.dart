@@ -14,10 +14,10 @@ class FrontPage extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => FontSize(context),
+          create: (context) => FontSizeProvider(context),
         ),
         ChangeNotifierProvider(
-          create: (_) => SlideUpState(_panelController),
+          create: (_) => SlideUpStateProvider(_panelController),
         ),
       ],
       child: Scaffold(

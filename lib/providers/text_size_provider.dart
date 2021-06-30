@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 //proivder that sends font sized depending on the screen size
-class FontSize extends ChangeNotifier {
+class FontSizeProvider extends ChangeNotifier {
   BuildContext context;
 
-  FontSize(this.context);
+  FontSizeProvider(this.context);
 
   TextStyle get button {
     return TextStyle(

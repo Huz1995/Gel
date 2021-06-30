@@ -22,7 +22,8 @@ class RegisterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _slideUpState = Provider.of<SlideUpState>(context, listen: false);
+    final _slideUpState =
+        Provider.of<SlideUpStateProvider>(context, listen: false);
 
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
@@ -36,7 +37,7 @@ class RegisterButton extends StatelessWidget {
       child: ElevatedButton(
         child: Text(
           _buttonTitle,
-          style: Provider.of<FontSize>(context).button,
+          style: Provider.of<FontSizeProvider>(context).button,
         ),
         onPressed: () => {
           /*when the apprioate button is pressed will update formstate so

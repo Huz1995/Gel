@@ -8,8 +8,9 @@ import 'package:http/http.dart' as http;
 
 class AuthenticationProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  late User? _loggedInUser;
+  late String? _idToken;
   bool _isLoggedIn = false;
-  late UserCredential? _loggedInUser;
   bool _isHairArtist = false;
 
   //register with email
@@ -23,9 +24,13 @@ class AuthenticationProvider with ChangeNotifier {
       registerData.setUID(result.user!.uid);
       _isLoggedIn = true;
       _isHairArtist = registerData.isHairArtist!;
+      _loggedInUser = _auth.currentUser!;
+      _idToken = await _auth.currentUser!.getIdToken();
       Timer(
         Duration(seconds: 1),
-        () => {notifyListeners()},
+        () => {
+          notifyListeners(),
+        },
       );
     } catch (e) {
       return Future.error(e);
@@ -43,32 +48,37 @@ class AuthenticationProvider with ChangeNotifier {
 
   Future loginUserIn(LoginFormData loginData) async {
     try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
           email: loginData.email!, password: loginData.password!);
-      print(result);
-      _loggedInUser = result;
+      _loggedInUser = _auth.currentUser!;
       _isLoggedIn = true;
+      _idToken = await _loggedInUser!.getIdToken();
     } catch (e) {
+      print(e);
       return Future.error(e);
     }
     try {
       var response = await http.get(
-        Uri.parse("http://localhost:3000/api/user/" + _loggedInUser!.user!.uid),
+        Uri.parse("http://localhost:3000/api/user/" + _loggedInUser!.uid),
       );
       _isHairArtist = (response.body == 'true');
       Timer(
         Duration(seconds: 1),
-        () => {notifyListeners()},
+        () => {
+          notifyListeners(),
+        },
       );
     } catch (e) {
       print(e);
     }
   }
 
-  void logUserOut() {
+  void logUserOut() async {
     _isLoggedIn = false;
     _isHairArtist = false;
     _loggedInUser = null;
+    _idToken = null;
+    _auth.signOut();
     notifyListeners();
   }
 
@@ -80,7 +90,11 @@ class AuthenticationProvider with ChangeNotifier {
     return _isHairArtist;
   }
 
-  UserCredential get userCredentials {
+  User get userCredentials {
     return _loggedInUser!;
+  }
+
+  String get idToken {
+    return _idToken!;
   }
 }

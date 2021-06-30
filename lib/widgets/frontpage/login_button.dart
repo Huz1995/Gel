@@ -15,14 +15,15 @@ class Login extends StatelessWidget {
   final PanelController _panelController;
   @override
   Widget build(BuildContext context) {
-    final _slideUpState = Provider.of<SlideUpState>(context, listen: false);
+    final _slideUpState =
+        Provider.of<SlideUpStateProvider>(context, listen: false);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           "Already have an account?",
-          style: Provider.of<FontSize>(context).bodyText2,
+          style: Provider.of<FontSizeProvider>(context).bodyText2,
         ),
         GestureDetector(
           onTap: () => {
@@ -33,7 +34,7 @@ class Login extends StatelessWidget {
             margin: EdgeInsets.all(3),
             child: Text(
               "Login",
-              style: Provider.of<FontSize>(context).bodyText1,
+              style: Provider.of<FontSizeProvider>(context).bodyText1,
             ),
           ),
         )

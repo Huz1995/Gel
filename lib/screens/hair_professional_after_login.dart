@@ -48,7 +48,7 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => FontSize(context),
+          create: (context) => FontSizeProvider(context),
         ),
       ],
       child: Scaffold(

@@ -21,7 +21,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _slideUpState = Provider.of<SlideUpState>(context);
+    final _slideUpState = Provider.of<SlideUpStateProvider>(context);
     final _authenticationProvider =
         Provider.of<AuthenticationProvider>(context);
     /*detectes if the slide up panel is not active so deletes the form
@@ -82,7 +82,7 @@ class _LoginFormState extends State<LoginForm> {
                           bottom: MediaQuery.of(context).size.height * 0.02),
                       child: Text(
                         "Login",
-                        style: Provider.of<FontSize>(context).headline1,
+                        style: Provider.of<FontSizeProvider>(context).headline1,
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -146,7 +146,7 @@ class _LoginFormState extends State<LoginForm> {
                 SmallButton(
                   child: Text(
                     "Submit",
-                    style: Provider.of<FontSize>(context).button,
+                    style: Provider.of<FontSizeProvider>(context).button,
                   ),
                   backgroundColor: Theme.of(context).primaryColor,
                   onPressed: () => {

@@ -1,15 +1,11 @@
-import 'dart:async';
-
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:gel/models/both_type_user_auth_model.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
+import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/authentication/revamped_form_field.dart';
 import 'package:gel/widgets/general/small_button.dart';
 import 'package:provider/provider.dart';
-
-import '../../providers/text_size_provider.dart';
 
 class RegisterFormFields extends StatefulWidget {
   RegisterFormFields({
@@ -41,7 +37,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
 
   @override
   Widget build(BuildContext context) {
-    final _slideUpState = Provider.of<SlideUpState>(context);
+    final _slideUpState = Provider.of<SlideUpStateProvider>(context);
     final _authenticationProvider =
         Provider.of<AuthenticationProvider>(context);
 
@@ -90,7 +86,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
                     bottom: MediaQuery.of(context).size.height * 0.02),
                 child: Text(
                   widget._formTitle,
-                  style: Provider.of<FontSize>(context).headline1,
+                  style: Provider.of<FontSizeProvider>(context).headline1,
                   textAlign: TextAlign.left,
                 ),
               ),
@@ -145,7 +141,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
           SmallButton(
             child: Text(
               "Submit",
-              style: Provider.of<FontSize>(context).button,
+              style: Provider.of<FontSizeProvider>(context).button,
             ),
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () => {

@@ -14,7 +14,7 @@ class _HProfRegFormState extends State<HProfRegForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _slideUpState = Provider.of<SlideUpState>(context);
+    final _slideUpState = Provider.of<SlideUpStateProvider>(context);
 
     /*detectes if the slide up panel is not active so deletes the form
     data and focusnode*/
