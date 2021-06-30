@@ -4,14 +4,16 @@ import 'package:gel/providers/authentication_provider.dart';
 
 //proivder that sends font sized depending on the screen size
 class HairArtistProfileProvider extends ChangeNotifier {
-  HairArtistUserProfile? _hairArtistUser;
-
+  late HairArtistUserProfile _userProfile;
   HairArtistProfileProvider(AuthenticationProvider auth) {
-    _hairArtistUser = HairArtistUserProfile(
+    _userProfile = new HairArtistUserProfile(
       auth.loggedInUser.uid,
       auth.loggedInUser.email!,
       auth.idToken,
       auth.isHairArtist,
     );
+  }
+  HairArtistUserProfile get hairArtistProfile {
+    return _userProfile;
   }
 }

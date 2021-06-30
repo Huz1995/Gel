@@ -17,6 +17,15 @@ class FontSizeProvider extends ChangeNotifier {
     return TextStyle(
       fontSize: MediaQuery.of(context).size.width * 0.08,
       fontWeight: FontWeight.bold,
+      color: Colors.black,
+    );
+  }
+
+  TextStyle get headline2 {
+    return TextStyle(
+      fontSize: MediaQuery.of(context).size.width * 0.06,
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
     );
   }
 
