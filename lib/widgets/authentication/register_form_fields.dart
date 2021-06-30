@@ -36,13 +36,27 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
   final _registerData = UserRegisterFormData();
   /*used to store entered password for validation*/
   late String _password = '';
-  bool _registrationError = false;
+  bool _userAlreadyExists = false;
+  bool _invalidEmail = false;
 
   @override
   Widget build(BuildContext context) {
     final _slideUpState = Provider.of<SlideUpState>(context);
     final _authenticationProvider =
         Provider.of<AuthenticationProvider>(context);
+
+    void errorValidation(dynamic onError) {
+      if (onError.toString() ==
+          "[firebase_auth/email-already-in-use] The email address is already in use by another account.") {
+        _userAlreadyExists = true;
+      } else if (onError.toString() ==
+          "[firebase_auth/invalid-email] The email address is badly formatted.") {
+        _invalidEmail = true;
+      }
+      widget._formKey.currentState?.validate();
+      _userAlreadyExists = false;
+      _invalidEmail = false;
+    }
 
     void _saveForm() {
       /*validate the form*/
@@ -59,10 +73,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
         ).catchError(
           (onError) {
             /*if login not sucessfull then show in validation*/
-            print(onError);
-            _registrationError = true;
-            widget._formKey.currentState?.validate();
-            _registrationError = false;
+            errorValidation(onError);
           },
         );
       }
@@ -92,10 +103,10 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             obscureText: false,
             onSaved: (value) => {_registerData.setEmail(value), 11},
             validator: (value) {
-              if (!EmailValidator.validate(value!, true, true)) {
-                return "Please enter a valid email address";
-              } else if (_registrationError) {
+              if (_userAlreadyExists) {
                 return "Sorry this email is already in use";
+              } else if (_invalidEmail) {
+                return "Sorry this email address is badly formatted";
               }
               return null;
             },

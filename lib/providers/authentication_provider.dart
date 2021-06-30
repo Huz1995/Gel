@@ -45,6 +45,7 @@ class AuthenticationProvider with ChangeNotifier {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: loginData.email!, password: loginData.password!);
+      print(result);
       _loggedInUser = result;
       _isLoggedIn = true;
     } catch (e) {
