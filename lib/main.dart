@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.blueAccent.shade700,
           accentColor: Colors.red.shade500,
           cardColor: Colors.grey.shade800,
-          textTheme: GoogleFonts.poppinsTextTheme(),
+          textTheme: GoogleFonts.questrialTextTheme(),
         ),
         home: Consumer<AuthenticationProvider>(
           builder: (context, value, child) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
 import 'package:gel/widgets/general/small_button.dart';
@@ -49,6 +50,9 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
       providers: [
         ChangeNotifierProvider(
           create: (context) => FontSizeProvider(context),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => HairArtistProfileProvider(_authProvider),
         ),
       ],
       child: Scaffold(

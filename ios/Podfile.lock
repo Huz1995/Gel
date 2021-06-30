@@ -61,6 +61,8 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - path_provider (0.0.1):
+    - Flutter
   - PromisesObjC (1.2.12)
 
 DEPENDENCIES:
@@ -69,6 +71,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
 
 SPEC REPOS:
   trunk:
@@ -94,6 +97,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/geolocator/ios"
   google_maps_flutter:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
 
 SPEC CHECKSUMS:
   Firebase: 73c3e3b216ec1ecbc54d2ffdd4670c65c749edb1
@@ -110,6 +115,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: f8a43108b38a68eebe8b3540e1f4f2d28843ce20
   GTMSessionFetcher: 36689134877faeb055b27dfa4ccc9ceaa42e029e
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
