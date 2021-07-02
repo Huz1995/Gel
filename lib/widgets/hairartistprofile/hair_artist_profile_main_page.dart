@@ -1,17 +1,39 @@
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
-import 'package:gel/providers/text_size_provider.dart';
+import 'package:gel/widgets/general_profile/no_profile_pic_icon.dart';
+import 'package:gel/widgets/general_profile/profile_tab_bar.dart';
 import 'package:gel/widgets/general/small_button.dart';
 import 'package:gel/widgets/hairartistprofile/about.dart';
 import 'package:gel/widgets/hairartistprofile/gallery.dart';
 import 'package:gel/widgets/hairartistprofile/reviews.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class HairArtistProfileMainPage extends StatelessWidget {
+class HairArtistProfileMainPage extends StatefulWidget {
   const HairArtistProfileMainPage({
     Key? key,
   }) : super(key: key);
+
+  @override
+  _HairArtistProfileMainPageState createState() =>
+      _HairArtistProfileMainPageState();
+}
+
+class _HairArtistProfileMainPageState extends State<HairArtistProfileMainPage> {
+  final _picker = ImagePicker();
+  List<File> _pickedImages = [];
+
+  void _pickImage() async {
+    final PickedFile? image =
+        await _picker.getImage(source: ImageSource.gallery);
+    setState(() {
+      _pickedImages.add(File(image!.path));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +43,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
         Provider.of<HairArtistProfileProvider>(context, listen: false);
     String _emailTextDisplay =
         "@" + _hairArtistProfileProvider.hairArtistProfile.email.split("@")[0];
+
     final _phoneHeight = MediaQuery.of(context).size.height;
     final _phoneWidth = MediaQuery.of(context).size.width;
     return DefaultTabController(
@@ -44,13 +67,13 @@ class HairArtistProfileMainPage extends StatelessWidget {
                       color: Colors.black,
                       size: 30,
                     ),
-                    onPressed: () {},
+                    onPressed: _pickImage,
                   ),
                 ),
               ],
               elevation: 0,
               backgroundColor: Colors.white,
-              expandedHeight: _phoneHeight * 0.38,
+              expandedHeight: _phoneHeight * 0.35,
               collapsedHeight: _phoneHeight * 0.1,
               flexibleSpace: LayoutBuilder(
                 builder: (context, constraints) {
@@ -59,7 +82,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
                     centerTitle: true,
                     title: AnimatedOpacity(
                       opacity: 1,
-                      duration: Duration(milliseconds: 10),
+                      duration: Duration(milliseconds: 1),
                       child: Container(
                         margin: EdgeInsets.only(
                           bottom: _phoneHeight * 0.06,
@@ -75,38 +98,17 @@ class HairArtistProfileMainPage extends StatelessWidget {
                     background: Column(
                       children: [
                         SizedBox(
-                          height: _phoneHeight * 0.1,
+                          height: _phoneHeight * 0.08,
                         ),
-                        Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: _phoneWidth / 10,
-                              backgroundColor:
-                                  Theme.of(context).cardColor.withOpacity(0.3),
-                            ),
-                            Positioned(
-                              left: _phoneWidth * 0.060,
-                              bottom: _phoneWidth * 0.060,
-                              //bottom: _phoneWidth / 4,
-                              child: Icon(
-                                Icons.person,
-                                size: 35,
-                              ),
-                            ),
-                          ],
-                        ),
+                        NoProfilePicIcon(phoneWidth: _phoneWidth),
                         Padding(
                           padding: EdgeInsets.all(
-                            _phoneHeight * 0.025,
+                            _phoneHeight * 0.015,
                           ),
                           child: Text(
                             _emailTextDisplay,
-                            style: Provider.of<FontSizeProvider>(context)
-                                .headline2,
+                            style: Theme.of(context).textTheme.headline5,
                           ),
-                        ),
-                        SizedBox(
-                          height: _phoneHeight * 0.01,
                         ),
                         SmallButton(
                           backgroundColor: Theme.of(context).primaryColor,
@@ -119,50 +121,12 @@ class HairArtistProfileMainPage extends StatelessWidget {
                 },
               ),
               pinned: true,
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(30),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.symmetric(
-                      horizontal: BorderSide(
-                        color: Colors.black.withOpacity(0.4),
-                        width: 1,
-                      ),
-                    ),
-                  ),
-                  child: TabBar(
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: Theme.of(context).primaryColor,
-                    labelColor: Theme.of(context).primaryColor,
-                    unselectedLabelColor: Colors.black.withOpacity(0.5),
-                    tabs: [
-                      Tab(
-                        icon: Icon(
-                          Icons.photo_album_outlined,
-                          size: 35,
-                        ),
-                      ),
-                      Tab(
-                        icon: Icon(
-                          Icons.info_outline,
-                          size: 35,
-                        ),
-                      ),
-                      Tab(
-                        icon: Icon(
-                          Icons.rate_review_outlined,
-                          size: 35,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              bottom: ProfileTabBar(),
             ),
             SliverFillRemaining(
               child: TabBarView(
                 children: [
-                  Gallery(),
+                  Gallery(pickedImages: _pickedImages),
                   About(),
                   Reviews(),
                 ],

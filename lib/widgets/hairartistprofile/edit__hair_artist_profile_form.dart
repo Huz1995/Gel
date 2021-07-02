@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class EditProfileForm extends StatelessWidget {
+class EditHairArtistProfileForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
