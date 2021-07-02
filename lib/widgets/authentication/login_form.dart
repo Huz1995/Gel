@@ -145,7 +145,7 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 SmallButton(
                   child: Text(
-                    "Submit",
+                    "          Log in         ",
                     style: Provider.of<FontSizeProvider>(context).button,
                   ),
                   backgroundColor: Theme.of(context).primaryColor,

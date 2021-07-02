@@ -44,8 +44,6 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
       });
     }
 
-    print(_selectedIndex);
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(

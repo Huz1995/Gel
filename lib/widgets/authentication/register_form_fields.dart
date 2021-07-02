@@ -140,7 +140,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
           ),
           SmallButton(
             child: Text(
-              "Submit",
+              "          Register         ",
               style: Provider.of<FontSizeProvider>(context).button,
             ),
             backgroundColor: Theme.of(context).primaryColor,
