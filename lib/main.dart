@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gel/screens/hair_client_after_login.dart';
-import 'package:gel/screens/hair_professional_after_login.dart';
+import 'package:gel/screens/hair_artist_after_login.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 

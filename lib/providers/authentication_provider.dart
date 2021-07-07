@@ -38,7 +38,7 @@ class AuthenticationProvider with ChangeNotifier {
     /*send registration data to our api to store the user in mongoDb*/
     try {
       await http.post(
-        Uri.parse("http://localhost:3000/api/user/registration"),
+        Uri.parse("http://localhost:3000/api/authentication/registration"),
         body: registerData.toObject(),
       );
     } catch (e) {
@@ -59,7 +59,8 @@ class AuthenticationProvider with ChangeNotifier {
     }
     try {
       var response = await http.get(
-        Uri.parse("http://localhost:3000/api/user/" + _loggedInUser!.uid),
+        Uri.parse(
+            "http://localhost:3000/api/authentication/" + _loggedInUser!.uid),
       );
       _isHairArtist = (response.body == 'true');
       Timer(

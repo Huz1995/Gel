@@ -25,14 +25,15 @@ class _NormRegFormState extends State<NormRegForm> {
 
     return Container(
       child: Center(
-          child: Form(
-        key: _formKey,
-        child: RegisterFormFields(
-          formKey: _formKey,
-          formTitle: "Sign Up \nAs Hair Client",
-          isHairArtist: false,
+        child: Form(
+          key: _formKey,
+          child: RegisterFormFields(
+            formKey: _formKey,
+            formTitle: "Sign Up \nAs Hair Client",
+            isHairArtist: false,
+          ),
         ),
-      )),
+      ),
     );
   }
 }

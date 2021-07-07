@@ -5,20 +5,34 @@ import 'package:flutter/material.dart';
 class Gallery extends StatelessWidget {
   const Gallery({
     Key? key,
-    required List<File> pickedImages,
-  })  : _pickedImages = pickedImages,
+    required List<String> photoUrls,
+  })  : _photoUrls = photoUrls,
         super(key: key);
 
-  final List<File> _pickedImages;
+  final List<String> _photoUrls;
   @override
   Widget build(BuildContext context) {
-    print(_pickedImages);
+    print(_photoUrls);
     return Container(
-      child: Center(
-        child: Text(
-          "You have no pictures!, click camera icon to add pictures so people can see how amazing your hairfressing is",
-        ),
-      ),
+      width: 50,
+      child: _photoUrls.isEmpty
+          ? Center(
+              child: Text(
+                "You have no pictures!, click camera icon to add pictures \n so people can see how amazing your hairfressing is",
+              ),
+            )
+          : CustomScrollView(
+              slivers: [
+                SliverOverlapInjector(
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                ),
+                SliverGrid.count(
+                  crossAxisCount: 2,
+                  children: _photoUrls.map((e) => Text(e)).toList(),
+                )
+              ],
+            ),
     );
   }
 }
