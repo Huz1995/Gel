@@ -12,6 +12,7 @@ class AuthenticationProvider with ChangeNotifier {
   late String? _idToken;
   bool _isLoggedIn = false;
   bool _isHairArtist = false;
+  late Timer _logoutTimer;
 
   //register with email
   Future registerEmailPassword(UserRegisterFormData registerData) async {
@@ -79,6 +80,10 @@ class AuthenticationProvider with ChangeNotifier {
           notifyListeners(),
         },
       );
+      /*Firebase idToken expires in an hour so log usre out*/
+      _logoutTimer = Timer(Duration(seconds: 3600), () {
+        logUserOut();
+      });
     } catch (e) {
       print(e);
     }
@@ -90,6 +95,7 @@ class AuthenticationProvider with ChangeNotifier {
     _loggedInUser = null;
     _idToken = null;
     _auth.signOut();
+    _logoutTimer.cancel();
     notifyListeners();
   }
 
