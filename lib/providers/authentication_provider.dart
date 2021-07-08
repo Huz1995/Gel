@@ -21,11 +21,16 @@ class AuthenticationProvider with ChangeNotifier {
         email: registerData.email!,
         password: registerData.password!,
       );
+      /*add the firebase uid to reg data model to send to backend*/
       registerData.setUID(result.user!.uid);
+      /*set isLogged in and hairArtist booleans so main.dart can render correct screen*/
       _isLoggedIn = true;
       _isHairArtist = registerData.isHairArtist!;
+      /*store firebase user details*/
       _loggedInUser = _auth.currentUser!;
+      /*store idToken expires in one hour*/
       _idToken = await _auth.currentUser!.getIdToken();
+      /*timer is set so the animations of slide panel are in sync*/
       Timer(
         Duration(seconds: 1),
         () => {
@@ -33,6 +38,7 @@ class AuthenticationProvider with ChangeNotifier {
         },
       );
     } catch (e) {
+      /*if firebase error return it so registration form can display the error*/
       return Future.error(e);
     }
     /*send registration data to our api to store the user in mongoDb*/
@@ -50,6 +56,7 @@ class AuthenticationProvider with ChangeNotifier {
     try {
       await _auth.signInWithEmailAndPassword(
           email: loginData.email!, password: loginData.password!);
+      /*same as above*/
       _loggedInUser = _auth.currentUser!;
       _isLoggedIn = true;
       _idToken = await _loggedInUser!.getIdToken();
@@ -58,11 +65,14 @@ class AuthenticationProvider with ChangeNotifier {
       return Future.error(e);
     }
     try {
+      /*need to query the database to see if hair artist or client logs in
+      to render the correct screen*/
       var response = await http.get(
         Uri.parse(
             "http://localhost:3000/api/authentication/" + _loggedInUser!.uid),
       );
       _isHairArtist = (response.body == 'true');
+      /*notify the listeners listen to the changes in notifier atttributes*/
       Timer(
         Duration(seconds: 1),
         () => {

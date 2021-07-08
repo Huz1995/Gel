@@ -24,8 +24,10 @@ class HairArtistProfileMainPage extends StatelessWidget {
         "@" + _hairArtistProfileProvider.hairArtistProfile.email.split("@")[0];
 
     void _pickImage() async {
-      final PickedFile? image =
-          await _picker.getImage(source: ImageSource.gallery);
+      final PickedFile? image = await _picker.getImage(
+        source: ImageSource.gallery,
+        imageQuality: 30,
+      );
       if (image != null) {
         /*send this file to hair artist profile provider to send in fb storare and url in db*/
         _hairArtistProfileProvider.saveNewImage(File(image.path));
@@ -76,7 +78,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
                         centerTitle: true,
                         title: AnimatedOpacity(
                           opacity: 1,
-                          duration: Duration(milliseconds: 1),
+                          duration: Duration(milliseconds: 0),
                           child: Container(
                             margin: EdgeInsets.only(
                               bottom: _phoneHeight * 0.06,
