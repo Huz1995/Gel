@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
-import 'package:gel/widgets/general_profile/no_profile_pic_icon.dart';
+import 'package:gel/widgets/hairartistprofile/profile_pic_icon.dart';
 import 'package:gel/widgets/general_profile/profile_tab_bar.dart';
 import 'package:gel/widgets/general/small_button.dart';
 import 'package:gel/widgets/hairartistprofile/about.dart';
@@ -100,7 +100,12 @@ class HairArtistProfileMainPage extends StatelessWidget {
                             SizedBox(
                               height: _phoneHeight * 0.08,
                             ),
-                            NoProfilePicIcon(phoneWidth: _phoneWidth),
+                            ProfilePicIcon(
+                              phoneWidth: _phoneWidth,
+                              imagePicker: _picker,
+                              hairArtistProfileProvider:
+                                  _hairArtistProfileProvider,
+                            ),
                             Padding(
                               padding: EdgeInsets.all(
                                 _phoneHeight * 0.015,

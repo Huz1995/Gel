@@ -3,12 +3,14 @@ class HairArtistUserProfile {
   String _email;
   bool _isHairArtist;
   List<String> _photoUrls;
+  String? _profilePhotoUrl;
 
   HairArtistUserProfile(
     this._uid,
     this._email,
     this._isHairArtist,
     this._photoUrls,
+    this._profilePhotoUrl,
   );
 
   String get uid {
@@ -27,6 +29,10 @@ class HairArtistUserProfile {
     return _photoUrls;
   }
 
+  String? get profilePhotoUrl {
+    return _profilePhotoUrl;
+  }
+
   void printProfile() {
     print(_uid);
     print(_email);
@@ -36,5 +42,9 @@ class HairArtistUserProfile {
 
   void addPhotoUrl(String url) {
     this._photoUrls.insert(0, url);
+  }
+
+  void addProfilePictureUrl(String url) {
+    this._profilePhotoUrl = url;
   }
 }
