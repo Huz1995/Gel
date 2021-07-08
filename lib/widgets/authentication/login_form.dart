@@ -145,13 +145,14 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 SmallButton(
                   child: Text(
-                    "          Log in         ",
+                    "Log in",
                     style: Provider.of<FontSizeProvider>(context).button,
                   ),
                   backgroundColor: Theme.of(context).primaryColor,
                   onPressed: () => {
                     _saveForm(),
                   },
+                  buttonWidth: 100,
                 ),
               ],
             ),

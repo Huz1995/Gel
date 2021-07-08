@@ -62,11 +62,12 @@ class _MapPageState extends State<MapPage> {
               backgroundColor: Theme.of(context).cardColor.withOpacity(0.8),
               child: Icon(
                 Icons.arrow_back_ios,
-                size: MediaQuery.of(context).size.width * 0.045,
+                size: MediaQuery.of(context).size.width * 0.06,
               ),
               onPressed: () => Navigator.pop(context),
+              buttonWidth: 50,
             ),
-          )
+          ),
         ],
       ),
     );

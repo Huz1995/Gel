@@ -14,16 +14,16 @@ class NoProfilePicIcon extends StatelessWidget {
     return Stack(
       children: [
         CircleAvatar(
-          radius: _phoneWidth / 10,
+          radius: _phoneWidth / 8,
           backgroundColor: Theme.of(context).cardColor.withOpacity(0.3),
         ),
         Positioned(
-          left: _phoneWidth * 0.060,
-          bottom: _phoneWidth * 0.060,
+          left: _phoneWidth * 0.080,
+          bottom: _phoneWidth * 0.080,
           //bottom: _phoneWidth / 4,
           child: Icon(
             Icons.person,
-            size: 35,
+            size: 40,
           ),
         ),
       ],

@@ -35,6 +35,7 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
         onPressed: () {
           _authProvider.logUserOut();
         },
+        buttonWidth: 100,
       ),
     ];
 

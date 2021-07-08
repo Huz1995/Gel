@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
+import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general_profile/no_profile_pic_icon.dart';
 import 'package:gel/widgets/general_profile/profile_tab_bar.dart';
 import 'package:gel/widgets/general/small_button.dart';
 import 'package:gel/widgets/hairartistprofile/about.dart';
+import 'package:gel/widgets/hairartistprofile/edit_hair_artist_profile_form.dart';
 import 'package:gel/widgets/hairartistprofile/gallery.dart';
 import 'package:gel/widgets/hairartistprofile/reviews.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +21,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _hairArtistProfileProvider =
         Provider.of<HairArtistProfileProvider>(context);
+    final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
 
     String _emailTextDisplay =
         "@" + _hairArtistProfileProvider.hairArtistProfile.email.split("@")[0];
@@ -26,7 +29,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
     void _pickImage() async {
       final PickedFile? image = await _picker.getImage(
         source: ImageSource.gallery,
-        imageQuality: 30,
+        imageQuality: 20,
       );
       if (image != null) {
         /*send this file to hair artist profile provider to send in fb storare and url in db*/
@@ -88,7 +91,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
                                       top < _phoneHeight * 0.3
                                   ? _emailTextDisplay
                                   : "",
-                              style: Theme.of(context).textTheme.headline5,
+                              style: _fontSizeProvider.headline2,
                             ),
                           ),
                         ),
@@ -104,14 +107,27 @@ class HairArtistProfileMainPage extends StatelessWidget {
                               ),
                               child: Text(
                                 _emailTextDisplay,
-                                style: Theme.of(context).textTheme.headline5,
+                                style: _fontSizeProvider.headline2,
                               ),
                             ),
                             SmallButton(
                               backgroundColor: Theme.of(context).primaryColor,
-                              child: Text("          Edit Profile         "),
-                              onPressed: () => print("sdk"),
-                            )
+                              child: Text("Edit Profile"),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        ChangeNotifierProvider(
+                                      create: (BuildContext context) =>
+                                          FontSizeProvider(context),
+                                      builder: (BuildContext context, child) =>
+                                          EditHairArtistProfileForm(),
+                                    ),
+                                  ),
+                                );
+                              },
+                              buttonWidth: 200,
+                            ),
                           ],
                         ),
                       );

@@ -18,6 +18,7 @@ class HairClientHomePage extends StatelessWidget {
           onPressed: () => {
             _authProvider.logUserOut(),
           },
+          buttonWidth: 50,
         ),
       ),
     );

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 class Gallery extends StatelessWidget {
@@ -12,7 +10,6 @@ class Gallery extends StatelessWidget {
   final List<String> _photoUrls;
   @override
   Widget build(BuildContext context) {
-    print(_photoUrls);
     return Container(
       padding: EdgeInsets.all(10),
       width: 50,

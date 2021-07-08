@@ -140,7 +140,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
           ),
           SmallButton(
             child: Text(
-              "          Register         ",
+              "Register",
               style: Provider.of<FontSizeProvider>(context).button,
             ),
             backgroundColor: Theme.of(context).primaryColor,
@@ -148,6 +148,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
               FocusScope.of(context).unfocus(),
               _saveForm(),
             },
+            buttonWidth: 110,
           ),
         ],
       ),

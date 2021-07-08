@@ -7,29 +7,38 @@ class SmallButton extends StatelessWidget {
       {Key? key,
       required Color backgroundColor,
       required Widget child,
+      required double buttonWidth,
       required void Function() onPressed})
       : _backgroundColor = backgroundColor,
         _child = child,
         _onPressed = onPressed,
+        _buttonWidth = buttonWidth,
         super(key: key);
 
   final Color _backgroundColor;
   final Widget _child;
   final void Function() _onPressed;
+  final double _buttonWidth;
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: _onPressed,
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
-        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-            (states) => _backgroundColor),
+    return ConstrainedBox(
+      constraints: BoxConstraints.tightFor(
+        width: _buttonWidth,
+        height: 40,
       ),
-      child: _child,
+      child: ElevatedButton(
+        onPressed: _onPressed,
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          ),
+          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (states) => _backgroundColor),
+        ),
+        child: _child,
+      ),
     );
   }
 }
