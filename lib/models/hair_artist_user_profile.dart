@@ -1,14 +1,12 @@
 class HairArtistUserProfile {
   String _uid;
   String _email;
-  String _idToken;
   bool _isHairArtist;
   List<String> _photoUrls;
 
   HairArtistUserProfile(
     this._uid,
     this._email,
-    this._idToken,
     this._isHairArtist,
     this._photoUrls,
   );
@@ -25,10 +23,6 @@ class HairArtistUserProfile {
     return _isHairArtist;
   }
 
-  String get idToken {
-    return _idToken;
-  }
-
   List<String> get photoUrls {
     return _photoUrls;
   }
@@ -36,7 +30,6 @@ class HairArtistUserProfile {
   void printProfile() {
     print(_uid);
     print(_email);
-    print(_idToken);
     print(_isHairArtist);
     print(_photoUrls);
   }

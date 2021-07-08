@@ -8,10 +8,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class HairArtistProfileProvider extends ChangeNotifier {
-  HairArtistUserProfile _userProfile =
-      HairArtistUserProfile("", "", "", false, []);
+  HairArtistUserProfile _userProfile = HairArtistUserProfile("", "", false, []);
+  late String _idToken;
 
   HairArtistProfileProvider(AuthenticationProvider auth) {
+    _idToken = auth.idToken;
     getUserDataFromBackend(auth);
   }
 
@@ -24,6 +25,9 @@ class HairArtistProfileProvider extends ChangeNotifier {
     var response = await http.get(
       Uri.parse("http://localhost:3000/api/hairArtistProfile/" +
           auth.loggedInUser.uid),
+      headers: {
+        HttpHeaders.authorizationHeader: _idToken,
+      },
     );
     /*convert the response from string to JSON*/
     var jsonResponse = convert.jsonDecode(response.body);
@@ -31,7 +35,6 @@ class HairArtistProfileProvider extends ChangeNotifier {
     _userProfile = new HairArtistUserProfile(
       jsonResponse['uid'],
       jsonResponse['email'],
-      auth.idToken,
       auth.isHairArtist,
       (jsonResponse['photoUrls'] as List).cast<String>(),
     );
@@ -60,6 +63,9 @@ class HairArtistProfileProvider extends ChangeNotifier {
           body: {
             'uid': _userProfile.uid,
             'photoUrl': photoUrl,
+          },
+          headers: {
+            HttpHeaders.authorizationHeader: _idToken,
           },
         );
       },
