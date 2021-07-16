@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class ProfileTabBar extends StatelessWidget with PreferredSizeWidget {
   const ProfileTabBar({
@@ -22,20 +23,20 @@ class ProfileTabBar extends StatelessWidget with PreferredSizeWidget {
         ),
         child: TabBar(
           indicatorSize: TabBarIndicatorSize.label,
-          indicatorColor: Theme.of(context).primaryColor,
-          labelColor: Theme.of(context).primaryColor,
+          indicatorColor: Colors.black,
+          labelColor: Colors.black,
           unselectedLabelColor: Colors.black.withOpacity(0.5),
           tabs: [
             Tab(
               icon: Icon(
-                Icons.photo_album_outlined,
-                size: 35,
+                FontAwesome5.images,
+                size: 30,
               ),
             ),
             Tab(
               icon: Icon(
-                Icons.info_outline,
-                size: 35,
+                FontAwesome5.address_card,
+                size: 30,
               ),
             ),
             Tab(

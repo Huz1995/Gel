@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class RevampFormField extends StatelessWidget {
-  const RevampFormField({
+  RevampFormField({
     Key? key,
     required String fieldTitle,
-    required FocusNode fieldFocusNode,
-    required FocusNode nextFieldFocudNode,
+    FocusNode? fieldFocusNode,
+    FocusNode? nextFieldFocudNode,
     required bool obscureText,
     required void Function(String?)? onSaved,
     required String? Function(String?)? validator,
@@ -17,8 +17,8 @@ class RevampFormField extends StatelessWidget {
         _validator = validator,
         super(key: key);
 
-  final FocusNode _fieldFocusNode;
-  final FocusNode _nextFieldFocusNode;
+  final FocusNode? _fieldFocusNode;
+  final FocusNode? _nextFieldFocusNode;
   final String _fieldTitle;
   final bool _obscureText;
   final void Function(String?)? _onSaved;

@@ -29,7 +29,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
     void _pickImage() async {
       final PickedFile? image = await _picker.getImage(
         source: ImageSource.gallery,
-        imageQuality: 20,
+        imageQuality: 5,
       );
       if (image != null) {
         /*send this file to hair artist profile provider to send in fb storare and url in db*/
@@ -72,7 +72,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
                   ],
                   elevation: 0,
                   backgroundColor: Colors.white,
-                  expandedHeight: _phoneHeight * 0.35,
+                  expandedHeight: _phoneWidth * 0.73,
                   collapsedHeight: _phoneHeight * 0.1,
                   flexibleSpace: LayoutBuilder(
                     builder: (context, constraints) {

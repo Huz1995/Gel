@@ -87,7 +87,6 @@ class HairArtistProfileProvider extends ChangeNotifier {
         var photoUrl = await ref.getDownloadURL();
         /*add it to userprofile object so widgets can render image*/
         _userProfile.addProfilePictureUrl(photoUrl);
-        print(photoUrl);
         notifyListeners();
         /*send the url to backend and store in mongodb for persistance*/
         await http.put(

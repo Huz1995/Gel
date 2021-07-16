@@ -36,6 +36,7 @@ class UserRegisterFormData {
     return _isHairArtist;
   }
 
+  /*used to send http requests to the backend*/
   Map<String, String> toObject() {
     return {
       'uid': _uid!,
