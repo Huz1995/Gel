@@ -9,10 +9,11 @@ import 'dart:convert' as convert;
 
 class HairArtistProfileProvider extends ChangeNotifier {
   HairArtistUserProfile _userProfile =
-      HairArtistUserProfile("", "", false, [], null);
+      HairArtistUserProfile("", "", false, [], null, null);
   late String _idToken;
 
   HairArtistProfileProvider(AuthenticationProvider auth) {
+    /* when we initate the hair artist profile then get the user data from the back end*/
     _idToken = auth.idToken;
     getUserDataFromBackend(auth);
   }
@@ -32,13 +33,27 @@ class HairArtistProfileProvider extends ChangeNotifier {
     );
     /*convert the response from string to JSON*/
     var jsonResponse = convert.jsonDecode(response.body);
-    /*create newe object and set the attributes in contructor to build object*/
+    /*create new Hair artist about info object*/
+    HairArtistAboutInfo _about = new HairArtistAboutInfo(
+      jsonResponse['about']['name'],
+      jsonResponse['about']['contactNumber'],
+      jsonResponse['about']['instaUrl'],
+      jsonResponse['about']['description'],
+      jsonResponse['about']['chatiness'],
+      jsonResponse['about']['workingConditions'],
+      jsonResponse['about']['previousWorkExperience'],
+      jsonResponse['about']['hairTypes'],
+      jsonResponse['about']['shortHairServCost'],
+      jsonResponse['about']['longHairServCost'],
+    );
+    /*create new HairArtistObject object and set the attributes in contructor to build object*/
     _userProfile = new HairArtistUserProfile(
       jsonResponse['uid'],
       jsonResponse['email'],
       auth.isHairArtist,
       (jsonResponse['photoUrls'] as List).cast<String>(),
       jsonResponse['profilePhotoUrl'],
+      _about,
     );
     /*updates the profile object so wigets listen can use its data*/
     notifyListeners();
@@ -102,5 +117,18 @@ class HairArtistProfileProvider extends ChangeNotifier {
         );
       },
     );
+  }
+
+  Future<void> setAboutDetails() async {
+    await http.put(
+      Uri.parse("http://localhost:3000/api/hairArtistProfile/about/" +
+          _userProfile.uid +
+          "/"),
+      body: _userProfile.about!.toObject(),
+      headers: {
+        HttpHeaders.authorizationHeader: _idToken,
+      },
+    );
+    notifyListeners();
   }
 }

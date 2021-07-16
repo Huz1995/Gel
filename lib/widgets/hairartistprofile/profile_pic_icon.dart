@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -73,9 +74,7 @@ class ProfilePicIcon extends StatelessWidget {
                 child: FloatingActionButton(
                   backgroundColor: Theme.of(context).primaryColor,
                   child: Icon(
-                    doesHaveProfilePhoto
-                        ? Icons.change_circle_outlined
-                        : Icons.add,
+                    doesHaveProfilePhoto ? MaterialIcons.swap_vert : Icons.add,
                   ),
                   onPressed: _pickProfileImage,
                 ),

@@ -26,12 +26,8 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => AuthenticationProvider(),
-        ),
-      ],
+    return ChangeNotifierProvider(
+      create: (context) => AuthenticationProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Gel',

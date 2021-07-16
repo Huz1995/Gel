@@ -1,9 +1,64 @@
+class HairArtistAboutInfo {
+  String? name;
+  String? contactNumber;
+  String? instaUrl;
+  String? description;
+  String? chatiness;
+  String? workingArrangement;
+  String? previousWorkExperience;
+  String? hairTypes;
+  String? shortHairServCost;
+  String? longHairServCost;
+
+  HairArtistAboutInfo(
+    this.name,
+    this.contactNumber,
+    this.instaUrl,
+    this.description,
+    this.chatiness,
+    this.workingArrangement,
+    this.previousWorkExperience,
+    this.hairTypes,
+    this.shortHairServCost,
+    this.longHairServCost,
+  );
+
+  Map<String, String> toObject() {
+    return {
+      'name': name!,
+      'contactNumber': contactNumber!,
+      'instaUrl': instaUrl!,
+      'description': description!,
+      'chatiness': chatiness!,
+      'workingArrangement': workingArrangement!,
+      'previousWorkExperience': previousWorkExperience!,
+      'hairTypes': hairTypes!,
+      'shortHairServCost': shortHairServCost!,
+      'longHairServCost': longHairServCost!,
+    };
+  }
+
+  void printAbout() {
+    print(name);
+    print(contactNumber);
+    print(instaUrl);
+    print(description);
+    print(chatiness);
+    print(workingArrangement);
+    print(previousWorkExperience);
+    print(hairTypes);
+    print(shortHairServCost);
+    print(longHairServCost);
+  }
+}
+
 class HairArtistUserProfile {
   String _uid;
   String _email;
   bool _isHairArtist;
   List<String> _photoUrls;
   String? _profilePhotoUrl;
+  HairArtistAboutInfo? _about;
 
   HairArtistUserProfile(
     this._uid,
@@ -11,6 +66,7 @@ class HairArtistUserProfile {
     this._isHairArtist,
     this._photoUrls,
     this._profilePhotoUrl,
+    this._about,
   );
 
   String get uid {
@@ -33,13 +89,11 @@ class HairArtistUserProfile {
     return _profilePhotoUrl;
   }
 
-  void printProfile() {
-    print(_uid);
-    print(_email);
-    print(_isHairArtist);
-    print(_photoUrls);
+  HairArtistAboutInfo? get about {
+    return _about;
   }
 
+  /*this adds a photo url to the array*/
   void addPhotoUrl(String url) {
     this._photoUrls.insert(0, url);
   }

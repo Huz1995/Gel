@@ -61,6 +61,7 @@ class AuthenticationProvider with ChangeNotifier {
       _loggedInUser = _auth.currentUser!;
       _isLoggedIn = true;
       _idToken = await _loggedInUser!.getIdToken();
+      print(_idToken);
     } catch (e) {
       print(e);
       return Future.error(e);

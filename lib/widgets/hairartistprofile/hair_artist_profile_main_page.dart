@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/hairartistprofile/profile_pic_icon.dart';
@@ -21,7 +22,8 @@ class HairArtistProfileMainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _hairArtistProfileProvider =
         Provider.of<HairArtistProfileProvider>(context);
-    final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
+    final _fontSizeProvider =
+        Provider.of<FontSizeProvider>(context, listen: false);
 
     String _emailTextDisplay =
         "@" + _hairArtistProfileProvider.hairArtistProfile.email.split("@")[0];
@@ -62,7 +64,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
                         shape: CircleBorder(),
                         elevation: 0.0,
                         child: Icon(
-                          Icons.add_a_photo_outlined,
+                          MaterialIcons.add_a_photo,
                           color: Colors.black,
                           size: 30,
                         ),
@@ -122,11 +124,9 @@ class HairArtistProfileMainPage extends StatelessWidget {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        ChangeNotifierProvider(
-                                      create: (BuildContext context) =>
-                                          FontSizeProvider(context),
-                                      builder: (BuildContext context, child) =>
-                                          EditHairArtistProfileForm(),
+                                        new EditHairArtistProfileForm(
+                                      _fontSizeProvider,
+                                      _hairArtistProfileProvider,
                                     ),
                                   ),
                                 );
