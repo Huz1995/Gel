@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -40,7 +41,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
       jsonResponse['about']['instaUrl'],
       jsonResponse['about']['description'],
       jsonResponse['about']['chatiness'],
-      jsonResponse['about']['workingConditions'],
+      jsonResponse['about']['workingArrangement'],
       jsonResponse['about']['previousWorkExperience'],
       jsonResponse['about']['hairTypes'],
       jsonResponse['about']['shortHairServCost'],
@@ -127,6 +128,27 @@ class HairArtistProfileProvider extends ChangeNotifier {
       body: _userProfile.about!.toObject(),
       headers: {
         HttpHeaders.authorizationHeader: _idToken,
+      },
+    );
+    notifyListeners();
+  }
+
+  Future<void> deletePhotoUrl(String url) async {
+    /*create a firebase reference from url*/
+    final ref = FirebaseStorage.instance.refFromURL(url);
+    await ref.delete().whenComplete(
+      () async {
+        _userProfile.deletePhotoUrl(url);
+        http.delete(
+          Uri.parse("http://localhost:3000/api/hairArtistProfile/photos"),
+          body: {
+            'uid': _userProfile.uid,
+            'photoUrl': url,
+          },
+          headers: {
+            HttpHeaders.authorizationHeader: _idToken,
+          },
+        );
       },
     );
     notifyListeners();

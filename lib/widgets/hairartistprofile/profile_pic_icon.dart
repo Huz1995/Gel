@@ -72,7 +72,9 @@ class ProfilePicIcon extends StatelessWidget {
               child: ConstrainedBox(
                 constraints: BoxConstraints.tightFor(width: 30),
                 child: FloatingActionButton(
-                  backgroundColor: Theme.of(context).primaryColor,
+                  heroTag: "addPhoto",
+                  backgroundColor:
+                      Theme.of(context).primaryColor.withOpacity(0.7),
                   child: Icon(
                     doesHaveProfilePhoto ? MaterialIcons.swap_vert : Icons.add,
                   ),

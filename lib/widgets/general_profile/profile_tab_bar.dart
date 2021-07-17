@@ -30,19 +30,19 @@ class ProfileTabBar extends StatelessWidget with PreferredSizeWidget {
             Tab(
               icon: Icon(
                 FontAwesome5.images,
-                size: 30,
+                size: 25,
               ),
             ),
             Tab(
               icon: Icon(
                 FontAwesome5.address_card,
-                size: 30,
+                size: 25,
               ),
             ),
             Tab(
               icon: Icon(
                 Icons.rate_review_outlined,
-                size: 35,
+                size: 30,
               ),
             ),
           ],

@@ -1,14 +1,14 @@
 class HairArtistAboutInfo {
-  String? name;
-  String? contactNumber;
-  String? instaUrl;
-  String? description;
-  String? chatiness;
-  String? workingArrangement;
-  String? previousWorkExperience;
-  String? hairTypes;
-  String? shortHairServCost;
-  String? longHairServCost;
+  String name;
+  String contactNumber;
+  String instaUrl;
+  String description;
+  String chatiness;
+  String workingArrangement;
+  String previousWorkExperience;
+  String hairTypes;
+  String shortHairServCost;
+  String longHairServCost;
 
   HairArtistAboutInfo(
     this.name,
@@ -25,16 +25,16 @@ class HairArtistAboutInfo {
 
   Map<String, String> toObject() {
     return {
-      'name': name!,
-      'contactNumber': contactNumber!,
-      'instaUrl': instaUrl!,
-      'description': description!,
-      'chatiness': chatiness!,
-      'workingArrangement': workingArrangement!,
-      'previousWorkExperience': previousWorkExperience!,
-      'hairTypes': hairTypes!,
-      'shortHairServCost': shortHairServCost!,
-      'longHairServCost': longHairServCost!,
+      'name': name,
+      'contactNumber': contactNumber,
+      'instaUrl': instaUrl,
+      'description': description,
+      'chatiness': chatiness,
+      'workingArrangement': workingArrangement,
+      'previousWorkExperience': previousWorkExperience,
+      'hairTypes': hairTypes,
+      'shortHairServCost': shortHairServCost,
+      'longHairServCost': longHairServCost,
     };
   }
 
@@ -100,5 +100,9 @@ class HairArtistUserProfile {
 
   void addProfilePictureUrl(String url) {
     this._profilePhotoUrl = url;
+  }
+
+  void deletePhotoUrl(String url) {
+    this._photoUrls.remove(url);
   }
 }

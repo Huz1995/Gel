@@ -20,13 +20,9 @@ class HairArtistProfileMainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _hairArtistProfileProvider =
-        Provider.of<HairArtistProfileProvider>(context);
+    final _hairArtistProvider = Provider.of<HairArtistProfileProvider>(context);
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
-
-    String _emailTextDisplay =
-        "@" + _hairArtistProfileProvider.hairArtistProfile.email.split("@")[0];
 
     void _pickImage() async {
       final PickedFile? image = await _picker.getImage(
@@ -35,8 +31,16 @@ class HairArtistProfileMainPage extends StatelessWidget {
       );
       if (image != null) {
         /*send this file to hair artist profile provider to send in fb storare and url in db*/
-        _hairArtistProfileProvider.saveNewImage(File(image.path));
+        _hairArtistProvider.saveNewImage(File(image.path));
       }
+    }
+
+    String _displayName() {
+      String hairArtistName = _hairArtistProvider.hairArtistProfile.about!.name;
+      if (hairArtistName == "") {
+        return "@" + _hairArtistProvider.hairArtistProfile.email.split("@")[0];
+      }
+      return hairArtistName;
     }
 
     final _phoneHeight = MediaQuery.of(context).size.height;
@@ -91,7 +95,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
                             child: Text(
                               top >= _phoneHeight * 0.1 &&
                                       top < _phoneHeight * 0.3
-                                  ? _emailTextDisplay
+                                  ? _displayName()
                                   : "",
                               style: _fontSizeProvider.headline2,
                             ),
@@ -105,20 +109,21 @@ class HairArtistProfileMainPage extends StatelessWidget {
                             ProfilePicIcon(
                               phoneWidth: _phoneWidth,
                               imagePicker: _picker,
-                              hairArtistProfileProvider:
-                                  _hairArtistProfileProvider,
+                              hairArtistProfileProvider: _hairArtistProvider,
                             ),
                             Padding(
                               padding: EdgeInsets.all(
                                 _phoneHeight * 0.015,
                               ),
                               child: Text(
-                                _emailTextDisplay,
+                                _displayName(),
                                 style: _fontSizeProvider.headline2,
                               ),
                             ),
                             SmallButton(
-                              backgroundColor: Theme.of(context).primaryColor,
+                              backgroundColor: Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(0.7),
                               child: Text("Edit Profile"),
                               onPressed: () {
                                 Navigator.of(context).push(
@@ -126,12 +131,12 @@ class HairArtistProfileMainPage extends StatelessWidget {
                                     builder: (BuildContext context) =>
                                         new EditHairArtistProfileForm(
                                       _fontSizeProvider,
-                                      _hairArtistProfileProvider,
+                                      _hairArtistProvider,
                                     ),
                                   ),
                                 );
                               },
-                              buttonWidth: 200,
+                              buttonWidth: 250,
                             ),
                           ],
                         ),
@@ -147,8 +152,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
           body: TabBarView(
             children: [
               Gallery(
-                photoUrls:
-                    _hairArtistProfileProvider.hairArtistProfile.photoUrls,
+                hairArtistProvider: _hairArtistProvider,
               ),
               About(),
               Reviews(),
