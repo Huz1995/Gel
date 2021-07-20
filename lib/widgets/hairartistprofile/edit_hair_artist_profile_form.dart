@@ -17,7 +17,6 @@ class EditHairArtistProfileForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    print("built");
 
     /*to ensure when au.to logout occurs then we remove this widget the tree*/
     if (!_authProvider.isLoggedIn) {
@@ -31,12 +30,7 @@ class EditHairArtistProfileForm extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          FloatingActionButton(
-            heroTag: "save",
-            splashColor: Colors.white,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            focusElevation: 0,
+          TextButton(
             onPressed: () {
               _basicInfoFormKey.currentState!.save();
               _workInfoFormkey.currentState!.save();
@@ -73,7 +67,7 @@ class EditHairArtistProfileForm extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             children: <Widget>[
               SizedBox(
-                height: 30,
+                height: MediaQuery.of(context).size.height * 0.02,
               ),
               Container(
                 padding: EdgeInsets.only(left: 30),
@@ -93,11 +87,11 @@ class EditHairArtistProfileForm extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 15),
                         child: TextFormField(
                           initialValue:
-                              _hairArtistProvider.hairArtistProfile.about!.name,
+                              _hairArtistProvider.hairArtistProfile.about.name,
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           onSaved: (value) => {
-                            _hairArtistProvider.hairArtistProfile.about!.name =
+                            _hairArtistProvider.hairArtistProfile.about.name =
                                 value!,
                           },
                           decoration: InputDecoration(
@@ -114,12 +108,12 @@ class EditHairArtistProfileForm extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: TextFormField(
                           initialValue: _hairArtistProvider
-                              .hairArtistProfile.about!.contactNumber,
+                              .hairArtistProfile.about.contactNumber,
                           textInputAction: TextInputAction.done,
                           keyboardType: TextInputType.number,
                           onSaved: (value) => {
-                            _hairArtistProvider.hairArtistProfile.about!
-                                .contactNumber = value!,
+                            _hairArtistProvider
+                                .hairArtistProfile.about.contactNumber = value!,
                           },
                           decoration: InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -135,15 +129,23 @@ class EditHairArtistProfileForm extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: TextFormField(
                           initialValue: _hairArtistProvider
-                              .hairArtistProfile.about!.instaUrl
+                              .hairArtistProfile.about.instaUrl
                               .split("/")
                               .last,
                           textInputAction: TextInputAction.done,
                           keyboardType: TextInputType.text,
                           onSaved: (value) => {
-                            _hairArtistProvider
-                                    .hairArtistProfile.about!.instaUrl =
-                                "https://www.instagram.com/" + value!,
+                            if (value != "")
+                              {
+                                _hairArtistProvider
+                                        .hairArtistProfile.about.instaUrl =
+                                    "https://www.instagram.com/" + value!,
+                              }
+                            else
+                              {
+                                _hairArtistProvider
+                                    .hairArtistProfile.about.instaUrl = value!,
+                              }
                           },
                           decoration: InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -159,12 +161,12 @@ class EditHairArtistProfileForm extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: TextFormField(
                           initialValue: _hairArtistProvider
-                              .hairArtistProfile.about!.description,
+                              .hairArtistProfile.about.description,
                           maxLines: 10,
                           keyboardType: TextInputType.multiline,
                           onSaved: (value) => {
                             _hairArtistProvider
-                                .hairArtistProfile.about!.description = value!,
+                                .hairArtistProfile.about.description = value!,
                           },
                           decoration: InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -180,12 +182,12 @@ class EditHairArtistProfileForm extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: TextFormField(
                           initialValue: _hairArtistProvider
-                              .hairArtistProfile.about!.chatiness,
+                              .hairArtistProfile.about.chatiness,
                           textInputAction: TextInputAction.done,
                           keyboardType: TextInputType.text,
                           onSaved: (value) => {
                             _hairArtistProvider
-                                .hairArtistProfile.about!.chatiness = value!,
+                                .hairArtistProfile.about.chatiness = value!,
                           },
                           decoration: InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -223,11 +225,11 @@ class EditHairArtistProfileForm extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: TextFormField(
                           initialValue: _hairArtistProvider
-                              .hairArtistProfile.about!.workingArrangement,
+                              .hairArtistProfile.about.workingArrangement,
                           maxLines: 10,
                           keyboardType: TextInputType.multiline,
                           onSaved: (value) => {
-                            _hairArtistProvider.hairArtistProfile.about!
+                            _hairArtistProvider.hairArtistProfile.about
                                 .workingArrangement = value!,
                           },
                           decoration: InputDecoration(
@@ -245,11 +247,11 @@ class EditHairArtistProfileForm extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: TextFormField(
                           initialValue: _hairArtistProvider
-                              .hairArtistProfile.about!.previousWorkExperience,
+                              .hairArtistProfile.about.previousWorkExperience,
                           maxLines: 10,
                           keyboardType: TextInputType.multiline,
                           onSaved: (value) => {
-                            _hairArtistProvider.hairArtistProfile.about!
+                            _hairArtistProvider.hairArtistProfile.about
                                 .previousWorkExperience = value!,
                           },
                           decoration: InputDecoration(
@@ -267,12 +269,12 @@ class EditHairArtistProfileForm extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: TextFormField(
                           initialValue: _hairArtistProvider
-                              .hairArtistProfile.about!.hairTypes,
+                              .hairArtistProfile.about.hairTypes,
                           maxLines: 10,
                           keyboardType: TextInputType.multiline,
                           onSaved: (value) => {
                             _hairArtistProvider
-                                .hairArtistProfile.about!.hairTypes = value!,
+                                .hairArtistProfile.about.hairTypes = value!,
                           },
                           decoration: InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -289,37 +291,16 @@ class EditHairArtistProfileForm extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: TextFormField(
                           initialValue: _hairArtistProvider
-                              .hairArtistProfile.about!.shortHairServCost,
+                              .hairArtistProfile.about.hairServCost,
                           maxLines: 10,
                           keyboardType: TextInputType.multiline,
                           onSaved: (value) => {
-                            _hairArtistProvider.hairArtistProfile.about!
-                                .shortHairServCost = value!,
+                            _hairArtistProvider
+                                .hairArtistProfile.about.hairServCost = value!,
                           },
                           decoration: InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'List short hair services with price',
-                            contentPadding:
-                                EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15.0)),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 15.0),
-                        child: TextFormField(
-                          initialValue: _hairArtistProvider
-                              .hairArtistProfile.about!.longHairServCost,
-                          maxLines: 10,
-                          keyboardType: TextInputType.multiline,
-                          onSaved: (value) => {
-                            _hairArtistProvider.hairArtistProfile.about!
-                                .longHairServCost = value!,
-                          },
-                          decoration: InputDecoration(
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'List long hair services with price',
+                            labelText: 'List hair services with price',
                             contentPadding:
                                 EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                             border: OutlineInputBorder(

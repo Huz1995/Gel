@@ -7,8 +7,7 @@ class HairArtistAboutInfo {
   String workingArrangement;
   String previousWorkExperience;
   String hairTypes;
-  String shortHairServCost;
-  String longHairServCost;
+  String hairServCost;
 
   HairArtistAboutInfo(
     this.name,
@@ -19,8 +18,7 @@ class HairArtistAboutInfo {
     this.workingArrangement,
     this.previousWorkExperience,
     this.hairTypes,
-    this.shortHairServCost,
-    this.longHairServCost,
+    this.hairServCost,
   );
 
   Map<String, String> toObject() {
@@ -33,8 +31,7 @@ class HairArtistAboutInfo {
       'workingArrangement': workingArrangement,
       'previousWorkExperience': previousWorkExperience,
       'hairTypes': hairTypes,
-      'shortHairServCost': shortHairServCost,
-      'longHairServCost': longHairServCost,
+      'hairServCost': hairServCost,
     };
   }
 
@@ -47,8 +44,7 @@ class HairArtistAboutInfo {
     print(workingArrangement);
     print(previousWorkExperience);
     print(hairTypes);
-    print(shortHairServCost);
-    print(longHairServCost);
+    print(hairServCost);
   }
 }
 
@@ -58,7 +54,7 @@ class HairArtistUserProfile {
   bool _isHairArtist;
   List<String> _photoUrls;
   String? _profilePhotoUrl;
-  HairArtistAboutInfo? _about;
+  HairArtistAboutInfo _about;
 
   HairArtistUserProfile(
     this._uid,
@@ -89,7 +85,7 @@ class HairArtistUserProfile {
     return _profilePhotoUrl;
   }
 
-  HairArtistAboutInfo? get about {
+  HairArtistAboutInfo get about {
     return _about;
   }
 

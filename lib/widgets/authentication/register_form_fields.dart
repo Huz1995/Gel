@@ -143,9 +143,9 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
               "Register",
               style: Provider.of<FontSizeProvider>(context).button,
             ),
-            backgroundColor: Theme.of(context).primaryColor, 
+            backgroundColor: Theme.of(context).primaryColor,
             onPressed: () => {
-              FocusScope.of(context).unfocus(), 
+              FocusScope.of(context).unfocus(),
               _saveForm(),
             },
             buttonWidth: 110,

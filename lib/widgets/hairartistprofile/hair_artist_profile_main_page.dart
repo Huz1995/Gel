@@ -36,11 +36,10 @@ class HairArtistProfileMainPage extends StatelessWidget {
     }
 
     String _displayName() {
-      String hairArtistName = _hairArtistProvider.hairArtistProfile.about!.name;
-      if (hairArtistName == "") {
+      if (_hairArtistProvider.hairArtistProfile.about.name == "") {
         return "@" + _hairArtistProvider.hairArtistProfile.email.split("@")[0];
       }
-      return hairArtistName;
+      return _hairArtistProvider.hairArtistProfile.about.name;
     }
 
     final _phoneHeight = MediaQuery.of(context).size.height;
@@ -64,9 +63,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
                       margin: EdgeInsets.fromLTRB(0, 10, 15, 0),
                       width: 50.0,
                       height: 50.0,
-                      child: RawMaterialButton(
-                        shape: CircleBorder(),
-                        elevation: 0.0,
+                      child: TextButton(
                         child: Icon(
                           MaterialIcons.add_a_photo,
                           color: Colors.black,

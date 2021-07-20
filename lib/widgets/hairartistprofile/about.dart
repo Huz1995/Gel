@@ -11,7 +11,8 @@ class About extends StatelessWidget {
     final _hairArtistProvider = Provider.of<HairArtistProfileProvider>(context);
     final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
 
-    final _about = _hairArtistProvider.hairArtistProfile.about!;
+    final _about = _hairArtistProvider.hairArtistProfile.about;
+    _about.printAbout();
 
     void _launchURL(String url) async => await canLaunch(url)
         ? await launch(url)
@@ -23,7 +24,7 @@ class About extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 40),
           children: [
             SizedBox(
-              height: 230,
+              height: MediaQuery.of(context).size.height * 0.25,
             ),
             Container(
               child: Text(
@@ -32,16 +33,34 @@ class About extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 30,
-            ),
-            _about.description != "" ? Text(_about.description) : Text(""),
-            SizedBox(
               height: 10,
             ),
-            _about.chatiness != "" ? Text(_about.chatiness) : Text(""),
-            SizedBox(
-              height: 10,
-            ),
+            _about.description != ""
+                ? Column(
+                    children: [
+                      Text(_about.description),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  )
+                : SizedBox(
+                    height: 0,
+                    width: 0,
+                  ),
+            _about.chatiness != ""
+                ? Column(
+                    children: [
+                      Text(_about.chatiness),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  )
+                : SizedBox(
+                    height: 0,
+                    width: 0,
+                  ),
             _about.instaUrl != ""
                 ? Row(
                     children: [
@@ -50,16 +69,23 @@ class About extends StatelessWidget {
                         style: _fontSizeProvider.headline4,
                       ),
                       SizedBox(
-                        width: 215,
+                        width: MediaQuery.of(context).size.width * 0.5,
                       ),
                       ConstrainedBox(
-                        constraints: BoxConstraints.tightFor(width: 40),
+                        constraints: BoxConstraints.tightFor(width: 37),
                         child: FloatingActionButton(
                           heroTag: "instagram",
                           elevation: 0,
                           backgroundColor:
-                              Theme.of(context).cardColor.withOpacity(0.3),
-                          child: Icon(AntDesign.instagram, color: Colors.black),
+                              Theme.of(context).cardColor.withOpacity(0.2),
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(1, 0, 0, 3),
+                            child: Icon(
+                              AntDesign.instagram,
+                              color: Colors.black,
+                              size: 26,
+                            ),
+                          ),
                           onPressed: () => {
                             _launchURL(_about.instaUrl),
                           },
@@ -67,10 +93,10 @@ class About extends StatelessWidget {
                       ),
                     ],
                   )
-                : Text(""),
-            SizedBox(
-              height: 10,
-            ),
+                : SizedBox(
+                    height: 0,
+                    width: 0,
+                  ),
             Divider(
               height: 25,
               thickness: 5,
@@ -148,39 +174,18 @@ class About extends StatelessWidget {
                     ],
                   )
                 : Text(""),
-            _about.shortHairServCost != ""
+            _about.hairServCost != ""
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Short Hair Services and Prices ",
+                        "Hair Services and Prices ",
                         style: _fontSizeProvider.headline4,
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      Text(_about.shortHairServCost),
-                      Divider(
-                        thickness: 2,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  )
-                : Text(""),
-            _about.longHairServCost != ""
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Short Hair Services and Prices ",
-                        style: _fontSizeProvider.headline4,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(_about.longHairServCost),
+                      Text(_about.hairServCost),
                       Divider(
                         thickness: 2,
                       ),

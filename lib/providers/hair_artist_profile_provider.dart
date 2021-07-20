@@ -9,8 +9,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class HairArtistProfileProvider extends ChangeNotifier {
-  HairArtistUserProfile _userProfile =
-      HairArtistUserProfile("", "", false, [], null, null);
+  HairArtistUserProfile _userProfile = HairArtistUserProfile("", "", false, [],
+      null, HairArtistAboutInfo("", "", "", "", "", "", "", "", ""));
   late String _idToken;
 
   HairArtistProfileProvider(AuthenticationProvider auth) {
@@ -44,8 +44,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
       jsonResponse['about']['workingArrangement'],
       jsonResponse['about']['previousWorkExperience'],
       jsonResponse['about']['hairTypes'],
-      jsonResponse['about']['shortHairServCost'],
-      jsonResponse['about']['longHairServCost'],
+      jsonResponse['about']['hairServCost'],
     );
     /*create new HairArtistObject object and set the attributes in contructor to build object*/
     _userProfile = new HairArtistUserProfile(
@@ -121,11 +120,12 @@ class HairArtistProfileProvider extends ChangeNotifier {
   }
 
   Future<void> setAboutDetails() async {
+    _userProfile.about.printAbout();
     await http.put(
       Uri.parse("http://localhost:3000/api/hairArtistProfile/about/" +
           _userProfile.uid +
           "/"),
-      body: _userProfile.about!.toObject(),
+      body: _userProfile.about.toObject(),
       headers: {
         HttpHeaders.authorizationHeader: _idToken,
       },
