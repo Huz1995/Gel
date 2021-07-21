@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
@@ -12,6 +13,7 @@ import 'package:gel/widgets/hairartistprofile/edit_hair_artist_profile_form.dart
 import 'package:gel/widgets/hairartistprofile/gallery.dart';
 import 'package:gel/widgets/hairartistprofile/reviews.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:provider/provider.dart';
 
 class HairArtistProfileMainPage extends StatelessWidget {
@@ -24,15 +26,46 @@ class HairArtistProfileMainPage extends StatelessWidget {
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
 
-    void _pickImage() async {
-      final PickedFile? image = await _picker.getImage(
-        source: ImageSource.gallery,
-        imageQuality: 5,
-      );
-      if (image != null) {
-        /*send this file to hair artist profile provider to send in fb storare and url in db*/
-        _hairArtistProvider.saveNewImage(File(image.path));
+    // void _pickImage() async {
+    //   final PickedFile? image = await _picker.getImage(
+    //     source: ImageSource.gallery,
+    //     imageQuality: 5,
+    //   );
+    //   if (image != null) {
+    //     /*send this file to hair artist profile provider to send in fb storare and url in db*/
+    //     _hairArtistProvider.saveNewImage(File(image.path));
+    //   }
+    // }
+
+    Future<void> _loadAssets() async {
+      List<Asset> resultList = <Asset>[];
+      String error = 'No Error Detected';
+
+      try {
+        resultList = await MultiImagePicker.pickImages(
+          maxImages: 10,
+          enableCamera: true,
+          cupertinoOptions: CupertinoOptions(
+            takePhotoIcon: "chat",
+            doneButtonTitle: "Select",
+          ),
+          materialOptions: MaterialOptions(
+            actionBarColor: "#abcdef",
+            actionBarTitle: "Example App",
+            allViewTitle: "All Photos",
+            useDetailsView: false,
+            selectCircleStrokeColor: "#000000",
+          ),
+        );
+      } on Exception catch (e) {
+        error = e.toString();
+        print(error);
       }
+
+      resultList.forEach((asset) async {
+        var path = await FlutterAbsolutePath.getAbsolutePath(asset.identifier);
+        await _hairArtistProvider.saveNewImage(File(path));
+      });
     }
 
     String _displayName() {
@@ -69,7 +102,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
                           color: Colors.black,
                           size: 30,
                         ),
-                        onPressed: _pickImage,
+                        onPressed: _loadAssets,
                       ),
                     ),
                   ],

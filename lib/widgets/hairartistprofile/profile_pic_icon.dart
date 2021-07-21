@@ -1,14 +1,14 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class ProfilePicIcon extends StatelessWidget {
-  const ProfilePicIcon({
+  ProfilePicIcon({
     Key? key,
     required double phoneWidth,
     required ImagePicker imagePicker,
@@ -21,21 +21,54 @@ class ProfilePicIcon extends StatelessWidget {
   final double _phoneWidth;
   final ImagePicker _imagePicker;
   final HairArtistProfileProvider _hairArtistProfileProvider;
+
   @override
   Widget build(BuildContext context) {
     final bool doesHaveProfilePhoto =
         (_hairArtistProfileProvider.hairArtistProfile.profilePhotoUrl != null);
 
-    void _pickProfileImage() async {
-      final PickedFile? image = await _imagePicker.getImage(
-        source: ImageSource.gallery,
-        imageQuality: 5,
-      );
-      if (image != null) {
-        /*send this file to hair artist profile provider to send in fb storare and url in db*/
-        _hairArtistProfileProvider.addProfilePicture(File(image.path));
+    Future<void> loadAssets() async {
+      List<Asset> resultList = <Asset>[];
+      String error = 'No Error Detected';
+
+      try {
+        resultList = await MultiImagePicker.pickImages(
+          maxImages: 1,
+          enableCamera: true,
+          cupertinoOptions: CupertinoOptions(
+            takePhotoIcon: "chat",
+            doneButtonTitle: "Select",
+          ),
+          materialOptions: MaterialOptions(
+            actionBarColor: "#abcdef",
+            actionBarTitle: "Example App",
+            allViewTitle: "All Photos",
+            useDetailsView: false,
+            selectCircleStrokeColor: "#000000",
+          ),
+        );
+      } on Exception catch (e) {
+        error = e.toString();
+        print(error);
       }
+
+      var path =
+          await FlutterAbsolutePath.getAbsolutePath(resultList[0].identifier);
+      var file = File(path);
+      _hairArtistProfileProvider.addProfilePicture(file);
+      print(path);
     }
+
+    // void _pickProfileImage() async {
+    //   final PickedFile? image = await _imagePicker.getImage(
+    //     source: ImageSource.gallery,
+    //     imageQuality: 5,
+    //   );
+    //   if (image != null) {
+    //     /*send this file to hair artist profile provider to send in fb storare and url in db*/
+    //     _hairArtistProfileProvider.addProfilePicture(File(image.path));
+    //   }
+    // }
 
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -78,7 +111,7 @@ class ProfilePicIcon extends StatelessWidget {
                   child: Icon(
                     doesHaveProfilePhoto ? MaterialIcons.swap_vert : Icons.add,
                   ),
-                  onPressed: _pickProfileImage,
+                  onPressed: loadAssets,
                 ),
               ),
             ),

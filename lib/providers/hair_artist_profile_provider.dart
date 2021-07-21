@@ -59,7 +59,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveNewImage(File file) async {
+  Future<void> saveNewImage(File file) async {
     /*create a storeage ref from firebase*/
     final ref = FirebaseStorage.instance
         .ref()
