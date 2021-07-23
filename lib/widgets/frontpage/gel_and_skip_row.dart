@@ -14,7 +14,7 @@ class GelAndSkip extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.075,
+            width: MediaQuery.of(context).size.width * 0.05,
           ),
           Image(
             width: MediaQuery.of(context).size.width * 0.23,
@@ -33,10 +33,10 @@ class GelAndSkip extends StatelessWidget {
                 '/map',
               );
             },
-            buttonWidth: 80,
+            buttonWidth: 65,
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.075,
+            width: MediaQuery.of(context).size.width * 0.05,
           ),
         ],
       ),

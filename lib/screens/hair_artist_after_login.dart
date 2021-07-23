@@ -3,8 +3,8 @@ import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
-import 'package:gel/widgets/general/small_button.dart';
 import 'package:gel/widgets/hairartistprofile/hair_artist_profile_main_page.dart';
+import 'package:gel/widgets/hairartistsettings/settings.dart';
 import 'package:provider/provider.dart';
 
 class HairArtistHomePage extends StatefulWidget {
@@ -27,16 +27,7 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
         'Index 2: Messages',
       ),
       HairArtistProfileMainPage(),
-      SmallButton(
-        backgroundColor: Colors.red,
-        child: Text(
-          "logout - hp",
-        ),
-        onPressed: () {
-          _authProvider.logUserOut();
-        },
-        buttonWidth: 100,
-      ),
+      Settings(),
     ];
 
     void _onIconTapped(int index) {

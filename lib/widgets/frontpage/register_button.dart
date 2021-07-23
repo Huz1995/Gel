@@ -26,8 +26,8 @@ class RegisterButton extends StatelessWidget {
         Provider.of<SlideUpStateProvider>(context, listen: false);
 
     return Container(
-      width: MediaQuery.of(context).size.width * 0.85,
-      height: MediaQuery.of(context).size.height * .07,
+      height: MediaQuery.of(context).size.width * .135,
+      width: MediaQuery.of(context).size.width * 0.9,
       margin: EdgeInsets.fromLTRB(
         20,
         0,

@@ -56,7 +56,6 @@ class ProfilePicIcon extends StatelessWidget {
           await FlutterAbsolutePath.getAbsolutePath(resultList[0].identifier);
       var file = File(path);
       _hairArtistProfileProvider.addProfilePicture(file);
-      print(path);
     }
 
     // void _pickProfileImage() async {

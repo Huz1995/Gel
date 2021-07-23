@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gel/widgets/authentication/get_started_auth.dart';
 import 'package:provider/provider.dart';
 
 import './register_button.dart';
@@ -23,6 +24,19 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _slideUpPanel = Provider.of<SlideUpStateProvider>(context);
+
+    Widget _slideUpPanelDisplayWidget() {
+      if (_slideUpPanel.formState.userRegistration) {
+        return GetStartedAuth(
+          isHairArtist: false,
+        );
+      } else if (_slideUpPanel.formState.hairProfRegistration) {
+        return HProfRegForm();
+      } else {
+        return LoginForm();
+      }
+    }
+
     return SlidingUpPanel(
       onPanelClosed: () => _slideUpPanel.setPanelState(Panel.closed),
       onPanelOpened: () => _slideUpPanel.setPanelState(Panel.open),
@@ -30,26 +44,16 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
         BoxShadow(blurRadius: 50, color: Colors.grey),
       ],
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(50),
-        topRight: Radius.circular(50),
+        topLeft: Radius.circular(30),
+        topRight: Radius.circular(30),
       ),
       controller: _panelController,
       minHeight: 0,
-      maxHeight: MediaQuery.of(context).size.height * 11 / 12,
+      maxHeight: MediaQuery.of(context).size.height * 0.5,
       panel: Center(
         /*consumer is listening to the changes in formstate and rebuils 
         appropiate form on the slide up panel*/
-        child: Consumer<SlideUpStateProvider>(
-          builder: (context, value, child) {
-            if (value.formState.userRegistration) {
-              return NormRegForm();
-            } else if (value.formState.hairProfRegistration) {
-              return HProfRegForm();
-            } else {
-              return LoginForm();
-            }
-          },
-        ),
+        child: _slideUpPanelDisplayWidget(),
       ),
       /*this is the background widget that is behind the slide
       up panel*/

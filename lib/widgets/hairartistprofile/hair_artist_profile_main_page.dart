@@ -43,7 +43,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
 
       try {
         resultList = await MultiImagePicker.pickImages(
-          maxImages: 10,
+          maxImages: 1,
           enableCamera: true,
           cupertinoOptions: CupertinoOptions(
             takePhotoIcon: "chat",
@@ -61,16 +61,17 @@ class HairArtistProfileMainPage extends StatelessWidget {
         error = e.toString();
         print(error);
       }
-
-      resultList.forEach((asset) async {
-        var path = await FlutterAbsolutePath.getAbsolutePath(asset.identifier);
-        await _hairArtistProvider.saveNewImage(File(path));
-      });
+      var path =
+          await FlutterAbsolutePath.getAbsolutePath(resultList[0].identifier);
+      var file = File(path);
+      _hairArtistProvider.saveNewImage(file);
     }
 
     String _displayName() {
       if (_hairArtistProvider.hairArtistProfile.about.name == "") {
-        return "@" + _hairArtistProvider.hairArtistProfile.email.split("@")[0];
+        String displayEmail =
+            "@" + _hairArtistProvider.hairArtistProfile.email.split("@")[0];
+        return displayEmail;
       }
       return _hairArtistProvider.hairArtistProfile.about.name;
     }
