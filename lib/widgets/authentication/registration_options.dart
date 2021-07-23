@@ -1,10 +1,14 @@
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:provider/provider.dart';
 
-class GetStartedAuth extends StatelessWidget {
-  const GetStartedAuth({
+import 'hair_client_register_form.dart';
+import 'hair_professional_register_form.dart';
+
+class RegistrationOptions extends StatelessWidget {
+  const RegistrationOptions({
     Key? key,
     required bool isHairArtist,
   })  : _isHairArtist = isHairArtist,
@@ -14,6 +18,8 @@ class GetStartedAuth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _slideUpState = Provider.of<SlideUpStateProvider>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -30,6 +36,7 @@ class GetStartedAuth extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 15),
           child: AppleAuthButton(
+            text: "Register with Apple",
             onPressed: () => {},
             style: AuthButtonStyle(
               borderRadius: 30,
@@ -48,6 +55,7 @@ class GetStartedAuth extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 15),
           child: FacebookAuthButton(
             onPressed: () => {},
+            text: "Register with Facebook",
             style: AuthButtonStyle(
               iconSize: 25,
               borderRadius: 30,
@@ -62,6 +70,7 @@ class GetStartedAuth extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 15),
           child: GoogleAuthButton(
+            text: "Register with Google",
             onPressed: () => {},
             style: AuthButtonStyle(
               iconSize: 25,
@@ -76,7 +85,17 @@ class GetStartedAuth extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 15),
           child: EmailAuthButton(
-            onPressed: () => {},
+            text: "Register with Email",
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ChangeNotifierProvider(
+                    create: (context) => FontSizeProvider(context),
+                    child: _isHairArtist ? HProfRegForm() : NormRegForm(),
+                  ),
+                ),
+              );
+            },
             style: AuthButtonStyle(
               buttonColor: Theme.of(context).primaryColor,
               iconSize: 25,

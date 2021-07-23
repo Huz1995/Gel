@@ -4,6 +4,7 @@ import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/authentication/revamped_form_field.dart';
+import 'package:gel/widgets/general/long_button.dart';
 import 'package:gel/widgets/general/small_button.dart';
 import 'package:provider/provider.dart';
 
@@ -37,9 +38,9 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
 
   @override
   Widget build(BuildContext context) {
-    final _slideUpState = Provider.of<SlideUpStateProvider>(context);
     final _authenticationProvider =
         Provider.of<AuthenticationProvider>(context);
+    final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
 
     void errorValidation(dynamic onError) {
       if (onError.toString() ==
@@ -64,7 +65,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
         _authenticationProvider.registerEmailPassword(_registerData).then(
           (_) {
             /*if auth sucessfull then return to login screen*/
-            _slideUpState.panelController.close();
+            Navigator.of(context).pop();
           },
         ).catchError(
           (onError) {
@@ -86,12 +87,13 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
                     bottom: MediaQuery.of(context).size.height * 0.02),
                 child: Text(
                   widget._formTitle,
-                  style: Provider.of<FontSizeProvider>(context).headline1,
+                  style: _fontSizeProvider.headline2,
                   textAlign: TextAlign.left,
                 ),
               ),
             ],
           ),
+          SizedBox(height: 10),
           RevampFormField(
             fieldTitle: "Email",
             fieldFocusNode: _emailFocusNode,
@@ -138,18 +140,16 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
               return null;
             },
           ),
-          SmallButton(
-            child: Text(
-              "Register",
-              style: Provider.of<FontSizeProvider>(context).button,
-            ),
+          Spacer(),
+          LongButton(
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () => {
               FocusScope.of(context).unfocus(),
               _saveForm(),
             },
-            buttonWidth: 110,
+            buttonName: "Register",
           ),
+          SizedBox(height: 20),
         ],
       ),
     );

@@ -17,11 +17,6 @@ enum AuthenticationForm {
   login,
 }
 
-enum Panel {
-  closed,
-  open,
-}
-
 class SlideUpStateProvider with ChangeNotifier {
   FrontPageFormState _formState = FrontPageFormState(false, false, false);
   bool _isSlideUpPanelOpen = false;
@@ -36,15 +31,6 @@ class SlideUpStateProvider with ChangeNotifier {
       _formState = FrontPageFormState(false, true, false);
     } else if (event == AuthenticationForm.login) {
       _formState = FrontPageFormState(false, false, true);
-    }
-    notifyListeners();
-  }
-
-  void setPanelState(Panel event) {
-    if (event == Panel.open) {
-      _isSlideUpPanelOpen = true;
-    } else if (event == Panel.closed) {
-      _isSlideUpPanelOpen = false;
     }
     notifyListeners();
   }

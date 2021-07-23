@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gel/widgets/authentication/get_started_auth.dart';
+import 'package:gel/widgets/authentication/login_options.dart';
+import 'package:gel/widgets/authentication/registration_options.dart';
 import 'package:provider/provider.dart';
 
 import './register_button.dart';
@@ -23,23 +24,23 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _slideUpPanel = Provider.of<SlideUpStateProvider>(context);
+    final _slideUpPanelProvider = Provider.of<SlideUpStateProvider>(context);
 
     Widget _slideUpPanelDisplayWidget() {
-      if (_slideUpPanel.formState.userRegistration) {
-        return GetStartedAuth(
+      if (_slideUpPanelProvider.formState.userRegistration) {
+        return RegistrationOptions(
           isHairArtist: false,
         );
-      } else if (_slideUpPanel.formState.hairProfRegistration) {
-        return HProfRegForm();
+      } else if (_slideUpPanelProvider.formState.hairProfRegistration) {
+        return RegistrationOptions(
+          isHairArtist: true,
+        );
       } else {
-        return LoginForm();
+        return LoginOptions();
       }
     }
 
     return SlidingUpPanel(
-      onPanelClosed: () => _slideUpPanel.setPanelState(Panel.closed),
-      onPanelOpened: () => _slideUpPanel.setPanelState(Panel.open),
       boxShadow: [
         BoxShadow(blurRadius: 50, color: Colors.grey),
       ],

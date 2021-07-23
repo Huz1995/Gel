@@ -30,7 +30,7 @@ class Settings extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: TextButton(
-              onPressed: () => {},
+              onPressed: () => _authProvider.logUserOut(),
               child: Row(
                 children: [
                   Text(

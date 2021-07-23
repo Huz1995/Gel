@@ -32,10 +32,11 @@ class AuthenticationProvider with ChangeNotifier {
       /*store idToken expires in one hour*/
       _idToken = await _auth.currentUser!.getIdToken();
       /*timer is set so the animations of slide panel are in sync*/
-      Timer(
-        Duration(seconds: 1),
-        () => {
-          notifyListeners(),
+      notifyListeners();
+      _logoutTimer = Timer(
+        Duration(seconds: 3600),
+        () {
+          logUserOut();
         },
       );
     } catch (e) {
@@ -75,16 +76,14 @@ class AuthenticationProvider with ChangeNotifier {
       );
       _isHairArtist = (response.body == 'true');
       /*notify the listeners listen to the changes in notifier atttributes*/
-      Timer(
-        Duration(seconds: 1),
-        () => {
-          notifyListeners(),
+      notifyListeners();
+      /*Firebase idToken expires in an hour so log usre out*/
+      _logoutTimer = Timer(
+        Duration(seconds: 3600),
+        () {
+          logUserOut();
         },
       );
-      /*Firebase idToken expires in an hour so log usre out*/
-      _logoutTimer = Timer(Duration(seconds: 3600), () {
-        logUserOut();
-      });
     } catch (e) {
       print(e);
     }
