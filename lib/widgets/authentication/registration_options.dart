@@ -1,5 +1,7 @@
 import 'package:auth_buttons/auth_buttons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,8 @@ class RegistrationOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _slideUpState = Provider.of<SlideUpStateProvider>(context);
+    final _authenticationProvider =
+        Provider.of<AuthenticationProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,10 +35,10 @@ class RegistrationOptions extends StatelessWidget {
           style: Provider.of<FontSizeProvider>(context).headline2,
         ),
         SizedBox(
-          height: 15,
+          height: 20,
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 15),
+          padding: const EdgeInsets.only(bottom: 20),
           child: AppleAuthButton(
             text: "Register with Apple",
             onPressed: () => {},
@@ -52,7 +56,7 @@ class RegistrationOptions extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 15),
+          padding: const EdgeInsets.only(bottom: 20),
           child: FacebookAuthButton(
             onPressed: () => {},
             text: "Register with Facebook",
@@ -68,10 +72,12 @@ class RegistrationOptions extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 15),
+          padding: const EdgeInsets.only(bottom: 20),
           child: GoogleAuthButton(
             text: "Register with Google",
-            onPressed: () => {},
+            onPressed: () {
+              _authenticationProvider.googleRegistration();
+            },
             style: AuthButtonStyle(
               iconSize: 25,
               borderRadius: 30,
@@ -83,7 +89,7 @@ class RegistrationOptions extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 15),
+          padding: const EdgeInsets.only(bottom: 20),
           child: EmailAuthButton(
             text: "Register with Email",
             onPressed: () {

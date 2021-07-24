@@ -28,6 +28,7 @@ class RevampFormField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
       child: TextFormField(
+        autocorrect: false,
         obscureText: _obscureText,
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,

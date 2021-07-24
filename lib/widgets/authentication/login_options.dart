@@ -19,9 +19,9 @@ class LoginOptions extends StatelessWidget {
           "Login",
           style: Provider.of<FontSizeProvider>(context).headline2,
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 20),
         Padding(
-          padding: const EdgeInsets.only(bottom: 15),
+          padding: const EdgeInsets.only(bottom: 20),
           child: AppleAuthButton(
             onPressed: () => {},
             text: "Login with Apple",
@@ -39,7 +39,7 @@ class LoginOptions extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 15),
+          padding: const EdgeInsets.only(bottom: 20),
           child: FacebookAuthButton(
             text: "Login with Facebook",
             onPressed: () => {},
@@ -55,7 +55,7 @@ class LoginOptions extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 15),
+          padding: const EdgeInsets.only(bottom: 20),
           child: GoogleAuthButton(
             onPressed: () => {},
             text: "Login with Google",
@@ -70,7 +70,7 @@ class LoginOptions extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 15),
+          padding: const EdgeInsets.only(bottom: 20),
           child: EmailAuthButton(
             onPressed: () => {
               Navigator.of(context).push(

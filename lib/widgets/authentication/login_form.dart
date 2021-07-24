@@ -52,7 +52,7 @@ class _LoginFormState extends State<LoginForm> {
       if (isValid!) {
         _formKey.currentState?.save();
         _authenticationProvider
-            .loginUserIn(_loginData)
+            .loginEmailPassword(_loginData)
             .then((_) => Navigator.of(context).pop())
             .catchError(
           (onError) {
@@ -96,6 +96,7 @@ class _LoginFormState extends State<LoginForm> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 15),
                     child: TextFormField(
+                      autocorrect: false,
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.next,
                       onSaved: (value) => {
@@ -123,6 +124,7 @@ class _LoginFormState extends State<LoginForm> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 15.0),
                     child: TextFormField(
+                      autocorrect: false,
                       obscureText: true,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.text,

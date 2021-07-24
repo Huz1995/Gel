@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gel/providers/authentication_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -24,6 +25,8 @@ class RegisterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final _slideUpState =
         Provider.of<SlideUpStateProvider>(context, listen: false);
+    final _authenticationProvider =
+        Provider.of<AuthenticationProvider>(context, listen: true);
 
     return Container(
       height: MediaQuery.of(context).size.width * .135,
@@ -51,6 +54,7 @@ class RegisterButton extends StatelessWidget {
               _slideUpState
                   .setFormOnPanel(AuthenticationForm.hairProfRegistration),
             },
+          _authenticationProvider.setIsHairArtist(_isHairArtist),
           /*use the panel controller to open slide up panel*/
           _panelController.open(),
         },

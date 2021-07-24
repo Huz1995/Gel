@@ -7,10 +7,7 @@ import './register_button.dart';
 import './login_button.dart';
 import './gel_and_skip_row.dart';
 import './gel_definition.dart';
-import '../authentication/hair_professional_register_form.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
-import 'package:gel/widgets/authentication/login_form.dart';
-import 'package:gel/widgets/authentication/hair_client_register_form.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SlidingUpPanelFrontPage extends StatelessWidget {
@@ -50,7 +47,7 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
       ),
       controller: _panelController,
       minHeight: 0,
-      maxHeight: MediaQuery.of(context).size.height * 0.5,
+      maxHeight: MediaQuery.of(context).size.width,
       panel: Center(
         /*consumer is listening to the changes in formstate and rebuils 
         appropiate form on the slide up panel*/
