@@ -4,6 +4,7 @@
         android:label="gel"
         android:icon="@mipmap/ic_launcher">
 
+        <!-- facebook authentication config -->
         <meta-data android:name="com.facebook.sdk.ApplicationId" 
             android:value="@string/facebook_app_id"/>
         
@@ -21,6 +22,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <!-- facebook authentication config -->
 
 
         <queries>

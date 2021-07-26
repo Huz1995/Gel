@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +22,43 @@ class RegistrationOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _slideUpState = Provider.of<SlideUpStateProvider>(context);
     final _authenticationProvider =
         Provider.of<AuthenticationProvider>(context);
+
+    Future<void> _showMyDialog(String error) async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              title: Text('Error'),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Text(error),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    'Back',
+                    style: TextStyle(color: Theme.of(context).accentColor),
+                  ),
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,28 +73,28 @@ class RegistrationOptions extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: AppleAuthButton(
-            text: "Register with Apple",
-            onPressed: () => {},
-            style: AuthButtonStyle(
-              borderRadius: 30,
-              iconSize: 25,
-              iconType: AuthIconType.secondary,
-              buttonColor: Colors.black,
-              elevation: 5,
-              height: MediaQuery.of(context).size.width * .135,
-              width: MediaQuery.of(context).size.width * 0.9,
-              textStyle:
-                  Provider.of<FontSizeProvider>(context).headline4_getStarted,
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.only(bottom: 20),
+        //   child: AppleAuthButton(
+        //     text: "Register with Apple",
+        //     onPressed: () => {},
+        //     style: AuthButtonStyle(
+        //       borderRadius: 30,
+        //       iconSize: 25,
+        //       iconType: AuthIconType.secondary,
+        //       buttonColor: Colors.black,
+        //       elevation: 5,
+        //       height: MediaQuery.of(context).size.width * .135,
+        //       width: MediaQuery.of(context).size.width * 0.9,
+        //       textStyle:
+        //           Provider.of<FontSizeProvider>(context).headline4_getStarted,
+        //     ),
+        //   ),
+        // ),
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: FacebookAuthButton(
-            onPressed: () => {},
+            onPressed: () => _authenticationProvider.facebookRegistration(),
             text: "Register with Facebook",
             style: AuthButtonStyle(
               iconSize: 25,
@@ -75,8 +111,12 @@ class RegistrationOptions extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 20),
           child: GoogleAuthButton(
             text: "Register with Google",
-            onPressed: () {
-              _authenticationProvider.googleRegistration();
+            onPressed: () async {
+              try {
+                await _authenticationProvider.googleRegistration();
+              } catch (e) {
+                return _showMyDialog(e.toString());
+              }
             },
             style: AuthButtonStyle(
               iconSize: 25,
