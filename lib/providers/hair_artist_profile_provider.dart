@@ -27,7 +27,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
     /*issue a get req to hairArtistProfile to get their information to display*/
     var response = await http.get(
       Uri.parse("http://localhost:3000/api/hairArtistProfile/" +
-          auth.loggedInUser.uid),
+          auth.firebaseAuth.currentUser!.uid),
       headers: {
         HttpHeaders.authorizationHeader: _idToken,
       },

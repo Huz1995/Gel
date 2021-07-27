@@ -7,7 +7,6 @@ class HairClientHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    print("hello");
     return Scaffold(
       body: Center(
         child: SmallButton(

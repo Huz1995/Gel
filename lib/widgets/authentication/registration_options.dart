@@ -73,28 +73,16 @@ class RegistrationOptions extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        // Padding(
-        //   padding: const EdgeInsets.only(bottom: 20),
-        //   child: AppleAuthButton(
-        //     text: "Register with Apple",
-        //     onPressed: () => {},
-        //     style: AuthButtonStyle(
-        //       borderRadius: 30,
-        //       iconSize: 25,
-        //       iconType: AuthIconType.secondary,
-        //       buttonColor: Colors.black,
-        //       elevation: 5,
-        //       height: MediaQuery.of(context).size.width * .135,
-        //       width: MediaQuery.of(context).size.width * 0.9,
-        //       textStyle:
-        //           Provider.of<FontSizeProvider>(context).headline4_getStarted,
-        //     ),
-        //   ),
-        // ),
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: FacebookAuthButton(
-            onPressed: () => _authenticationProvider.facebookRegistration(),
+            onPressed: () async {
+              try {
+                await _authenticationProvider.facebookRegistration();
+              } catch (e) {
+                return _showMyDialog(e.toString());
+              }
+            },
             text: "Register with Facebook",
             style: AuthButtonStyle(
               iconSize: 25,
@@ -115,7 +103,10 @@ class RegistrationOptions extends StatelessWidget {
               try {
                 await _authenticationProvider.googleRegistration();
               } catch (e) {
-                return _showMyDialog(e.toString());
+                if (e.toString() !=
+                    "Null check operator used on a null value") {
+                  return _showMyDialog(e.toString());
+                }
               }
             },
             style: AuthButtonStyle(
@@ -137,7 +128,7 @@ class RegistrationOptions extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ChangeNotifierProvider(
                     create: (context) => FontSizeProvider(context),
-                    child: _isHairArtist ? HProfRegForm() : NormRegForm(),
+                    child: HProfRegForm(),
                   ),
                 ),
               );

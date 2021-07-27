@@ -11,9 +11,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthenticationProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final FacebookLogin facebookSignIn = FacebookLogin();
+  final FacebookLogin _facebookSignIn = FacebookLogin();
 
-  late User? _loggedInUser;
   late String? _idToken;
   bool _isLoggedIn = false;
   bool _isHairArtist = false;
@@ -27,92 +26,120 @@ class AuthenticationProvider with ChangeNotifier {
       password: registerData.password!,
     );
     registerData.setUID(result.user!.uid);
-
     /*add the firebase uid to reg data model to send to backend*/
     /*set isLogged in and hairArtist booleans so main.dart can render correct screen*/
-    setFrontEndLoginStateAfterRegistration(registerData);
+    _setFrontEndLoginStateAfterRegistration(registerData);
     /*send registration data to our api to store the user in mongoDb*/
-
     await http.post(
       Uri.parse("http://localhost:3000/api/authentication/registration"),
       body: registerData.toObject(),
     );
   }
 
-  Future<void> googleRegistration() async {
+  Future<AuthCredential> _googleGetAuthCredential() async {
     final GoogleSignInAccount? googleSignInAccount =
         await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount!.authentication;
-
     final AuthCredential credential = GoogleAuthProvider.credential(
       idToken: googleSignInAuthentication.idToken,
       accessToken: googleSignInAuthentication.accessToken,
     );
+    return credential;
+  }
 
-    /*check if user is already registered with gel*/
-    List<String> previousMethods =
-        await _auth.fetchSignInMethodsForEmail(googleSignInAccount.email);
-    if (previousMethods.isNotEmpty) {
-      _googleSignIn.signOut();
-      throw ("This Google account is already registered with Gel");
-    }
+  Future<AuthCredential> _facebookGetAuthCredential(
+      FacebookLoginResult result) async {
+    final FacebookAccessToken fbToken = result.accessToken;
+    final AuthCredential credential =
+        FacebookAuthProvider.credential(fbToken.token);
 
-    final UserCredential authResult =
-        await _auth.signInWithCredential(credential);
+    return credential;
+  }
 
-    final User? user = authResult.user;
+  Future<void> _registerUser() async {
+    print(_auth.currentUser);
     UserRegisterFormData registerData = UserRegisterFormData();
-    registerData.setEmail(user!.email);
-    registerData.setUID(user.uid);
+    registerData.setEmail(_auth.currentUser!.email);
+    registerData.setUID(_auth.currentUser!.uid);
     registerData.setIsHairArtist(_isHairArtist);
-    /*set isLogged in and hairArtist booleans so main.dart can render correct screen*/
-    setFrontEndLoginStateAfterRegistration(registerData);
-    await http.post(
-      Uri.parse("http://localhost:3000/api/authentication/registration"),
-      body: registerData.toObject(),
+    var response = await http.get(
+      Uri.parse(
+          "http://localhost:3000/api/authentication/" + _auth.currentUser!.uid),
     );
+    if (response.body == "User does not exist") {
+      await http.post(
+        Uri.parse("http://localhost:3000/api/authentication/registration"),
+        body: registerData.toObject(),
+      );
+      await _setFrontEndLoginStateAfterRegistration(registerData);
+    } else {
+      _facebookSignIn.logOut();
+      _googleSignIn.signOut();
+      throw ("This account is already registered with Gel");
+    }
   }
 
-  Future<void> facebookRegistration() async {
-    final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
-    print(result);
-  }
-
-/*function that turns login state to on after reg is sucessfull*/
-  void setFrontEndLoginStateAfterRegistration(
+  /*function that turns login state to on after reg is sucessfull*/
+  Future<void> _setFrontEndLoginStateAfterRegistration(
       UserRegisterFormData registerData) async {
     /*set isLogged in and hairArtist booleans so main.dart can render correct screen*/
     _isLoggedIn = true;
     _isHairArtist = registerData.isHairArtist!;
-    /*store firebase user details*/
-    _loggedInUser = _auth.currentUser!;
     /*store idToken expires in one hour*/
     _idToken = await _auth.currentUser!.getIdToken();
     /*timer is set so the animations of slide panel are in sync*/
     notifyListeners();
     _logoutTimer = Timer(
       Duration(seconds: 3600),
-      () {
-        logUserOut();
+      () async {
+        await logUserOut();
       },
     );
+  }
+
+  Future<void> googleRegistration() async {
+    final AuthCredential credential = await _googleGetAuthCredential();
+    await _auth.signInWithCredential(credential);
+    try {
+      await _registerUser();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<void> facebookRegistration() async {
+    final FacebookLoginResult result = await _facebookSignIn.logIn(['email']);
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final AuthCredential credential =
+            await _facebookGetAuthCredential(result);
+        await _auth.signInWithCredential(credential);
+        try {
+          await _registerUser();
+        } catch (e) {
+          throw e.toString();
+        }
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        print('Login cancelled by the user.');
+        break;
+      case FacebookLoginStatus.error:
+        throw (result.errorMessage);
+    }
   }
 
   Future<void> loginEmailPassword(LoginFormData loginData) async {
     await _auth.signInWithEmailAndPassword(
         email: loginData.email!, password: loginData.password!);
     /*same as above*/
-    _loggedInUser = _auth.currentUser!;
     _isLoggedIn = true;
-    _idToken = await _loggedInUser!.getIdToken();
-    print(_idToken);
-
+    _idToken = await _auth.currentUser!.getIdToken();
     /*need to query the database to see if hair artist or client logs in
       to render the correct screen*/
     var response = await http.get(
       Uri.parse(
-          "http://localhost:3000/api/authentication/" + _loggedInUser!.uid),
+          "http://localhost:3000/api/authentication/" + _auth.currentUser!.uid),
     );
     _isHairArtist = (response.body == 'true');
     /*notify the listeners listen to the changes in notifier atttributes*/
@@ -120,60 +147,80 @@ class AuthenticationProvider with ChangeNotifier {
     /*Firebase idToken expires in an hour so log usre out*/
     _logoutTimer = Timer(
       Duration(seconds: 3600),
-      () {
-        logUserOut();
+      () async {
+        await logUserOut();
       },
     );
   }
 
-  Future loginWithGoogle() async {
-    final GoogleSignInAccount? googleSignInAccount =
-        await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount!.authentication;
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      idToken: googleSignInAuthentication.idToken,
-      accessToken: googleSignInAuthentication.accessToken,
+  Future<void> _loginUser() async {
+    print(_auth.currentUser);
+
+    var response = await http.get(
+      Uri.parse(
+          "http://localhost:3000/api/authentication/" + _auth.currentUser!.uid),
     );
-    /*check if user is already registered with gel*/
-    List<String> signInProviders =
-        await _auth.fetchSignInMethodsForEmail(googleSignInAccount.email);
-    print(signInProviders);
-    if (signInProviders.isEmpty) {
-      _googleSignIn.signOut();
-      throw ("This Google account is not registered with Gel");
+    if (response.body != "User does not exist") {
+      _isHairArtist = (response.body == 'true');
+      _isLoggedIn = true;
+      _idToken = await _auth.currentUser!.getIdToken();
+      /*notify the listeners listen to the changes in notifier atttributes*/
+      notifyListeners();
+      /*Firebase idToken expires in an hour so log usre out*/
+      _logoutTimer = Timer(
+        Duration(seconds: 3600),
+        () async {
+          await logUserOut();
+        },
+      );
+    } else {
+      _auth.currentUser!.delete();
+      throw "This account is not registered with Gel";
     }
-    await _auth.signInWithCredential(credential);
-    _loggedInUser = _auth.currentUser!;
-    _isLoggedIn = true;
-    _idToken = await _loggedInUser!.getIdToken();
-    print(_idToken);
-    /*need to query the database to see if hair artist or client logs in
-      to render the correct screen*/
-    var response = await http.get(
-      Uri.parse(
-          "http://localhost:3000/api/authentication/" + _loggedInUser!.uid),
-    );
-    _isHairArtist = (response.body == 'true');
-    /*notify the listeners listen to the changes in notifier atttributes*/
-    notifyListeners();
-    /*Firebase idToken expires in an hour so log usre out*/
-    _logoutTimer = Timer(
-      Duration(seconds: 3600),
-      () {
-        logUserOut();
-      },
-    );
   }
 
-  void logUserOut() async {
+  Future<void> loginWithGoogle() async {
+    final AuthCredential credential = await _googleGetAuthCredential();
+    final UserCredential authResult =
+        await _auth.signInWithCredential(credential);
+
+    try {
+      await _loginUser();
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<void> loginWithFacebook() async {
+    final FacebookLoginResult result = await _facebookSignIn.logIn(['email']);
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final AuthCredential credential =
+            await _facebookGetAuthCredential(result);
+        await _auth.signInWithCredential(credential);
+        try {
+          await _loginUser();
+        } catch (e) {
+          throw e.toString();
+        }
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        print('Login cancelled by the user.');
+        break;
+      case FacebookLoginStatus.error:
+        throw (result.errorMessage);
+    }
+  }
+
+  Future<void> logUserOut() async {
     _isLoggedIn = false;
     _isHairArtist = false;
-    _loggedInUser = null;
     _idToken = null;
-    _auth.signOut();
+    await _auth.signOut();
+    print(_auth.currentUser);
     _logoutTimer.cancel();
-    _googleSignIn.signOut();
+    await _googleSignIn.signOut();
+    await _facebookSignIn.logOut();
     notifyListeners();
   }
 
@@ -185,16 +232,15 @@ class AuthenticationProvider with ChangeNotifier {
     return _isHairArtist;
   }
 
-  User get loggedInUser {
-    return _loggedInUser!;
-  }
-
   String get idToken {
     return _idToken!;
   }
 
+  FirebaseAuth get firebaseAuth {
+    return _auth;
+  }
+
   void setIsHairArtist(bool isHairArtist) {
     _isHairArtist = isHairArtist;
-    print(_isHairArtist);
   }
 }

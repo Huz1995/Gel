@@ -82,7 +82,13 @@ class LoginOptions extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 20),
           child: FacebookAuthButton(
             text: "Login with Facebook",
-            onPressed: () => {},
+            onPressed: () async {
+              try {
+                await _authenticationProvider.loginWithFacebook();
+              } catch (e) {
+                return _showMyDialog(e.toString());
+              }
+            },
             style: AuthButtonStyle(
               iconSize: 25,
               borderRadius: 30,
@@ -101,7 +107,10 @@ class LoginOptions extends StatelessWidget {
               try {
                 await _authenticationProvider.loginWithGoogle();
               } catch (e) {
-                return _showMyDialog(e.toString());
+                String errMsg = e.toString();
+                if (errMsg != "Null check operator used on a null value") {
+                  return _showMyDialog(e.toString());
+                }
               }
             },
             text: "Login with Google",

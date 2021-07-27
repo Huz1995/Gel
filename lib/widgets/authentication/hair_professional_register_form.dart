@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:gel/widgets/authentication/register_form_fields.dart';
 
-class HProfRegForm extends StatefulWidget {
-  @override
-  _HProfRegFormState createState() => _HProfRegFormState();
-}
-
-class _HProfRegFormState extends State<HProfRegForm> {
+class HProfRegForm extends StatelessWidget {
   static final _formKey = GlobalKey<FormState>();
 
   @override
@@ -24,14 +19,15 @@ class _HProfRegFormState extends State<HProfRegForm> {
       ),
       body: Container(
         child: Center(
-            child: Form(
-          key: _formKey,
-          child: RegisterFormFields(
-            formKey: _formKey,
-            formTitle: "Register \nAs Hair Artist",
-            isHairArtist: true,
+          child: Form(
+            key: _formKey,
+            child: RegisterFormFields(
+              formKey: _formKey,
+              formTitle: "Register \nAs Hair Artist",
+              isHairArtist: true,
+            ),
           ),
-        )),
+        ),
       ),
     );
   }
