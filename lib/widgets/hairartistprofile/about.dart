@@ -37,6 +37,7 @@ class About extends StatelessWidget {
             ),
             _about.description != ""
                 ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(_about.description),
                       SizedBox(
@@ -50,6 +51,7 @@ class About extends StatelessWidget {
                   ),
             _about.chatiness != ""
                 ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(_about.chatiness),
                       SizedBox(

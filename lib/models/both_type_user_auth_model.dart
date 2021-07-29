@@ -3,6 +3,7 @@ class UserRegisterFormData {
   String? _email;
   String? _password;
   bool? _isHairArtist;
+  String? _photoURL;
 
   void setUID(String? uid) {
     _uid = uid;
@@ -14,6 +15,10 @@ class UserRegisterFormData {
 
   void setPassword(String? password) {
     _password = password;
+  }
+
+  void setPhotoURL(String? photoURL) {
+    _photoURL = photoURL;
   }
 
   void setIsHairArtist(bool? isHairArtist) {
@@ -42,6 +47,7 @@ class UserRegisterFormData {
       'uid': _uid!,
       'email': _email!,
       'isHairArtist': _isHairArtist!.toString(),
+      'photoURL': _photoURL == null ? "null" : _photoURL!,
     };
   }
 }

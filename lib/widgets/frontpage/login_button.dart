@@ -23,7 +23,7 @@ class Login extends StatelessWidget {
       children: [
         Text(
           "Already have an account?",
-          style: Provider.of<FontSizeProvider>(context).bodyText2,
+          style: Provider.of<FontSizeProvider>(context).bodyText3,
         ),
         GestureDetector(
           onTap: () => {

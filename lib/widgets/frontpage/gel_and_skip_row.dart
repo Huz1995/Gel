@@ -14,7 +14,7 @@ class GelAndSkip extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.05,
+            width: MediaQuery.of(context).size.width * 0.1,
           ),
           Image(
             width: MediaQuery.of(context).size.width * 0.23,
@@ -24,19 +24,19 @@ class GelAndSkip extends StatelessWidget {
           SmallButton(
             child: Text(
               "Skip",
-              style: Provider.of<FontSizeProvider>(context).button,
+              style: Provider.of<FontSizeProvider>(context).bodyText2,
             ),
-            backgroundColor: Theme.of(context).cardColor,
+            backgroundColor: Theme.of(context).cardColor.withOpacity(0.6),
             onPressed: () {
               Navigator.pushNamed(
                 context,
                 '/map',
               );
             },
-            buttonWidth: 70,
+            buttonWidth: 60,
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.05,
+            width: MediaQuery.of(context).size.width * 0.1,
           ),
         ],
       ),

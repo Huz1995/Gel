@@ -1,10 +1,8 @@
 import 'dart:ui';
 
 import 'package:auth_buttons/auth_buttons.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
-import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -128,7 +126,7 @@ class RegistrationOptions extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ChangeNotifierProvider(
                     create: (context) => FontSizeProvider(context),
-                    child: HProfRegForm(),
+                    child: _isHairArtist ? HProfRegForm() : NormRegForm(),
                   ),
                 ),
               );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/authentication/revamped_form_field.dart';
 import 'package:provider/provider.dart';
@@ -18,14 +19,31 @@ class ChangePasswordForm extends StatelessWidget {
   static final _formKey = GlobalKey<FormState>();
   String _password = "";
 
-  void _onChangePassword() {
-    if (_formKey.currentState!.validate()) {
-      print(_password);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    void _onChangePassword() {
+      if (_formKey.currentState!.validate()) {
+        _authenticationProvider.changePassword(_password).then(
+          (_) async {
+            await CustomDialogs.showMyDialogOneButton(
+              context,
+              Text("Success"),
+              [Text("Password has been changed")],
+              Text("ok"),
+              () {
+                Navigator.of(context).pop();
+              },
+            ).then(
+              (_) => Navigator.of(context).pop(),
+            );
+          },
+        ).catchError(
+          /*maybe need to do something with this error*/
+          (error) => print(error),
+        );
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white, //change your color here

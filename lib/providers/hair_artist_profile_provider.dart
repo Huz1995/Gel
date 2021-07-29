@@ -26,7 +26,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
   Future<void> getUserDataFromBackend(AuthenticationProvider auth) async {
     /*issue a get req to hairArtistProfile to get their information to display*/
     var response = await http.get(
-      Uri.parse("http://localhost:3000/api/hairArtistProfile/" +
+      Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/" +
           auth.firebaseAuth.currentUser!.uid),
       headers: {
         HttpHeaders.authorizationHeader: _idToken,
@@ -69,6 +69,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
     /*store the file in firbase storage and call on complete callback*/
     await ref.putFile(file).whenComplete(
       () async {
+        print("here");
         /*when complete get the image url from firebase storeage*/
         var photoUrl = await ref.getDownloadURL();
         /*add it to userprofile object so widgets can render image*/
@@ -76,7 +77,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
         notifyListeners();
         /*send the url to backend and store in mongodb for persistance*/
         await http.put(
-          Uri.parse("http://localhost:3000/api/hairArtistProfile/photos"),
+          Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/photos"),
           body: {
             'uid': _userProfile.uid,
             'photoUrl': photoUrl,
@@ -106,7 +107,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
         /*send the url to backend and store in mongodb for persistance*/
         await http.put(
           Uri.parse(
-              "http://localhost:3000/api/hairArtistProfile/profilepicture"),
+              "http://192.168.0.11:3000/api/hairArtistProfile/profilepicture"),
           body: {
             'uid': _userProfile.uid,
             'photoUrl': photoUrl,
@@ -122,7 +123,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
   Future<void> setAboutDetails() async {
     _userProfile.about.printAbout();
     await http.put(
-      Uri.parse("http://localhost:3000/api/hairArtistProfile/about/" +
+      Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/about/" +
           _userProfile.uid +
           "/"),
       body: _userProfile.about.toObject(),
@@ -140,7 +141,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
       () async {
         _userProfile.deletePhotoUrl(url);
         http.delete(
-          Uri.parse("http://localhost:3000/api/hairArtistProfile/photos"),
+          Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/photos"),
           body: {
             'uid': _userProfile.uid,
             'photoUrl': url,

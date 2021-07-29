@@ -58,7 +58,7 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.05,
+            height: MediaQuery.of(context).size.height * 0.03,
           ),
           GelAndSkip(),
           Expanded(
@@ -73,11 +73,14 @@ class SlidingUpPanelFrontPage extends StatelessWidget {
             isHairArtist: false,
             panelController: _panelController,
           ),
+          Login(panelController: _panelController),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
+          ),
           RegisterButton(
               buttonTitle: "Join as Hair Artist.",
               isHairArtist: true,
               panelController: _panelController),
-          Login(panelController: _panelController),
           SizedBox(
             height: 50,
           ),

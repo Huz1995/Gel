@@ -14,7 +14,7 @@ class GelDefinition extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 70,
+            height: 80,
             child: AnimatedTextKit(
               animatedTexts: [
                 TyperAnimatedText(

@@ -26,14 +26,16 @@ class AuthenticationProvider with ChangeNotifier {
       password: registerData.password!,
     );
     registerData.setUID(result.user!.uid);
+    print("here");
     /*add the firebase uid to reg data model to send to backend*/
-    /*set isLogged in and hairArtist booleans so main.dart can render correct screen*/
-    _setFrontEndLoginStateAfterRegistration(registerData);
+
     /*send registration data to our api to store the user in mongoDb*/
     await http.post(
-      Uri.parse("http://localhost:3000/api/authentication/registration"),
+      Uri.parse("http://192.168.0.11:3000/api/authentication/registration"),
       body: registerData.toObject(),
     );
+    /*set isLogged in and hairArtist booleans so main.dart can render correct screen*/
+    await _setFrontEndLoginStateAfterRegistration(registerData);
   }
 
   Future<AuthCredential> _googleGetAuthCredential() async {
@@ -57,19 +59,21 @@ class AuthenticationProvider with ChangeNotifier {
     return credential;
   }
 
-  Future<void> _registerUser() async {
+  Future<void> _registerUser(String photoURL) async {
+    print(photoURL);
     print(_auth.currentUser);
     UserRegisterFormData registerData = UserRegisterFormData();
     registerData.setEmail(_auth.currentUser!.email);
     registerData.setUID(_auth.currentUser!.uid);
     registerData.setIsHairArtist(_isHairArtist);
+    registerData.setPhotoURL(photoURL);
     var response = await http.get(
-      Uri.parse(
-          "http://localhost:3000/api/authentication/" + _auth.currentUser!.uid),
+      Uri.parse("http://192.168.0.11:3000/api/authentication/" +
+          _auth.currentUser!.uid),
     );
     if (response.body == "User does not exist") {
       await http.post(
-        Uri.parse("http://localhost:3000/api/authentication/registration"),
+        Uri.parse("http://192.168.0.11:3000/api/authentication/registration"),
         body: registerData.toObject(),
       );
       await _setFrontEndLoginStateAfterRegistration(registerData);
@@ -100,9 +104,13 @@ class AuthenticationProvider with ChangeNotifier {
 
   Future<void> googleRegistration() async {
     final AuthCredential credential = await _googleGetAuthCredential();
-    await _auth.signInWithCredential(credential);
     try {
-      await _registerUser();
+      await _auth.signInWithCredential(credential);
+    } catch (e) {
+      throw e.toString();
+    }
+    try {
+      await _registerUser(_auth.currentUser!.photoURL!);
     } catch (e) {
       throw e.toString();
     }
@@ -114,9 +122,13 @@ class AuthenticationProvider with ChangeNotifier {
       case FacebookLoginStatus.loggedIn:
         final AuthCredential credential =
             await _facebookGetAuthCredential(result);
-        await _auth.signInWithCredential(credential);
         try {
-          await _registerUser();
+          await _auth.signInWithCredential(credential);
+        } catch (e) {
+          throw e.toString();
+        }
+        try {
+          await _registerUser(_auth.currentUser!.photoURL!);
         } catch (e) {
           throw e.toString();
         }
@@ -138,8 +150,8 @@ class AuthenticationProvider with ChangeNotifier {
     /*need to query the database to see if hair artist or client logs in
       to render the correct screen*/
     var response = await http.get(
-      Uri.parse(
-          "http://localhost:3000/api/authentication/" + _auth.currentUser!.uid),
+      Uri.parse("http://192.168.0.11:3000/api/authentication/" +
+          _auth.currentUser!.uid),
     );
     _isHairArtist = (response.body == 'true');
     /*notify the listeners listen to the changes in notifier atttributes*/
@@ -154,11 +166,9 @@ class AuthenticationProvider with ChangeNotifier {
   }
 
   Future<void> _loginUser() async {
-    print(_auth.currentUser);
-
     var response = await http.get(
-      Uri.parse(
-          "http://localhost:3000/api/authentication/" + _auth.currentUser!.uid),
+      Uri.parse("http://192.168.0.11:3000/api/authentication/" +
+          _auth.currentUser!.uid),
     );
     if (response.body != "User does not exist") {
       _isHairArtist = (response.body == 'true');
@@ -174,6 +184,8 @@ class AuthenticationProvider with ChangeNotifier {
         },
       );
     } else {
+      _facebookSignIn.logOut();
+      _googleSignIn.signOut();
       _auth.currentUser!.delete();
       throw "This account is not registered with Gel";
     }
@@ -181,9 +193,11 @@ class AuthenticationProvider with ChangeNotifier {
 
   Future<void> loginWithGoogle() async {
     final AuthCredential credential = await _googleGetAuthCredential();
-    final UserCredential authResult =
-        await _auth.signInWithCredential(credential);
-
+    try {
+      await _auth.signInWithCredential(credential);
+    } catch (e) {
+      throw e.toString();
+    }
     try {
       await _loginUser();
     } catch (e) {
@@ -197,7 +211,11 @@ class AuthenticationProvider with ChangeNotifier {
       case FacebookLoginStatus.loggedIn:
         final AuthCredential credential =
             await _facebookGetAuthCredential(result);
-        await _auth.signInWithCredential(credential);
+        try {
+          await _auth.signInWithCredential(credential);
+        } catch (e) {
+          throw e.toString();
+        }
         try {
           await _loginUser();
         } catch (e) {
@@ -209,6 +227,14 @@ class AuthenticationProvider with ChangeNotifier {
         break;
       case FacebookLoginStatus.error:
         throw (result.errorMessage);
+    }
+  }
+
+  Future<void> changePassword(String password) async {
+    try {
+      await _auth.currentUser!.updatePassword(password);
+    } catch (e) {
+      throw e.toString();
     }
   }
 

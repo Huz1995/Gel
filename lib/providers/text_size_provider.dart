@@ -55,14 +55,21 @@ class FontSizeProvider extends ChangeNotifier {
 
   TextStyle get bodyText1 {
     return TextStyle(
-      fontSize: MediaQuery.of(context).size.width * 0.06,
+      fontSize: MediaQuery.of(context).size.width * 0.05,
       color: Theme.of(context).primaryColor,
     );
   }
 
   TextStyle get bodyText2 {
     return TextStyle(
-      fontSize: MediaQuery.of(context).size.width * 0.05,
+      fontSize: MediaQuery.of(context).size.width * 0.035,
+      color: Colors.white,
+    );
+  }
+
+  TextStyle get bodyText3 {
+    return TextStyle(
+      fontSize: MediaQuery.of(context).size.width * 0.04,
       color: Colors.white,
     );
   }

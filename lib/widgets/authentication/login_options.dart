@@ -1,8 +1,7 @@
-import 'dart:ui';
-
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/authentication/login_form.dart';
 import 'package:provider/provider.dart';
@@ -12,41 +11,6 @@ class LoginOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> _showMyDialog(String error) async {
-      return showDialog<void>(
-        context: context,
-        barrierDismissible: false, // user must tap button!
-        builder: (BuildContext context) {
-          return BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              title: Text('Error'),
-              content: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Text(error),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text(
-                    'Back',
-                    style: TextStyle(color: Theme.of(context).accentColor),
-                  ),
-                  onPressed: () async {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
-        },
-      );
-    }
-
     final _authenticationProvider =
         Provider.of<AuthenticationProvider>(context);
     return Column(
@@ -60,24 +24,6 @@ class LoginOptions extends StatelessWidget {
           style: Provider.of<FontSizeProvider>(context).headline2,
         ),
         SizedBox(height: 20),
-        // Padding(
-        //   padding: const EdgeInsets.only(bottom: 20),
-        //   child: AppleAuthButton(
-        //     onPressed: () => {},
-        //     text: "Login with Apple",
-        //     style: AuthButtonStyle(
-        //       borderRadius: 30,
-        //       iconSize: 25,
-        //       iconType: AuthIconType.secondary,
-        //       buttonColor: Colors.black,
-        //       elevation: 5,
-        //       height: MediaQuery.of(context).size.width * .135,
-        //       width: MediaQuery.of(context).size.width * 0.9,
-        //       textStyle:
-        //           Provider.of<FontSizeProvider>(context).headline4_getStarted,
-        //     ),
-        //   ),
-        // ),
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: FacebookAuthButton(
@@ -86,7 +32,20 @@ class LoginOptions extends StatelessWidget {
               try {
                 await _authenticationProvider.loginWithFacebook();
               } catch (e) {
-                return _showMyDialog(e.toString());
+                return CustomDialogs.showMyDialogOneButton(
+                  context,
+                  Text('Error'),
+                  <Widget>[
+                    Text(e.toString()),
+                  ],
+                  Text(
+                    'Back',
+                    style: TextStyle(color: Theme.of(context).accentColor),
+                  ),
+                  () {
+                    Navigator.of(context).pop();
+                  },
+                );
               }
             },
             style: AuthButtonStyle(
@@ -109,7 +68,20 @@ class LoginOptions extends StatelessWidget {
               } catch (e) {
                 String errMsg = e.toString();
                 if (errMsg != "Null check operator used on a null value") {
-                  return _showMyDialog(e.toString());
+                  return CustomDialogs.showMyDialogOneButton(
+                    context,
+                    Text('Error'),
+                    <Widget>[
+                      Text(e.toString()),
+                    ],
+                    Text(
+                      'Back',
+                      style: TextStyle(color: Theme.of(context).accentColor),
+                    ),
+                    () {
+                      Navigator.of(context).pop();
+                    },
+                  );
                 }
               }
             },
@@ -135,7 +107,7 @@ class LoginOptions extends StatelessWidget {
                     child: LoginForm(),
                   ),
                 ),
-              )
+              ),
             },
             text: "Login with Email",
             style: AuthButtonStyle(
