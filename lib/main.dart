@@ -25,11 +25,14 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitDown,
     ]);
+    final GlobalKey<NavigatorState> navigatorKey =
+        new GlobalKey<NavigatorState>();
 
     return ChangeNotifierProvider(
-      create: (context) => AuthenticationProvider(),
+      create: (context) => AuthenticationProvider(navigatorKey),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
         title: 'Gel',
         theme: ThemeData(
           primarySwatch: Colors.blue,

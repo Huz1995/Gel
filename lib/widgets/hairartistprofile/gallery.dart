@@ -1,17 +1,22 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
+import 'package:gel/providers/text_size_provider.dart';
 
 class Gallery extends StatelessWidget {
   const Gallery({
     Key? key,
     required HairArtistProfileProvider hairArtistProvider,
+    required FontSizeProvider fontSizeProvider,
   })  : _hairArtistProvider = hairArtistProvider,
+        _fontSizeProvider = fontSizeProvider,
         super(key: key);
 
   final HairArtistProfileProvider _hairArtistProvider;
+  final FontSizeProvider _fontSizeProvider;
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +26,44 @@ class Gallery extends StatelessWidget {
       child: _hairArtistProvider.hairArtistProfile.photoUrls.isEmpty
           ? Center(
               child: Container(
-                margin: EdgeInsets.all(50.0),
-                child: Text(
-                  "You have no pictures!, click camera icon to add before and after photos of your hair cut so people can see what an amazing hairdresser you are!",
+                margin: EdgeInsets.only(top: 250.0),
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: MediaQuery.of(context).size.width / 7,
+                          backgroundColor:
+                              Theme.of(context).cardColor.withOpacity(0.1),
+                        ),
+                        Positioned(
+                          left: MediaQuery.of(context).size.width * 0.078,
+                          bottom: MediaQuery.of(context).size.width * 0.078,
+                          //bottom: _phoneWidth / 4,
+                          child: Icon(
+                            FontAwesome5.images,
+                            size: 50,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15.0),
+                      child: Text(
+                        "Upload Images",
+                        textAlign: TextAlign.center,
+                        style: _fontSizeProvider.headline2,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(50, 10, 50, 0),
+                      child: Text(
+                        "Uploading images is to your portfolio is a key part of gaining exposure and buisiness. Highlight your work and styles to the world!",
+                        textAlign: TextAlign.center,
+                        style: _fontSizeProvider.bodyText4,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             )

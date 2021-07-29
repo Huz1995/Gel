@@ -131,6 +131,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
             children: [
               Gallery(
                 hairArtistProvider: _hairArtistProvider,
+                fontSizeProvider: _fontSizeProvider,
               ),
               About(),
               Reviews(),

@@ -3,6 +3,7 @@ import 'package:gel/models/login_auth_model.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
+import 'package:gel/widgets/authentication/reset_password.dart';
 import 'package:gel/widgets/general/long_button.dart';
 import 'package:gel/widgets/general/small_button.dart';
 import 'package:provider/provider.dart';
@@ -150,6 +151,38 @@ class _LoginFormState extends State<LoginForm> {
                             borderRadius: BorderRadius.circular(15.0)),
                       ),
                     ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Forgot Password? Click",
+                        style: _fontSizeProvider.bodyText4,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ChangeNotifierProvider(
+                                create: (context) => FontSizeProvider(context),
+                                child: ResetPassword(
+                                  authenticationProvider:
+                                      _authenticationProvider,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(3),
+                          child: Text(
+                            "Here",
+                            style: Provider.of<FontSizeProvider>(context)
+                                .bodyText1,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                   Spacer(),
                   LongButton(

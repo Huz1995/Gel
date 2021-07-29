@@ -36,7 +36,7 @@ class GelAndSkip extends StatelessWidget {
             buttonWidth: 60,
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.1,
+            width: MediaQuery.of(context).size.width * 0.08,
           ),
         ],
       ),

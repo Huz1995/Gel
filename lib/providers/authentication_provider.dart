@@ -12,30 +12,68 @@ class AuthenticationProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FacebookLogin _facebookSignIn = FacebookLogin();
-
+  late StreamController<bool> _streamController;
   late String? _idToken;
   bool _isLoggedIn = false;
   bool _isHairArtist = false;
   late Timer _logoutTimer;
+  late Timer _emailVerifTimer;
+  final GlobalKey<NavigatorState> navigatorKey;
 
+  AuthenticationProvider(this.navigatorKey);
+
+  // haripatel130@gmail.com
   //register with email
   Future<void> registerEmailPassword(UserRegisterFormData registerData) async {
+    print("active");
     /*register the user with firebase auth and set the UID returned in register data*/
-    UserCredential result = await _auth.createUserWithEmailAndPassword(
+    await _auth.createUserWithEmailAndPassword(
       email: registerData.email!,
       password: registerData.password!,
     );
-    registerData.setUID(result.user!.uid);
-    print("here");
-    /*add the firebase uid to reg data model to send to backend*/
-
-    /*send registration data to our api to store the user in mongoDb*/
-    await http.post(
-      Uri.parse("http://192.168.0.11:3000/api/authentication/registration"),
-      body: registerData.toObject(),
+    try {
+      await _auth.currentUser!.sendEmailVerification();
+    } catch (e) {}
+    _waitingForUserToVerifiedEmail();
+    _streamController = StreamController();
+    Stream boolStream = _streamController.stream;
+    boolStream.listen(
+      (userVerifedEmail) async {
+        print(userVerifedEmail);
+        if (userVerifedEmail) {
+          /*add the firebase uid to reg data model to send to backend*/
+          print("here");
+          /*send registration data to our api to store the user in mongoDb*/
+          registerData.setUID(_auth.currentUser!.uid);
+          await http.post(
+            Uri.parse(
+                "http://192.168.0.11:3000/api/authentication/registration"),
+            body: registerData.toObject(),
+          );
+          /*set isLogged in and hairArtist booleans so main.dart can render correct screen*/
+          await _setFrontEndLoginStateAfterRegistration(registerData);
+          navigatorKey.currentState!.pop();
+          navigatorKey.currentState!.pop();
+          print("done");
+        }
+      },
     );
-    /*set isLogged in and hairArtist booleans so main.dart can render correct screen*/
-    await _setFrontEndLoginStateAfterRegistration(registerData);
+  }
+
+  void _waitingForUserToVerifiedEmail() {
+    _emailVerifTimer = Timer.periodic(
+      Duration(seconds: 2),
+      (_) async {
+        await _auth.currentUser!.reload();
+        if (_auth.currentUser!.emailVerified) {
+          _streamController.add(true);
+          _emailVerifTimer.cancel();
+          _streamController.close();
+        } else {
+          _streamController.add(false);
+        }
+      },
+    );
   }
 
   Future<AuthCredential> _googleGetAuthCredential() async {
@@ -142,8 +180,13 @@ class AuthenticationProvider with ChangeNotifier {
   }
 
   Future<void> loginEmailPassword(LoginFormData loginData) async {
-    await _auth.signInWithEmailAndPassword(
-        email: loginData.email!, password: loginData.password!);
+    try {
+      await _auth.signInWithEmailAndPassword(
+          email: loginData.email!, password: loginData.password!);
+    } catch (e) {
+      print(e.toString());
+      throw e.toString();
+    }
     /*same as above*/
     _isLoggedIn = true;
     _idToken = await _auth.currentUser!.getIdToken();
@@ -238,6 +281,14 @@ class AuthenticationProvider with ChangeNotifier {
     }
   }
 
+  Future<void> forgotPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
   Future<void> logUserOut() async {
     _isLoggedIn = false;
     _isHairArtist = false;
@@ -266,7 +317,15 @@ class AuthenticationProvider with ChangeNotifier {
     return _auth;
   }
 
+  StreamController get isEmailVerifController {
+    return _streamController;
+  }
+
   void setIsHairArtist(bool isHairArtist) {
     _isHairArtist = isHairArtist;
+  }
+
+  Timer get emailVerifPeriodicTimer {
+    return _emailVerifTimer;
   }
 }

@@ -4,6 +4,7 @@ import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/slideup_frontpage_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/authentication/revamped_form_field.dart';
+import 'package:gel/widgets/authentication/verify_email_warning.dart';
 import 'package:gel/widgets/general/long_button.dart';
 import 'package:gel/widgets/general/small_button.dart';
 import 'package:provider/provider.dart';
@@ -55,17 +56,24 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
       _invalidEmail = false;
     }
 
-    void _saveForm() {
+    void _saveForm() async {
       /*validate the form*/
       final isValid = widget._formKey.currentState?.validate();
       if (isValid!) {
         /*save form at the new object authData*/
         widget._formKey.currentState?.save();
+
         /*use auth provider to complete registration and deal with any errors*/
         _authenticationProvider.registerEmailPassword(_registerData).then(
           (_) {
-            /*if auth sucessfull then return to login screen*/
-            Navigator.of(context).pop();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => VerifyEmailWarning(
+                  fontSizeProvider: _fontSizeProvider,
+                  authenticationProvider: _authenticationProvider,
+                ),
+              ),
+            );
           },
         ).catchError(
           (onError) {
