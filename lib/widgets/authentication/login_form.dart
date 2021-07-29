@@ -51,10 +51,11 @@ class _LoginFormState extends State<LoginForm> {
       final isValid = _formKey.currentState?.validate();
       if (isValid!) {
         _formKey.currentState?.save();
-        _authenticationProvider
-            .loginEmailPassword(_loginData)
-            .then((_) => Navigator.of(context).pop())
-            .catchError(
+        _authenticationProvider.loginEmailPassword(_loginData).then(
+          (_) {
+            Navigator.of(context).pop();
+          },
+        ).catchError(
           (onError) {
             errorValidation(onError);
           },

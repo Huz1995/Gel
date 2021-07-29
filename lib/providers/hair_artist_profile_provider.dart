@@ -95,22 +95,46 @@ class HairArtistProfileProvider extends ChangeNotifier {
     final ref = FirebaseStorage.instance
         .ref()
         .child(_userProfile.email)
-        .child("profile picture");
+        .child("profile_picture");
     /*store the file in firbase storage and call on complete callback*/
-    await ref.putFile(file).whenComplete(
+    try {
+      await ref.putFile(file).whenComplete(
+        () async {
+          /*when complete get the image url from firebase storeage*/
+          var photoUrl = await ref.getDownloadURL();
+          /*add it to userprofile object so widgets can render image*/
+          _userProfile.addProfilePictureUrl(photoUrl);
+          notifyListeners();
+          /*send the url to backend and store in mongodb for persistance*/
+          await http.put(
+            Uri.parse(
+                "http://192.168.0.11:3000/api/hairArtistProfile/profilepicture"),
+            body: {
+              'uid': _userProfile.uid,
+              'photoUrl': photoUrl,
+            },
+            headers: {
+              HttpHeaders.authorizationHeader: _idToken,
+            },
+          );
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void removeProfilePicture() async {
+    final ref =
+        FirebaseStorage.instance.refFromURL(_userProfile.profilePhotoUrl!);
+    await ref.delete().whenComplete(
       () async {
-        /*when complete get the image url from firebase storeage*/
-        var photoUrl = await ref.getDownloadURL();
-        /*add it to userprofile object so widgets can render image*/
-        _userProfile.addProfilePictureUrl(photoUrl);
-        notifyListeners();
-        /*send the url to backend and store in mongodb for persistance*/
-        await http.put(
+        _userProfile.deleteProfilePhoto();
+        http.delete(
           Uri.parse(
               "http://192.168.0.11:3000/api/hairArtistProfile/profilepicture"),
           body: {
             'uid': _userProfile.uid,
-            'photoUrl': photoUrl,
           },
           headers: {
             HttpHeaders.authorizationHeader: _idToken,
@@ -118,6 +142,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
         );
       },
     );
+    notifyListeners();
   }
 
   Future<void> setAboutDetails() async {

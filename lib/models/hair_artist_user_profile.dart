@@ -101,4 +101,8 @@ class HairArtistUserProfile {
   void deletePhotoUrl(String url) {
     this._photoUrls.remove(url);
   }
+
+  void deleteProfilePhoto() {
+    this._profilePhotoUrl = null;
+  }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
+import 'package:gel/widgets/hairartistprofile/gallery_picker.dart';
 import 'package:gel/widgets/hairartistprofile/profile_pic_icon.dart';
 import 'package:gel/widgets/general_profile/profile_tab_bar.dart';
 import 'package:gel/widgets/general/small_button.dart';
@@ -17,55 +18,11 @@ import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:provider/provider.dart';
 
 class HairArtistProfileMainPage extends StatelessWidget {
-  /*init image picker so user can pic image from phones gallery*/
-  final _picker = ImagePicker();
-
   @override
   Widget build(BuildContext context) {
     final _hairArtistProvider = Provider.of<HairArtistProfileProvider>(context);
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
-
-    // void _pickImage() async {
-    //   final PickedFile? image = await _picker.getImage(
-    //     source: ImageSource.gallery,
-    //     imageQuality: 5,
-    //   );
-    //   if (image != null) {
-    //     /*send this file to hair artist profile provider to send in fb storare and url in db*/
-    //     _hairArtistProvider.saveNewImage(File(image.path));
-    //   }
-    // }
-
-    Future<void> _loadAssets() async {
-      List<Asset> resultList = <Asset>[];
-      String error = 'No Error Detected';
-
-      try {
-        resultList = await MultiImagePicker.pickImages(
-          maxImages: 1,
-          enableCamera: true,
-          cupertinoOptions: CupertinoOptions(
-            takePhotoIcon: "chat",
-            doneButtonTitle: "Select",
-          ),
-          materialOptions: MaterialOptions(
-            actionBarColor: "#abcdef",
-            actionBarTitle: "Example App",
-            allViewTitle: "All Photos",
-            useDetailsView: false,
-            selectCircleStrokeColor: "#000000",
-          ),
-        );
-      } on Exception catch (e) {
-        error = e.toString();
-        print(error);
-      }
-      var path =
-          await FlutterAbsolutePath.getAbsolutePath(resultList[0].identifier);
-      var file = File(path);
-      _hairArtistProvider.saveNewImage(file);
-    }
 
     String _displayName() {
       if (_hairArtistProvider.hairArtistProfile.about.name == "") {
@@ -97,14 +54,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
                       margin: EdgeInsets.fromLTRB(0, 10, 15, 0),
                       width: 50.0,
                       height: 50.0,
-                      child: TextButton(
-                        child: Icon(
-                          MaterialIcons.add_a_photo,
-                          color: Colors.black,
-                          size: 30,
-                        ),
-                        onPressed: _loadAssets,
-                      ),
+                      child: GalleryPicker(),
                     ),
                   ],
                   elevation: 0,
@@ -139,7 +89,6 @@ class HairArtistProfileMainPage extends StatelessWidget {
                             ),
                             ProfilePicIcon(
                               phoneWidth: _phoneWidth,
-                              imagePicker: _picker,
                               hairArtistProfileProvider: _hairArtistProvider,
                             ),
                             Padding(
@@ -152,9 +101,7 @@ class HairArtistProfileMainPage extends StatelessWidget {
                               ),
                             ),
                             SmallButton(
-                              backgroundColor: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(0.7),
+                              backgroundColor: Theme.of(context).primaryColor,
                               child: Text("Edit Profile"),
                               onPressed: () {
                                 Navigator.of(context).push(
