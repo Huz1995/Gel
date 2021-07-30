@@ -101,7 +101,7 @@ class About extends StatelessWidget {
                   ),
             Divider(
               height: 25,
-              thickness: 5,
+              thickness: 3,
             ),
             SizedBox(
               height: 5,

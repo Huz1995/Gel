@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gel">
    <application
-        android:label="gel"
+        android:label="Gel"
         android:icon="@mipmap/ic_launcher">
 
         <!-- facebook authentication config -->
