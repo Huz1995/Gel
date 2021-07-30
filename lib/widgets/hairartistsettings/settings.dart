@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:app_settings/app_settings.dart';
 
 import 'change_password.dart';
 
@@ -73,6 +74,34 @@ class Settings extends StatelessWidget {
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.5,
+                  ),
+                  Icon(
+                    MaterialIcons.keyboard_arrow_right,
+                    color: Colors.black,
+                    size: 30,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Divider(
+            thickness: 3,
+            indent: 13,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: TextButton(
+              onPressed: () async {
+                await AppSettings.openLocationSettings();
+              },
+              child: Row(
+                children: [
+                  Text(
+                    "Open Location Settings",
+                    style: _fontSizeProvider.headline4,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.41,
                   ),
                   Icon(
                     MaterialIcons.keyboard_arrow_right,
