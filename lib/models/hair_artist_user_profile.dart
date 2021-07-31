@@ -34,18 +34,6 @@ class HairArtistAboutInfo {
       'hairServCost': hairServCost,
     };
   }
-
-  void printAbout() {
-    print(name);
-    print(contactNumber);
-    print(instaUrl);
-    print(description);
-    print(chatiness);
-    print(workingArrangement);
-    print(previousWorkExperience);
-    print(hairTypes);
-    print(hairServCost);
-  }
 }
 
 class HairArtistUserProfile {

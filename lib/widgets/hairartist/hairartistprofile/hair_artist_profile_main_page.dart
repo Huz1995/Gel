@@ -24,15 +24,6 @@ class HairArtistProfileMainPage extends StatelessWidget {
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
 
-    String _displayName() {
-      if (_hairArtistProvider.hairArtistProfile.about.name == "") {
-        String displayEmail =
-            "@" + _hairArtistProvider.hairArtistProfile.email.split("@")[0];
-        return displayEmail;
-      }
-      return _hairArtistProvider.hairArtistProfile.about.name;
-    }
-
     final _phoneHeight = MediaQuery.of(context).size.height;
     final _phoneWidth = MediaQuery.of(context).size.width;
     return DefaultTabController(
@@ -76,7 +67,8 @@ class HairArtistProfileMainPage extends StatelessWidget {
                             child: Text(
                               top >= _phoneHeight * 0.1 &&
                                       top < _phoneHeight * 0.3
-                                  ? _displayName()
+                                  ? _hairArtistProvider
+                                      .hairArtistProfile.about.name
                                   : "",
                               style: _fontSizeProvider.headline2,
                             ),
@@ -96,7 +88,8 @@ class HairArtistProfileMainPage extends StatelessWidget {
                                 _phoneHeight * 0.015,
                               ),
                               child: Text(
-                                _displayName(),
+                                _hairArtistProvider
+                                    .hairArtistProfile.about.name,
                                 style: _fontSizeProvider.headline2,
                               ),
                             ),

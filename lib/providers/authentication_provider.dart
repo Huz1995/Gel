@@ -39,10 +39,8 @@ class AuthenticationProvider with ChangeNotifier {
     Stream boolStream = _streamController.stream;
     boolStream.listen(
       (userVerifedEmail) async {
-        print(userVerifedEmail);
         if (userVerifedEmail) {
           /*add the firebase uid to reg data model to send to backend*/
-          print("here");
           /*send registration data to our api to store the user in mongoDb*/
           registerData.setUID(_auth.currentUser!.uid);
           await http.post(
@@ -54,7 +52,6 @@ class AuthenticationProvider with ChangeNotifier {
           await _setFrontEndLoginStateAfterRegistration(registerData);
           navigatorKey.currentState!.pop();
           navigatorKey.currentState!.pop();
-          print("done");
         }
       },
     );
@@ -105,6 +102,7 @@ class AuthenticationProvider with ChangeNotifier {
     registerData.setUID(_auth.currentUser!.uid);
     registerData.setIsHairArtist(_isHairArtist);
     registerData.setPhotoURL(photoURL);
+    /*need to check if the user exist*/
     var response = await http.get(
       Uri.parse("http://192.168.0.11:3000/api/authentication/" +
           _auth.currentUser!.uid),

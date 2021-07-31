@@ -39,10 +39,15 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => FontSizeProvider(context),
+          create: (context) {
+            return FontSizeProvider(context);
+          },
         ),
         ChangeNotifierProvider(
-          create: (context) => HairArtistProfileProvider(_authProvider),
+          create: (context) {
+            print("fggf");
+            return HairArtistProfileProvider(_authProvider);
+          },
         ),
       ],
       child: Scaffold(

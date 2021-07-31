@@ -91,8 +91,20 @@ class EditHairArtistProfileForm extends StatelessWidget {
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           onSaved: (value) => {
-                            _hairArtistProvider.hairArtistProfile.about.name =
-                                value!,
+                            if (value == "")
+                              {
+                                _hairArtistProvider
+                                        .hairArtistProfile.about.name =
+                                    "@" +
+                                        _hairArtistProvider
+                                            .hairArtistProfile.email
+                                            .split("@")[0],
+                              }
+                            else
+                              {
+                                _hairArtistProvider
+                                    .hairArtistProfile.about.name = value!,
+                              }
                           },
                           decoration: InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/custom_dialogs.dart';
@@ -21,6 +23,15 @@ class ChangePasswordForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /*to ensure when auto logout occurs then we remove this widget the tree*/
+    if (!_authenticationProvider.isLoggedIn) {
+      Timer(
+        Duration(seconds: 1),
+        () {
+          Navigator.of(context).pop();
+        },
+      );
+    }
     void _onChangePassword() {
       if (_formKey.currentState!.validate()) {
         _authenticationProvider.changePassword(_password).then(

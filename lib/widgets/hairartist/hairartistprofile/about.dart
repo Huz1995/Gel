@@ -12,7 +12,6 @@ class About extends StatelessWidget {
     final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
 
     final _about = _hairArtistProvider.hairArtistProfile.about;
-    _about.printAbout();
 
     void _launchURL(String url) async => await canLaunch(url)
         ? await launch(url)

@@ -125,28 +125,32 @@ class HairArtistProfileProvider extends ChangeNotifier {
   }
 
   void removeProfilePicture() async {
-    final ref =
-        FirebaseStorage.instance.refFromURL(_userProfile.profilePhotoUrl!);
-    await ref.delete().whenComplete(
-      () async {
-        _userProfile.deleteProfilePhoto();
-        http.delete(
-          Uri.parse(
-              "http://192.168.0.11:3000/api/hairArtistProfile/profilepicture"),
-          body: {
-            'uid': _userProfile.uid,
-          },
-          headers: {
-            HttpHeaders.authorizationHeader: _idToken,
-          },
-        );
-      },
-    );
+    void Function() removeProfileAtBackend = () async {
+      _userProfile.deleteProfilePhoto();
+      http.delete(
+        Uri.parse(
+            "http://192.168.0.11:3000/api/hairArtistProfile/profilepicture"),
+        body: {
+          'uid': _userProfile.uid,
+        },
+        headers: {
+          HttpHeaders.authorizationHeader: _idToken,
+        },
+      );
+    };
+    _userProfile.deleteProfilePhoto();
+    try {
+      final ref =
+          FirebaseStorage.instance.refFromURL(_userProfile.profilePhotoUrl!);
+      await ref.delete().whenComplete(removeProfileAtBackend);
+    } catch (e) {
+      removeProfileAtBackend();
+    }
+
     notifyListeners();
   }
 
   Future<void> setAboutDetails() async {
-    _userProfile.about.printAbout();
     await http.put(
       Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/about/" +
           _userProfile.uid +

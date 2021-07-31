@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
 import 'package:gel/widgets/hairclient/hairclientsettings/hair_client_settings.dart';
@@ -38,6 +39,9 @@ class _HairClientHomePageState extends State<HairClientHomePage> {
 
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (context) => HairClientProfileProvider(_authProvider),
+        ),
         ChangeNotifierProvider(
           create: (context) => FontSizeProvider(context),
         ),

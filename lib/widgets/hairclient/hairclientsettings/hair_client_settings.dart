@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/settings_button.dart';
 import 'package:gel/widgets/general_profile/change_password.dart';
+import 'package:gel/widgets/hairclient/hairclientsettings/edit_hair_client_profile_form.dart';
 import 'package:provider/provider.dart';
 import 'package:app_settings/app_settings.dart';
 
@@ -12,6 +14,9 @@ class HairClientSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
     final _authProvider = Provider.of<AuthenticationProvider>(context);
+
+    final _hairClientProfileProvider =
+        Provider.of<HairClientProfileProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white, //change your color here
@@ -57,8 +62,13 @@ class HairClientSettings extends StatelessWidget {
             gap: MediaQuery.of(context).size.width * 0.41,
           ),
           SettingButton(
-            onPressed: () async {
-              await AppSettings.openLocationSettings();
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => EditHairClientProfileForm(
+                      _fontSizeProvider, _hairClientProfileProvider),
+                ),
+              );
             },
             title: "Edit Profile",
             fontSizeProvider: _fontSizeProvider,
