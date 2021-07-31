@@ -13,8 +13,6 @@ class HairClientProfileProvider extends ChangeNotifier {
   late String _idToken;
 
   HairClientProfileProvider(AuthenticationProvider auth) {
-    print("active");
-    print("dfdf");
     /* when we initate the hair artist profile then get the user data from the back end*/
     _idToken = auth.idToken;
     getUserDataFromBackend(auth);
@@ -44,11 +42,6 @@ class HairClientProfileProvider extends ChangeNotifier {
       jsonResponse['name'],
     );
     /*updates the profile object so wigets listen can use its data*/
-    print(_userProfile.uid);
-    print(_userProfile.email);
-    print(_userProfile.isHairArtist);
-    print(_userProfile.profilePhotoUrl);
-    print(_userProfile.name);
     notifyListeners();
   }
 

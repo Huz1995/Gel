@@ -32,7 +32,7 @@ class _EditHairClientProfileFormState extends State<EditHairClientProfileForm> {
     final _imagePicker = ImagePicker();
     bool _pickedCamera = false;
 
-    final bool doesHaveProfilePhoto =
+    bool doesHaveProfilePhoto =
         (widget._hairClientProfileProvider.hairClientProfile.profilePhotoUrl !=
             null);
 
@@ -167,6 +167,9 @@ class _EditHairClientProfileFormState extends State<EditHairClientProfileForm> {
                             () {
                               widget._hairClientProfileProvider
                                   .removeProfilePicture();
+                              setState(() {
+                                doesHaveProfilePhoto = false;
+                              });
                               Navigator.of(context).pop();
                             },
                             Text("Replace"),
