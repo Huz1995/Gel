@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
-import 'package:gel/widgets/general/small_button.dart';
-import 'package:gel/widgets/hairartistprofile/hair_artist_profile_main_page.dart';
-import 'package:gel/widgets/hairartistsettings/settings.dart';
+import 'package:gel/widgets/hairclient/hairclientsettings/hair_client_settings.dart';
 import 'package:provider/provider.dart';
 
 class HairClientHomePage extends StatefulWidget {
@@ -29,16 +27,7 @@ class _HairClientHomePageState extends State<HairClientHomePage> {
       Text(
         'Index 3: Profile',
       ),
-      SmallButton(
-        backgroundColor: Colors.blue,
-        child: Text(
-          "logout - hc",
-        ),
-        onPressed: () => {
-          _authProvider.logUserOut(),
-        },
-        buttonWidth: 200,
-      ),
+      HairClientSettings(),
     ];
 
     void _onIconTapped(int index) {
@@ -69,6 +58,7 @@ class _HairClientHomePageState extends State<HairClientHomePage> {
           child: BottomNavBar(
             selectedIndex: _selectedIndex,
             onIconTapped: _onIconTapped,
+            isHairArtist: false,
           ),
         ),
       ),

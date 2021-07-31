@@ -5,11 +5,14 @@ class BottomNavBar extends StatelessWidget {
     Key? key,
     required int selectedIndex,
     required void Function(int)? onIconTapped,
+    required bool isHairArtist,
   })  : _selectedIndex = selectedIndex,
         _onIconTapped = onIconTapped,
+        _isHairArtist = isHairArtist,
         super(key: key);
 
   final int _selectedIndex;
+  final bool _isHairArtist;
   final void Function(int)? _onIconTapped;
 
   @override
@@ -17,7 +20,7 @@ class BottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       elevation: 100,
-      items: const <BottomNavigationBarItem>[
+      items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.search),
           label: 'Explore',
@@ -28,7 +31,7 @@ class BottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.face),
-          label: 'Profile',
+          label: _isHairArtist ? "Profile" : "Favorites",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),

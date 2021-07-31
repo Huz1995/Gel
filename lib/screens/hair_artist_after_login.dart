@@ -3,8 +3,8 @@ import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
-import 'package:gel/widgets/hairartistprofile/hair_artist_profile_main_page.dart';
-import 'package:gel/widgets/hairartistsettings/settings.dart';
+import 'package:gel/widgets/hairartist/hairartistprofile/hair_artist_profile_main_page.dart';
+import 'package:gel/widgets/hairartist/hairartistsettings/hair_artist_settings.dart';
 import 'package:provider/provider.dart';
 
 class HairArtistHomePage extends StatefulWidget {
@@ -27,7 +27,7 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
         'Index 2: Messages',
       ),
       HairArtistProfileMainPage(),
-      Settings(),
+      HairArtistSettings(),
     ];
 
     void _onIconTapped(int index) {
@@ -61,6 +61,7 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
           child: BottomNavBar(
             selectedIndex: _selectedIndex,
             onIconTapped: _onIconTapped,
+            isHairArtist: true,
           ),
         ),
       ),
