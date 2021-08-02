@@ -3,7 +3,7 @@ import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
-import 'package:gel/widgets/hairclient/hairclientsettings/hair_client_settings.dart';
+import 'package:gel/widgets/hairclient/settings/hair_client_settings.dart';
 import 'package:provider/provider.dart';
 
 class HairClientHomePage extends StatefulWidget {

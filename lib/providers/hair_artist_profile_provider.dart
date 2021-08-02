@@ -146,7 +146,6 @@ class HairArtistProfileProvider extends ChangeNotifier {
     } catch (e) {
       removeProfileAtBackend();
     }
-
     notifyListeners();
   }
 

@@ -5,7 +5,7 @@ import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/settings_button.dart';
 import 'package:gel/widgets/general_profile/change_password.dart';
-import 'package:gel/widgets/hairclient/hairclientsettings/edit_hair_client_profile_form.dart';
+import 'package:gel/widgets/hairclient/settings/edit_hair_client_profile_form.dart';
 import 'package:provider/provider.dart';
 import 'package:app_settings/app_settings.dart';
 

@@ -32,7 +32,6 @@ class _EditHairClientProfileFormState extends State<EditHairClientProfileForm> {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     final _imagePicker = ImagePicker();
     bool _pickedCamera = false;
-
     bool doesHaveProfilePhoto =
         (widget._hairClientProfileProvider.hairClientProfile.profilePhotoUrl !=
             null);

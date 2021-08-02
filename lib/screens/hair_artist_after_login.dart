@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
-import 'package:gel/widgets/hairartist/hairartistprofile/hair_artist_profile_main_page.dart';
-import 'package:gel/widgets/hairartist/hairartistsettings/hair_artist_settings.dart';
+import 'package:gel/widgets/hairartist/profile/hair_artist_profile_main_page.dart';
+import 'package:gel/widgets/hairartist/settings/hair_artist_settings.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
@@ -23,13 +24,24 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
 
     Geolocator.checkPermission().then(
       (value) {
-        print(value);
         if (value == LocationPermission.denied ||
             value == LocationPermission.deniedForever) {
           Geolocator.requestPermission().then(
             (value) {
               if (value == LocationPermission.denied ||
                   value == LocationPermission.deniedForever) {
+                CustomDialogs.showMyDialogOneButton(
+                  context,
+                  Text("Warning"),
+                  [
+                    Text(
+                        "In order for people in you area to discover your services, you will need to add location services, in settings you can update your location services"),
+                  ],
+                  Text("Ok"),
+                  () {
+                    Navigator.of(context).pop();
+                  },
+                );
                 print(
                     "In order for people in you area to discover your services, you will need to add location services, in settings you can update your location services");
               }
