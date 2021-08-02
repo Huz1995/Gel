@@ -26,7 +26,7 @@ class _HairClientHomePageState extends State<HairClientHomePage> {
         'Index 2: Messages',
       ),
       Text(
-        'Index 3: Profile',
+        'Index 3: Favorites',
       ),
       HairClientSettings(),
     ];

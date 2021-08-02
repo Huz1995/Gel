@@ -62,6 +62,7 @@ class HairClientProfileProvider extends ChangeNotifier {
 
   void addProfilePicture(File file) async {
     /*create a storeage ref from firebase*/
+    print(file);
     final ref = FirebaseStorage.instance
         .ref()
         .child(_userProfile.email)

@@ -5,6 +5,7 @@ import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
 import 'package:gel/widgets/hairartist/hairartistprofile/hair_artist_profile_main_page.dart';
 import 'package:gel/widgets/hairartist/hairartistsettings/hair_artist_settings.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class HairArtistHomePage extends StatefulWidget {
@@ -14,6 +15,30 @@ class HairArtistHomePage extends StatefulWidget {
 
 class _HairArtistHomePageState extends State<HairArtistHomePage> {
   int _selectedIndex = 2;
+
+  @override
+  void initState() {
+    super.initState();
+    print("dffd");
+
+    Geolocator.checkPermission().then(
+      (value) {
+        print(value);
+        if (value == LocationPermission.denied ||
+            value == LocationPermission.deniedForever) {
+          Geolocator.requestPermission().then(
+            (value) {
+              if (value == LocationPermission.denied ||
+                  value == LocationPermission.deniedForever) {
+                print(
+                    "In order for people in you area to discover your services, you will need to add location services, in settings you can update your location services");
+              }
+            },
+          );
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +70,6 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
         ),
         ChangeNotifierProvider(
           create: (context) {
-            print("fggf");
             return HairArtistProfileProvider(_authProvider);
           },
         ),

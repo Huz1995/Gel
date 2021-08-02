@@ -17,7 +17,6 @@ class HairClientSettings extends StatelessWidget {
 
     final _hairClientProfileProvider =
         Provider.of<HairClientProfileProvider>(context, listen: true);
-    print("df");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white, //change your color here

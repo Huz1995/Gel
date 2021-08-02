@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
@@ -48,7 +49,6 @@ class _EditHairClientProfileFormState extends State<EditHairClientProfileForm> {
 
     void _pickProfileImage() async {
       PickedFile? image;
-
       if (_pickedCamera) {
         image = await _imagePicker.getImage(
           source: ImageSource.camera,
@@ -60,6 +60,8 @@ class _EditHairClientProfileFormState extends State<EditHairClientProfileForm> {
           imageQuality: 5,
         );
       }
+      Navigator.of(context).pop();
+
       if (image != null) {
         /*send this file to hair artist profile provider to send in fb storare and url in db*/
         widget._hairClientProfileProvider.addProfilePicture(File(image.path));
@@ -133,12 +135,12 @@ class _EditHairClientProfileFormState extends State<EditHairClientProfileForm> {
                           !doesHaveProfilePhoto
                               ? Positioned(
                                   left:
-                                      MediaQuery.of(context).size.width * 0.080,
+                                      MediaQuery.of(context).size.width * 0.075,
                                   bottom:
-                                      MediaQuery.of(context).size.width * 0.080,
+                                      MediaQuery.of(context).size.width * 0.075,
                                   //bottom: _phoneWidth / 4,
                                   child: Icon(
-                                    Icons.person,
+                                    MaterialIcons.person_add,
                                     size: 40,
                                   ),
                                 )
@@ -161,15 +163,16 @@ class _EditHairClientProfileFormState extends State<EditHairClientProfileForm> {
                             [Text("Please select one of the options below")],
                             Text("Cancel"),
                             () {
-                              Navigator.of(context).pop();
+                              Timer(
+                                Duration(seconds: 1),
+                                () => Navigator.of(context).pop(),
+                              );
                             },
                             Text("Remove"),
                             () {
                               widget._hairClientProfileProvider
                                   .removeProfilePicture();
-                              setState(() {
-                                doesHaveProfilePhoto = false;
-                              });
+                              Navigator.of(context).pop();
                               Navigator.of(context).pop();
                             },
                             Text("Replace"),
@@ -258,8 +261,21 @@ class _EditHairClientProfileFormState extends State<EditHairClientProfileForm> {
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           onSaved: (value) => {
-                            widget._hairClientProfileProvider.hairClientProfile
-                                .setName(value!),
+                            if (value == "")
+                              {
+                                widget._hairClientProfileProvider
+                                    .hairClientProfile
+                                    .setName("@" +
+                                        widget._hairClientProfileProvider
+                                            .hairClientProfile.email
+                                            .split("@")[0]),
+                              }
+                            else
+                              {
+                                widget._hairClientProfileProvider
+                                    .hairClientProfile
+                                    .setName(value!),
+                              }
                           },
                           decoration: InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
