@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:gel/models/place.dart';
 import 'package:gel/models/place_search.dart';
 import 'package:gel/providers/map_places_provider.dart';
 import 'package:gel/widgets/general/small_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -14,12 +16,12 @@ class HairClientExplore extends StatefulWidget {
 }
 
 class _HairClientExploreState extends State<HairClientExplore> {
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(51.4545, 2.5879),
-    zoom: 10,
-  );
+  late GoogleMapController _googleMapController;
+  late StreamSubscription _subscription;
+  FloatingSearchBarController _floatingSearchBarController =
+      FloatingSearchBarController();
 
-  void _onMapCreated(GoogleMapController _ctr) {
+  void _onMapCreated() {
     Geolocator.checkPermission().then(
       (allowed) {
         if (allowed == LocationPermission.deniedForever) {
@@ -29,7 +31,7 @@ class _HairClientExploreState extends State<HairClientExplore> {
           Geolocator.getCurrentPosition().then(
             (pos) {
               print(pos);
-              _ctr.animateCamera(
+              _googleMapController.animateCamera(
                 CameraUpdate.newCameraPosition(
                   CameraPosition(
                     target: LatLng(pos.latitude, pos.longitude),
@@ -44,6 +46,38 @@ class _HairClientExploreState extends State<HairClientExplore> {
     );
   }
 
+  Future<void> _goToPlace(Place place) async {
+    _googleMapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(place.lat!, place.lng!),
+          zoom: 10,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    _subscription = Provider.of<MapPlacesProvider>(context, listen: false)
+        .placeStreamController
+        .stream
+        .listen(
+      (place) {
+        _goToPlace(place);
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    _googleMapController.dispose();
+    _floatingSearchBarController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _mapLocationProvider = Provider.of<MapPlacesProvider>(context);
@@ -54,17 +88,23 @@ class _HairClientExploreState extends State<HairClientExplore> {
         children: [
           GoogleMap(
             mapType: MapType.normal,
-            initialCameraPosition: _kGooglePlex,
+            initialCameraPosition: CameraPosition(
+              target: LatLng(51.4545, 2.5879),
+              zoom: 10,
+            ),
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
             onMapCreated: (GoogleMapController controller) {
-              _onMapCreated(controller);
+              _googleMapController = controller;
+              _onMapCreated();
             },
           ),
           FloatingSearchBar(
+            textInputAction: TextInputAction.done,
+            controller: _floatingSearchBarController,
             backgroundColor: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(30)),
-            hint: 'Search by city...',
+            hint: '  Search by city or town...',
             scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
             transitionDuration: const Duration(milliseconds: 800),
             transitionCurve: Curves.easeInOut,
@@ -74,7 +114,6 @@ class _HairClientExploreState extends State<HairClientExplore> {
             width: 600,
             debounceDelay: const Duration(milliseconds: 500),
             onQueryChanged: (query) {
-              print(query);
               _mapLocationProvider.getAutoComplete(query);
             },
             // Specify a custom transition to be used for
@@ -84,7 +123,7 @@ class _HairClientExploreState extends State<HairClientExplore> {
               FloatingSearchBarAction(
                 showIfOpened: false,
                 child: CircularButton(
-                  icon: const Icon(Icons.place),
+                  icon: const Icon(Icons.list),
                   onPressed: () {},
                 ),
               ),
@@ -109,7 +148,11 @@ class _HairClientExploreState extends State<HairClientExplore> {
                               child: Text(result.description!),
                             ),
                           ),
-                          onTap: () => print(result.description),
+                          onTap: () async {
+                            await _mapLocationProvider
+                                .getPlaceDetails(result.placeId!);
+                            _floatingSearchBarController.close();
+                          },
                         );
                       },
                     ).toList(),
