@@ -42,38 +42,6 @@ class _GalleryPickerState extends State<GalleryPicker> {
       }
     }
 
-    // Future<void> _loadAssets() async {
-    //   List<Asset> resultList = <Asset>[];
-    //   String error = 'No Error Detected';
-    //   final tempDirectory = await Directory.systemTemp.create();
-    //   File imageFile;
-
-    //   try {
-    //     resultList = await MultiImagePicker.pickImages(
-    //       maxImages: 1,
-    //       enableCamera: true,
-    //       cupertinoOptions: CupertinoOptions(
-    //         takePhotoIcon: "chat",
-    //         doneButtonTitle: "Select",
-    //       ),
-    //       materialOptions: MaterialOptions(
-    //         actionBarColor: "#abcdef",
-    //         actionBarTitle: "Example App",
-    //         allViewTitle: "All Photos",
-    //         useDetailsView: false,
-    //         selectCircleStrokeColor: "#000000",
-    //       ),
-    //     );
-    //   } on Exception catch (e) {
-    //     error = e.toString();
-    //     print(error);
-    //   }
-    //   final data = await resultList[0].getByteData();
-    //   imageFile = await File('${tempDirectory.path}/img').writeAsBytes(
-    //       data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
-    //   _hairArtistProvider.saveNewImage(imageFile);
-    // }
-
     return TextButton(
       child: Icon(
         MaterialIcons.add_a_photo,

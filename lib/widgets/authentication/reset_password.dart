@@ -14,7 +14,6 @@ class ResetPassword extends StatelessWidget {
 
   final AuthenticationProvider _authenticationProvider;
   static final _formKey = GlobalKey<FormState>();
-  final _loginData = LoginFormData();
 
   @override
   Widget build(BuildContext context) {

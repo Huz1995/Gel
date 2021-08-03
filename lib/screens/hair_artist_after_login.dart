@@ -42,8 +42,6 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
                     Navigator.of(context).pop();
                   },
                 );
-                print(
-                    "In order for people in you area to discover your services, you will need to add location services, in settings you can update your location services");
               }
             },
           );
