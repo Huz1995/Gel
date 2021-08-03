@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/custom_dialogs.dart';
@@ -16,39 +18,6 @@ class HairArtistHomePage extends StatefulWidget {
 
 class _HairArtistHomePageState extends State<HairArtistHomePage> {
   int _selectedIndex = 2;
-
-  @override
-  void initState() {
-    super.initState();
-    print("dffd");
-
-    Geolocator.checkPermission().then(
-      (value) {
-        if (value == LocationPermission.denied ||
-            value == LocationPermission.deniedForever) {
-          Geolocator.requestPermission().then(
-            (value) {
-              if (value == LocationPermission.denied ||
-                  value == LocationPermission.deniedForever) {
-                CustomDialogs.showMyDialogOneButton(
-                  context,
-                  Text("Warning"),
-                  [
-                    Text(
-                        "In order for people in you area to discover your services, you will need to add location services, in settings you can update your location services"),
-                  ],
-                  Text("Ok"),
-                  () {
-                    Navigator.of(context).pop();
-                  },
-                );
-              }
-            },
-          );
-        }
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

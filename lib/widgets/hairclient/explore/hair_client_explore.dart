@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:gel/models/place.dart';
+import 'package:gel/models/location.dart';
 import 'package:gel/models/place_search.dart';
 import 'package:gel/providers/map_places_provider.dart';
-import 'package:gel/widgets/general/small_button.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +15,7 @@ class HairClientExplore extends StatefulWidget {
 
 class _HairClientExploreState extends State<HairClientExplore> {
   late GoogleMapController _googleMapController;
-  late StreamSubscription _subscription;
+  late Location _latestSearchedPlace;
   FloatingSearchBarController _floatingSearchBarController =
       FloatingSearchBarController();
 
@@ -46,36 +44,15 @@ class _HairClientExploreState extends State<HairClientExplore> {
     );
   }
 
-  Future<void> _goToPlace(Place place) async {
+  Future<void> _goToPlace(Location location) async {
     _googleMapController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          target: LatLng(place.lat!, place.lng!),
+          target: LatLng(location.lat!, location.lng!),
           zoom: 10,
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    _subscription = Provider.of<MapPlacesProvider>(context, listen: false)
-        .placeStreamController
-        .stream
-        .listen(
-      (place) {
-        _goToPlace(place);
-      },
-    );
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _subscription.cancel();
-    _googleMapController.dispose();
-    _floatingSearchBarController.dispose();
-    super.dispose();
   }
 
   @override
@@ -149,8 +126,10 @@ class _HairClientExploreState extends State<HairClientExplore> {
                             ),
                           ),
                           onTap: () async {
-                            await _mapLocationProvider
+                            var place = await _mapLocationProvider
                                 .getPlaceDetails(result.placeId!);
+                            _goToPlace(place);
+                            _latestSearchedPlace = place;
                             _floatingSearchBarController.close();
                           },
                         );

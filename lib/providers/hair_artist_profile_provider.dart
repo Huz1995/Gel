@@ -182,4 +182,19 @@ class HairArtistProfileProvider extends ChangeNotifier {
     );
     notifyListeners();
   }
+
+  Future<void> updateHairArtistLocation(double lat, double lng) async {
+    await http.put(
+      Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/location/" +
+          _userProfile.uid +
+          "/"),
+      body: {
+        'lat': lat.toString(),
+        'lng': lng.toString(),
+      },
+      headers: {
+        HttpHeaders.authorizationHeader: _idToken,
+      },
+    );
+  }
 }

@@ -326,4 +326,10 @@ class AuthenticationProvider with ChangeNotifier {
   Timer get emailVerifPeriodicTimer {
     return _emailVerifTimer;
   }
+
+  @override
+  void dispose() {
+    _streamController.close();
+    super.dispose();
+  }
 }
