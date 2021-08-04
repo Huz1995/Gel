@@ -74,7 +74,6 @@ class HairArtistProfileProvider extends ChangeNotifier {
         var photoUrl = await ref.getDownloadURL();
         /*add it to userprofile object so widgets can render image*/
         _userProfile.addPhotoUrl(photoUrl);
-        notifyListeners();
         /*send the url to backend and store in mongodb for persistance*/
         await http.put(
           Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/photos"),
@@ -88,6 +87,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
         );
       },
     );
+    notifyListeners();
   }
 
   void addProfilePicture(File file) async {

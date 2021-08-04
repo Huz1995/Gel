@@ -69,6 +69,12 @@ class _HairClientExploreState extends State<HairClientExplore> {
               target: LatLng(51.4545, 2.5879),
               zoom: 10,
             ),
+            markers: {
+              Marker(
+                markerId: MarkerId("a"),
+                position: LatLng(51.4545, 2.5879),
+              ),
+            },
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
             onMapCreated: (GoogleMapController controller) {

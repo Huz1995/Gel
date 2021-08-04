@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class About extends StatelessWidget {
+class HairArtistAbout extends StatelessWidget {
+  const HairArtistAbout(
+      {Key? key,
+      required HairArtistUserProfile hairArtistUserProfile,
+      required})
+      : _hairArtistUserProfile = hairArtistUserProfile,
+        super(key: key);
+  final HairArtistUserProfile _hairArtistUserProfile;
+
   @override
   Widget build(BuildContext context) {
-    final _hairArtistProvider = Provider.of<HairArtistProfileProvider>(context);
     final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
-
-    final _about = _hairArtistProvider.hairArtistProfile.about;
 
     void _launchURL(String url) async => await canLaunch(url)
         ? await launch(url)
@@ -34,11 +40,11 @@ class About extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            _about.description != ""
+            _hairArtistUserProfile.about.description != ""
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(_about.description),
+                      Text(_hairArtistUserProfile.about.description),
                       SizedBox(
                         height: 10,
                       ),
@@ -48,11 +54,11 @@ class About extends StatelessWidget {
                     height: 0,
                     width: 0,
                   ),
-            _about.chatiness != ""
+            _hairArtistUserProfile.about.chatiness != ""
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(_about.chatiness),
+                      Text(_hairArtistUserProfile.about.chatiness),
                       SizedBox(
                         height: 10,
                       ),
@@ -62,7 +68,7 @@ class About extends StatelessWidget {
                     height: 0,
                     width: 0,
                   ),
-            _about.instaUrl != ""
+            _hairArtistUserProfile.about.instaUrl != ""
                 ? Row(
                     children: [
                       Text(
@@ -88,7 +94,7 @@ class About extends StatelessWidget {
                             ),
                           ),
                           onPressed: () => {
-                            _launchURL(_about.instaUrl),
+                            _launchURL(_hairArtistUserProfile.about.instaUrl),
                           },
                         ),
                       ),
@@ -112,7 +118,7 @@ class About extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            _about.workingArrangement != ""
+            _hairArtistUserProfile.about.workingArrangement != ""
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -123,7 +129,7 @@ class About extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      Text(_about.workingArrangement),
+                      Text(_hairArtistUserProfile.about.workingArrangement),
                       Divider(
                         thickness: 2,
                       ),
@@ -133,7 +139,7 @@ class About extends StatelessWidget {
                     ],
                   )
                 : Text(""),
-            _about.previousWorkExperience != ""
+            _hairArtistUserProfile.about.previousWorkExperience != ""
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -144,7 +150,7 @@ class About extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      Text(_about.previousWorkExperience),
+                      Text(_hairArtistUserProfile.about.previousWorkExperience),
                       Divider(
                         thickness: 2,
                       ),
@@ -154,7 +160,7 @@ class About extends StatelessWidget {
                     ],
                   )
                 : Text(""),
-            _about.hairTypes != ""
+            _hairArtistUserProfile.about.hairTypes != ""
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -165,7 +171,7 @@ class About extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      Text(_about.hairTypes),
+                      Text(_hairArtistUserProfile.about.hairTypes),
                       Divider(
                         thickness: 2,
                       ),
@@ -175,7 +181,7 @@ class About extends StatelessWidget {
                     ],
                   )
                 : Text(""),
-            _about.hairServCost != ""
+            _hairArtistUserProfile.about.hairServCost != ""
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -186,7 +192,7 @@ class About extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      Text(_about.hairServCost),
+                      Text(_hairArtistUserProfile.about.hairServCost),
                       Divider(
                         thickness: 2,
                       ),
