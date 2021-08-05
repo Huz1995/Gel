@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
+import 'package:gel/providers/map_hair_artists_retrieval.dart';
 import 'package:gel/providers/map_places_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
@@ -47,6 +48,9 @@ class _HairClientHomePageState extends State<HairClientHomePage> {
         ),
         ChangeNotifierProvider(
           create: (context) => MapPlacesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MapHairArtistRetrievalProvider(_authProvider),
         ),
       ],
       child: Scaffold(

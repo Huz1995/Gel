@@ -10,11 +10,11 @@ import 'dart:convert' as convert;
 class HairClientProfileProvider extends ChangeNotifier {
   HairClientUserProfile _userProfile =
       HairClientUserProfile("", "", false, "", "");
-  late String _idToken;
+  late String _loggedInUserIdToken;
 
   HairClientProfileProvider(AuthenticationProvider auth) {
     /* when we initate the hair artist profile then get the user data from the back end*/
-    _idToken = auth.idToken;
+    _loggedInUserIdToken = auth.idToken;
     getUserDataFromBackend(auth);
   }
 
@@ -28,7 +28,7 @@ class HairClientProfileProvider extends ChangeNotifier {
       Uri.parse("http://192.168.0.11:3000/api/hairClientProfile/" +
           auth.firebaseAuth.currentUser!.uid),
       headers: {
-        HttpHeaders.authorizationHeader: _idToken,
+        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
       },
     );
     /*convert the response from string to JSON*/
@@ -54,7 +54,7 @@ class HairClientProfileProvider extends ChangeNotifier {
         'name': _userProfile.name,
       },
       headers: {
-        HttpHeaders.authorizationHeader: _idToken,
+        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
       },
     );
     notifyListeners();
@@ -85,7 +85,7 @@ class HairClientProfileProvider extends ChangeNotifier {
               'photoUrl': photoUrl,
             },
             headers: {
-              HttpHeaders.authorizationHeader: _idToken,
+              HttpHeaders.authorizationHeader: _loggedInUserIdToken,
             },
           );
         },
@@ -105,7 +105,7 @@ class HairClientProfileProvider extends ChangeNotifier {
           'uid': _userProfile.uid,
         },
         headers: {
-          HttpHeaders.authorizationHeader: _idToken,
+          HttpHeaders.authorizationHeader: _loggedInUserIdToken,
         },
       );
     };

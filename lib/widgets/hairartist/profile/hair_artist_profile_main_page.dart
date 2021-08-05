@@ -53,6 +53,7 @@ class _HairArtistProfileMainPageState extends State<HairArtistProfileMainPage> {
         } else {
           _positionStream = Geolocator.getPositionStream(distanceFilter: 3)
               .listen((position) {
+            print(position);
             Provider.of<HairArtistProfileProvider>(context, listen: false)
                 .updateHairArtistLocation(
               position.latitude,

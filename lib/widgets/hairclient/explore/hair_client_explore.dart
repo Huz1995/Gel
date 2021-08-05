@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gel/models/location.dart';
 import 'package:gel/models/place_search.dart';
+import 'package:gel/providers/map_hair_artists_retrieval.dart';
 import 'package:gel/providers/map_places_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -15,7 +16,6 @@ class HairClientExplore extends StatefulWidget {
 
 class _HairClientExploreState extends State<HairClientExplore> {
   late GoogleMapController _googleMapController;
-  late Location _latestSearchedPlace;
   FloatingSearchBarController _floatingSearchBarController =
       FloatingSearchBarController();
 
@@ -59,22 +59,17 @@ class _HairClientExploreState extends State<HairClientExplore> {
   Widget build(BuildContext context) {
     final _mapLocationProvider = Provider.of<MapPlacesProvider>(context);
     final List<PlaceSearch> _searchResults = _mapLocationProvider.searchResults;
-
+    final MapHairArtistRetrievalProvider _hairArtistRetrievalProvider =
+        Provider.of<MapHairArtistRetrievalProvider>(context);
     return Scaffold(
       body: Stack(
         children: [
           GoogleMap(
             mapType: MapType.normal,
             initialCameraPosition: CameraPosition(
-              target: LatLng(51.4545, 2.5879),
+              target: LatLng(37.785834, -122.406417),
               zoom: 10,
             ),
-            markers: {
-              Marker(
-                markerId: MarkerId("a"),
-                position: LatLng(51.4545, 2.5879),
-              ),
-            },
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
             onMapCreated: (GoogleMapController controller) {
@@ -135,8 +130,9 @@ class _HairClientExploreState extends State<HairClientExplore> {
                             var place = await _mapLocationProvider
                                 .getPlaceDetails(result.placeId!);
                             _goToPlace(place);
-                            _latestSearchedPlace = place;
                             _floatingSearchBarController.close();
+                            _hairArtistRetrievalProvider
+                                .getHairArtistsAtLocation(place);
                           },
                         );
                       },

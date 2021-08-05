@@ -25,7 +25,6 @@ class AuthenticationProvider with ChangeNotifier {
   // haripatel130@gmail.com
   //register with email
   Future<void> registerEmailPassword(UserRegisterFormData registerData) async {
-    print("active");
     /*register the user with firebase auth and set the UID returned in register data*/
     await _auth.createUserWithEmailAndPassword(
       email: registerData.email!,
@@ -95,8 +94,6 @@ class AuthenticationProvider with ChangeNotifier {
   }
 
   Future<void> _registerUser(String photoURL) async {
-    print(photoURL);
-    print(_auth.currentUser);
     UserRegisterFormData registerData = UserRegisterFormData();
     registerData.setEmail(_auth.currentUser!.email);
     registerData.setUID(_auth.currentUser!.uid);
@@ -182,7 +179,6 @@ class AuthenticationProvider with ChangeNotifier {
       await _auth.signInWithEmailAndPassword(
           email: loginData.email!, password: loginData.password!);
     } catch (e) {
-      print(e.toString());
       throw e.toString();
     }
     /*same as above*/
@@ -292,7 +288,6 @@ class AuthenticationProvider with ChangeNotifier {
     _isHairArtist = false;
     _idToken = null;
     await _auth.signOut();
-    print(_auth.currentUser);
     _logoutTimer.cancel();
     await _googleSignIn.signOut();
     await _facebookSignIn.logOut();

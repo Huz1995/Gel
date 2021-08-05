@@ -1,3 +1,5 @@
+import 'package:gel/models/location.dart';
+
 class HairArtistAboutInfo {
   String name;
   String contactNumber;
@@ -43,6 +45,7 @@ class HairArtistUserProfile {
   List<String> _photoUrls;
   String? _profilePhotoUrl;
   HairArtistAboutInfo _about;
+  Location? _location;
 
   HairArtistUserProfile(
     this._uid,
@@ -51,6 +54,7 @@ class HairArtistUserProfile {
     this._photoUrls,
     this._profilePhotoUrl,
     this._about,
+    this._location,
   );
 
   String get uid {
@@ -75,6 +79,10 @@ class HairArtistUserProfile {
 
   HairArtistAboutInfo get about {
     return _about;
+  }
+
+  Location? get location {
+    return _location;
   }
 
   /*this adds a photo url to the array*/

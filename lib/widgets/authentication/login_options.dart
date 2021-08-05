@@ -35,9 +35,7 @@ class LoginOptions extends StatelessWidget {
                 return CustomDialogs.showMyDialogOneButton(
                   context,
                   Text('Error'),
-                  <Widget>[
-                    Text(e.toString()),
-                  ],
+                  <Widget>[Text(e.toString())],
                   Text(
                     'Back',
                     style: TextStyle(color: Theme.of(context).accentColor),
@@ -71,9 +69,7 @@ class LoginOptions extends StatelessWidget {
                   return CustomDialogs.showMyDialogOneButton(
                     context,
                     Text('Error'),
-                    <Widget>[
-                      Text(e.toString()),
-                    ],
+                    <Widget>[Text(e.toString())],
                     Text(
                       'Back',
                       style: TextStyle(color: Theme.of(context).accentColor),

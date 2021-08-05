@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -22,41 +23,6 @@ class RegistrationOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     final _authenticationProvider =
         Provider.of<AuthenticationProvider>(context);
-
-    Future<void> _showMyDialog(String error) async {
-      return showDialog<void>(
-        context: context,
-        barrierDismissible: false, // user must tap button!
-        builder: (BuildContext context) {
-          return BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              title: Text('Error'),
-              content: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Text(error),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text(
-                    'Back',
-                    style: TextStyle(color: Theme.of(context).accentColor),
-                  ),
-                  onPressed: () async {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
-        },
-      );
-    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +44,16 @@ class RegistrationOptions extends StatelessWidget {
               try {
                 await _authenticationProvider.facebookRegistration();
               } catch (e) {
-                return _showMyDialog(e.toString());
+                return CustomDialogs.showMyDialogOneButton(
+                  context,
+                  Text("Error"),
+                  [Text(e.toString())],
+                  Text('Back',
+                      style: TextStyle(color: Theme.of(context).accentColor)),
+                  () async {
+                    Navigator.of(context).pop();
+                  },
+                );
               }
             },
             text: "Register with Facebook",
@@ -103,7 +78,16 @@ class RegistrationOptions extends StatelessWidget {
               } catch (e) {
                 if (e.toString() !=
                     "Null check operator used on a null value") {
-                  return _showMyDialog(e.toString());
+                  return CustomDialogs.showMyDialogOneButton(
+                    context,
+                    Text("Error"),
+                    [Text(e.toString())],
+                    Text('Back',
+                        style: TextStyle(color: Theme.of(context).accentColor)),
+                    () async {
+                      Navigator.of(context).pop();
+                    },
+                  );
                 }
               }
             },
