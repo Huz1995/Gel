@@ -24,8 +24,6 @@ class HairArtistProfileProvider extends ChangeNotifier {
   }
 
   Future<void> getUserDataFromBackend(AuthenticationProvider auth) async {
-    print("sdsdsds");
-
     /*issue a get req to hairArtistProfile to get their information to display*/
     http.get(
       Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/" +
@@ -60,7 +58,6 @@ class HairArtistProfileProvider extends ChangeNotifier {
             null);
         /*updates the profile object so wigets listen can use its data*/
         notifyListeners();
-        print(jsonResponse);
       },
     );
   }
