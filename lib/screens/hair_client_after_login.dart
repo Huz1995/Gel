@@ -20,8 +20,6 @@ class _HairClientHomePageState extends State<HairClientHomePage> {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-    final GlobalKey<NavigatorState> _navigatorKey =
-        new GlobalKey<NavigatorState>();
 
     final List<Widget> _widgetOptions = <Widget>[
       HairClientExplore(),
@@ -52,8 +50,7 @@ class _HairClientHomePageState extends State<HairClientHomePage> {
           create: (context) => MapPlacesProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) =>
-              MapHairArtistRetrievalProvider(_authProvider, _navigatorKey),
+          create: (context) => MapHairArtistRetrievalProvider(_authProvider),
         ),
       ],
       child: Scaffold(

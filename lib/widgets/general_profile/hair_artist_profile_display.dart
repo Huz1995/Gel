@@ -54,6 +54,17 @@ class HairArtistProfileDisplay extends StatelessWidget {
                 handle:
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverAppBar(
+                  leading: Container(
+                    margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
+                    child: TextButton(
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
                   actions: [
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 10, 15, 0),
@@ -187,6 +198,7 @@ class HairArtistProfileDisplay extends StatelessWidget {
                     ),
               HairArtistAbout(
                 hairArtistUserProfile: _hairArtistUserProfile,
+                fontSizeProvider: _fontSizeProvider,
               ),
               HairArtistReviews(),
             ],
