@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
+import 'package:gel/models/location.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -23,6 +24,36 @@ class HairArtistProfileProvider extends ChangeNotifier {
     return _userProfile;
   }
 
+  static HairArtistUserProfile createUserProfile(
+      dynamic jsonResponse, bool withLocation) {
+    Location? location = withLocation
+        ? Location(
+            lng: jsonResponse['location']['coordinates'][0],
+            lat: jsonResponse['location']['coordinates'][1],
+          )
+        : null;
+    HairArtistAboutInfo about = new HairArtistAboutInfo(
+      jsonResponse['about']['name'],
+      jsonResponse['about']['contactNumber'],
+      jsonResponse['about']['instaUrl'],
+      jsonResponse['about']['description'],
+      jsonResponse['about']['chatiness'],
+      jsonResponse['about']['workingArrangement'],
+      jsonResponse['about']['previousWorkExperience'],
+      jsonResponse['about']['hairTypes'],
+      jsonResponse['about']['hairServCost'],
+    );
+
+    return new HairArtistUserProfile(
+        jsonResponse['uid'],
+        jsonResponse['email'],
+        jsonResponse['isHairArtist:'],
+        (jsonResponse['photoUrls'] as List).cast<String>(),
+        jsonResponse['profilePhotoUrl'],
+        about,
+        location);
+  }
+
   Future<void> getUserDataFromBackend(AuthenticationProvider auth) async {
     /*issue a get req to hairArtistProfile to get their information to display*/
     http.get(
@@ -36,26 +67,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
         /*convert the response from string to JSON*/
         var jsonResponse = convert.jsonDecode(response.body);
         /*create new Hair artist about info object*/
-        HairArtistAboutInfo _about = new HairArtistAboutInfo(
-          jsonResponse['about']['name'],
-          jsonResponse['about']['contactNumber'],
-          jsonResponse['about']['instaUrl'],
-          jsonResponse['about']['description'],
-          jsonResponse['about']['chatiness'],
-          jsonResponse['about']['workingArrangement'],
-          jsonResponse['about']['previousWorkExperience'],
-          jsonResponse['about']['hairTypes'],
-          jsonResponse['about']['hairServCost'],
-        );
-        /*create new HairArtistObject object and set the attributes in contructor to build object*/
-        _userProfile = new HairArtistUserProfile(
-            jsonResponse['uid'],
-            jsonResponse['email'],
-            auth.isHairArtist,
-            (jsonResponse['photoUrls'] as List).cast<String>(),
-            jsonResponse['profilePhotoUrl'],
-            _about,
-            null);
+        _userProfile = createUserProfile(jsonResponse, false);
         /*updates the profile object so wigets listen can use its data*/
         notifyListeners();
       },

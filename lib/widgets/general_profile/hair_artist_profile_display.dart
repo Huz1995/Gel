@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
+import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/small_button.dart';
 import 'package:gel/widgets/general_profile/hair_artist_about.dart';
@@ -13,15 +14,17 @@ import 'package:gel/widgets/hairartist/profile/gallery_picker.dart';
 import 'hair_artist_profile_pic_icon.dart';
 import 'hair_artist_reviews.dart';
 
-class HairArtistProfileDisplay extends StatelessWidget {
-  const HairArtistProfileDisplay(
+class HairArtistProfileDisplay extends StatefulWidget {
+  HairArtistProfileDisplay(
       {Key? key,
       required double phoneWidth,
       required double phoneHeight,
       HairArtistProfileProvider? hairArtistProvider,
+      HairClientProfileProvider? hairClientProfileProvider,
       required HairArtistUserProfile hairArtistUserProfile,
       required FontSizeProvider fontSizeProvider,
       required bool isForDisplay,
+      bool? isFavOfClient,
       required})
       : _phoneWidth = phoneWidth,
         _phoneHeight = phoneHeight,
@@ -29,6 +32,8 @@ class HairArtistProfileDisplay extends StatelessWidget {
         _isForDisplay = isForDisplay,
         _fontSizeProvider = fontSizeProvider,
         _hairArtistUserProfile = hairArtistUserProfile,
+        _hairClientProfileProvider = hairClientProfileProvider,
+        _isFavOfClient = isFavOfClient,
         super(key: key);
 
   final double _phoneWidth;
@@ -37,6 +42,19 @@ class HairArtistProfileDisplay extends StatelessWidget {
   final FontSizeProvider _fontSizeProvider;
   final HairArtistUserProfile _hairArtistUserProfile;
   final bool _isForDisplay;
+  final HairClientProfileProvider? _hairClientProfileProvider;
+  bool? _isFavOfClient;
+
+  @override
+  _HairArtistProfileDisplayState createState() =>
+      _HairArtistProfileDisplayState();
+}
+
+class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,19 +88,43 @@ class HairArtistProfileDisplay extends StatelessWidget {
                       margin: EdgeInsets.fromLTRB(0, 10, 15, 0),
                       width: 50.0,
                       height: 50.0,
-                      child: !_isForDisplay
+                      child: !widget._isForDisplay
                           ? GalleryPicker()
-                          : Icon(
-                              MaterialIcons.favorite_border,
-                              color: Theme.of(context).accentColor,
-                              size: 30,
-                            ),
+                          : widget._isFavOfClient!
+                              ? TextButton(
+                                  child: Icon(
+                                    MaterialIcons.remove_circle_outline,
+                                    color: Theme.of(context).accentColor,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+                                    widget._hairClientProfileProvider!
+                                        .removeHairArtistFavorite(
+                                            widget._hairArtistUserProfile.uid);
+                                    setState(() {
+                                      widget._isFavOfClient = false;
+                                    });
+                                  })
+                              : TextButton(
+                                  child: Icon(
+                                    MaterialIcons.favorite_border,
+                                    color: Theme.of(context).accentColor,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+                                    widget._hairClientProfileProvider!
+                                        .addHairArtistFavorite(
+                                            widget._hairArtistUserProfile.uid);
+                                    setState(() {
+                                      widget._isFavOfClient = true;
+                                    });
+                                  }),
                     ),
                   ],
                   elevation: 0,
                   backgroundColor: Colors.white,
-                  expandedHeight: _phoneWidth * 0.73,
-                  collapsedHeight: _phoneHeight * 0.1,
+                  expandedHeight: widget._phoneWidth * 0.73,
+                  collapsedHeight: widget._phoneHeight * 0.1,
                   flexibleSpace: LayoutBuilder(
                     builder: (context, constraints) {
                       var top = constraints.biggest.height;
@@ -93,47 +135,47 @@ class HairArtistProfileDisplay extends StatelessWidget {
                           duration: Duration(milliseconds: 0),
                           child: Container(
                             margin: EdgeInsets.only(
-                              bottom: _phoneHeight * 0.06,
+                              bottom: widget._phoneHeight * 0.06,
                             ),
                             child: Text(
-                              top >= _phoneHeight * 0.1 &&
-                                      top < _phoneHeight * 0.3
-                                  ? _hairArtistUserProfile.about.name
+                              top >= widget._phoneHeight * 0.1 &&
+                                      top < widget._phoneHeight * 0.3
+                                  ? widget._hairArtistUserProfile.about.name
                                   : "",
-                              style: _fontSizeProvider.headline2,
+                              style: widget._fontSizeProvider.headline2,
                             ),
                           ),
                         ),
                         background: Column(
                           children: [
                             SizedBox(
-                              height: _phoneHeight * 0.08,
+                              height: widget._phoneHeight * 0.08,
                             ),
-                            !_isForDisplay
+                            !widget._isForDisplay
                                 ? HairArtistProfilePicIcon(
-                                    phoneWidth: _phoneWidth,
+                                    phoneWidth: widget._phoneWidth,
                                     hairArtistProfileProvider:
-                                        _hairArtistProvider!,
+                                        widget._hairArtistProvider!,
                                     hairArtistUserProfile:
-                                        _hairArtistUserProfile,
-                                    isForDisplay: _isForDisplay,
+                                        widget._hairArtistUserProfile,
+                                    isForDisplay: widget._isForDisplay,
                                   )
                                 : HairArtistProfilePicIcon(
-                                    phoneWidth: _phoneWidth,
+                                    phoneWidth: widget._phoneWidth,
                                     hairArtistUserProfile:
-                                        _hairArtistUserProfile,
-                                    isForDisplay: _isForDisplay,
+                                        widget._hairArtistUserProfile,
+                                    isForDisplay: widget._isForDisplay,
                                   ),
                             Padding(
                               padding: EdgeInsets.all(
-                                _phoneHeight * 0.015,
+                                widget._phoneHeight * 0.015,
                               ),
                               child: Text(
-                                _hairArtistUserProfile.about.name,
-                                style: _fontSizeProvider.headline2,
+                                widget._hairArtistUserProfile.about.name,
+                                style: widget._fontSizeProvider.headline2,
                               ),
                             ),
-                            !_isForDisplay
+                            !widget._isForDisplay
                                 ? SmallButton(
                                     backgroundColor:
                                         Theme.of(context).primaryColor,
@@ -143,8 +185,8 @@ class HairArtistProfileDisplay extends StatelessWidget {
                                         MaterialPageRoute(
                                           builder: (BuildContext context) =>
                                               new EditHairArtistProfileForm(
-                                            _fontSizeProvider,
-                                            _hairArtistProvider!,
+                                            widget._fontSizeProvider,
+                                            widget._hairArtistProvider!,
                                           ),
                                         ),
                                       );
@@ -184,21 +226,21 @@ class HairArtistProfileDisplay extends StatelessWidget {
           },
           body: TabBarView(
             children: [
-              !_isForDisplay
+              !widget._isForDisplay
                   ? HairArtistGallery(
-                      hairArtistProvider: _hairArtistProvider,
-                      fontSizeProvider: _fontSizeProvider,
-                      isForDisplay: _isForDisplay,
-                      hairArtistUserProfile: _hairArtistUserProfile,
+                      hairArtistProvider: widget._hairArtistProvider,
+                      fontSizeProvider: widget._fontSizeProvider,
+                      isForDisplay: widget._isForDisplay,
+                      hairArtistUserProfile: widget._hairArtistUserProfile,
                     )
                   : HairArtistGallery(
-                      hairArtistUserProfile: _hairArtistUserProfile,
-                      isForDisplay: _isForDisplay,
-                      fontSizeProvider: _fontSizeProvider,
+                      hairArtistUserProfile: widget._hairArtistUserProfile,
+                      isForDisplay: widget._isForDisplay,
+                      fontSizeProvider: widget._fontSizeProvider,
                     ),
               HairArtistAbout(
-                hairArtistUserProfile: _hairArtistUserProfile,
-                fontSizeProvider: _fontSizeProvider,
+                hairArtistUserProfile: widget._hairArtistUserProfile,
+                fontSizeProvider: widget._fontSizeProvider,
               ),
               HairArtistReviews(),
             ],

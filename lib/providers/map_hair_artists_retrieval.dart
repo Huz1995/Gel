@@ -3,13 +3,13 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/models/location.dart';
 import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/providers/hair_artist_profile_provider.dart';
+import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general_profile/hair_artist_profile_display.dart';
-import 'package:gel/widgets/hairclient/explore/dummy.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -40,29 +40,9 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
     var jsonResponse = convert.jsonDecode(response.body);
     (jsonResponse as List).forEach(
       (rawHairArtistUserData) {
-        HairArtistAboutInfo about = new HairArtistAboutInfo(
-          rawHairArtistUserData['about']['name'],
-          rawHairArtistUserData['about']['contactNumber'],
-          rawHairArtistUserData['about']['instaUrl'],
-          rawHairArtistUserData['about']['description'],
-          rawHairArtistUserData['about']['chatiness'],
-          rawHairArtistUserData['about']['workingArrangement'],
-          rawHairArtistUserData['about']['previousWorkExperience'],
-          rawHairArtistUserData['about']['hairTypes'],
-          rawHairArtistUserData['about']['hairServCost'],
-        );
-        HairArtistUserProfile userProfile = new HairArtistUserProfile(
-          rawHairArtistUserData['uid'],
-          rawHairArtistUserData['email'],
-          rawHairArtistUserData['isHairArtist:'],
-          (rawHairArtistUserData['photoUrls'] as List).cast<String>(),
-          rawHairArtistUserData['profilePhotoUrl'],
-          about,
-          Location(
-            lng: rawHairArtistUserData['location']['coordinates'][0],
-            lat: rawHairArtistUserData['location']['coordinates'][1],
-          ),
-        );
+        HairArtistUserProfile userProfile =
+            HairArtistProfileProvider.createUserProfile(
+                rawHairArtistUserData, true);
         _searchedHairArtists.add(userProfile);
       },
     );
@@ -146,8 +126,8 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
     return BitmapDescriptor.fromBytes(uint8List);
   }
 
-  Future<void> getMarkers(
-      Location location, BuildContext context, FontSizeProvider fsp) async {
+  Future<void> getMarkers(Location location, BuildContext context,
+      FontSizeProvider fsp, HairClientProfileProvider hcpp) async {
     await getHairArtistsAtLocation(location);
     _markers = {};
     notifyListeners();
@@ -170,7 +150,10 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
                   phoneWidth: MediaQuery.of(context).size.width,
                   phoneHeight: MediaQuery.of(context).size.height,
                   hairArtistUserProfile: userProfile,
+                  hairClientProfileProvider: hcpp,
                   fontSizeProvider: fsp,
+                  isFavOfClient: hcpp.hairClientProfile.favouriteHairArtists
+                      .contains(userProfile.uid),
                   isForDisplay: true),
             ),
           ),
@@ -187,5 +170,9 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
 
   Set<Marker> get markers {
     return _markers;
+  }
+
+  void resetMarkers() {
+    _markers = {};
   }
 }

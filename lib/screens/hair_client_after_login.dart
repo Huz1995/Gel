@@ -6,6 +6,7 @@ import 'package:gel/providers/map_places_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
 import 'package:gel/widgets/hairclient/explore/hair_client_explore.dart';
+import 'package:gel/widgets/hairclient/favourites/favourite_hair_artists.dart';
 import 'package:gel/widgets/hairclient/settings/hair_client_settings.dart';
 import 'package:provider/provider.dart';
 
@@ -26,9 +27,7 @@ class _HairClientHomePageState extends State<HairClientHomePage> {
       Text(
         'Index 2: Messages',
       ),
-      Text(
-        'Index 3: Favorites',
-      ),
+      FavouriteHairArtists(),
       HairClientSettings(),
     ];
 

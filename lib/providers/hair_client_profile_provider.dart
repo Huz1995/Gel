@@ -9,7 +9,7 @@ import 'dart:convert' as convert;
 
 class HairClientProfileProvider extends ChangeNotifier {
   HairClientUserProfile _userProfile =
-      HairClientUserProfile("", "", false, "", "");
+      HairClientUserProfile("", "", false, "", "", []);
   late String _loggedInUserIdToken;
 
   HairClientProfileProvider(AuthenticationProvider auth) {
@@ -40,6 +40,7 @@ class HairClientProfileProvider extends ChangeNotifier {
       auth.isHairArtist,
       jsonResponse['profilePhotoUrl'],
       jsonResponse['name'],
+      (jsonResponse['favouriteHairArtists'] as List).cast<String>(),
     );
     /*updates the profile object so wigets listen can use its data*/
     notifyListeners();
@@ -118,5 +119,40 @@ class HairClientProfileProvider extends ChangeNotifier {
       removeProfileAtBackend();
     }
     notifyListeners();
+  }
+
+  Future<void> addHairArtistFavorite(String artistUID) async {
+    _userProfile.addFavourite(artistUID);
+    await http.post(
+      Uri.parse(
+          "http://192.168.0.11:3000/api/hairClientProfile/favouriteHairArtists"),
+      body: {
+        'uid': _userProfile.uid,
+        'favouriteHairArtists': artistUID,
+      },
+      headers: {
+        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+      },
+    );
+    print("added");
+    notifyListeners();
+  }
+
+  Future<void> removeHairArtistFavorite(String artistUID) async {
+    _userProfile.removeFromFavourite(artistUID);
+    await http.delete(
+      Uri.parse(
+          "http://192.168.0.11:3000/api/hairClientProfile/favouriteHairArtists"),
+      body: {
+        'uid': _userProfile.uid,
+        'favouriteHairArtists': artistUID,
+      },
+      headers: {
+        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+      },
+    );
+
+    notifyListeners();
+    print("remove");
   }
 }

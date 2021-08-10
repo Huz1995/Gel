@@ -4,6 +4,7 @@ class HairClientUserProfile {
   bool _isHairArtist;
   String? _profilePhotoUrl;
   String _name;
+  List<String> favouriteHairArtists;
 
   HairClientUserProfile(
     this._uid,
@@ -11,6 +12,7 @@ class HairClientUserProfile {
     this._isHairArtist,
     this._profilePhotoUrl,
     this._name,
+    this.favouriteHairArtists,
   );
 
   String get uid {
@@ -31,6 +33,18 @@ class HairClientUserProfile {
 
   String get name {
     return _name;
+  }
+
+  List<String> get favourites {
+    return favouriteHairArtists;
+  }
+
+  void addFavourite(String artistUID) {
+    favouriteHairArtists.add(artistUID);
+  }
+
+  void removeFromFavourite(String artistUID) {
+    favouriteHairArtists.remove(artistUID);
   }
 
   void setName(String name) {

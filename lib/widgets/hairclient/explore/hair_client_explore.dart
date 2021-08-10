@@ -1,22 +1,16 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/models/location.dart';
 import 'package:gel/models/place_search.dart';
-import 'package:gel/providers/hair_artist_profile_provider.dart';
+import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/map_hair_artists_retrieval.dart';
 import 'package:gel/providers/map_places_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
-import 'package:gel/widgets/general_profile/hair_artist_profile_display.dart';
-import 'package:gel/widgets/hairclient/explore/dummy.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
-import 'dart:ui' as ui;
 
 class HairClientExplore extends StatefulWidget {
   @override
@@ -27,7 +21,7 @@ class _HairClientExploreState extends State<HairClientExplore> {
   late GoogleMapController _googleMapController;
   FloatingSearchBarController _floatingSearchBarController =
       FloatingSearchBarController();
-
+  late MapHairArtistRetrievalProvider _harp;
   void _onMapCreated() {
     Geolocator.checkPermission().then(
       (allowed) {
@@ -65,17 +59,28 @@ class _HairClientExploreState extends State<HairClientExplore> {
   }
 
   @override
+  void initState() {
+    _harp = Provider.of<MapHairArtistRetrievalProvider>(context, listen: false);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _harp.resetMarkers();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
-
+    final _hairClientProfileProvider =
+        Provider.of<HairClientProfileProvider>(context);
     final _mapLocationProvider = Provider.of<MapPlacesProvider>(context);
     final List<PlaceSearch> _placeSearchResults =
         _mapLocationProvider.searchResults;
     final MapHairArtistRetrievalProvider _hairArtistRetrievalProvider =
         Provider.of<MapHairArtistRetrievalProvider>(context);
-    final _hairArtistSearchResults =
-        _hairArtistRetrievalProvider.searchedHairArtists;
     final _markers = _hairArtistRetrievalProvider.markers;
 
     return Scaffold(
@@ -153,6 +158,7 @@ class _HairClientExploreState extends State<HairClientExplore> {
                             place,
                             context,
                             _fontSizeProvider,
+                            _hairClientProfileProvider,
                           );
                         },
                       );
