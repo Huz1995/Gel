@@ -114,7 +114,7 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                                   onPressed: () {
                                     widget._hairClientProfileProvider!
                                         .addHairArtistFavorite(
-                                            widget._hairArtistUserProfile.uid);
+                                            widget._hairArtistUserProfile);
                                     setState(() {
                                       widget._isFavOfClient = true;
                                     });

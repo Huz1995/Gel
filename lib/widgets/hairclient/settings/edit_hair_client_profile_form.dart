@@ -7,6 +7,7 @@ import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
+import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/general/small_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -114,38 +115,11 @@ class _EditHairClientProfileFormState extends State<EditHairClientProfileForm> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Stack(
-                        children: [
-                          doesHaveProfilePhoto
-                              ? CircleAvatar(
-                                  radius: MediaQuery.of(context).size.width / 8,
-                                  backgroundColor: Theme.of(context).cardColor,
-                                  backgroundImage: NetworkImage(widget
-                                      ._hairClientProfileProvider
-                                      .hairClientProfile
-                                      .profilePhotoUrl!),
-                                )
-                              : CircleAvatar(
-                                  radius: MediaQuery.of(context).size.width / 8,
-                                  backgroundColor: Theme.of(context)
-                                      .cardColor
-                                      .withOpacity(0.3),
-                                ),
-                          !doesHaveProfilePhoto
-                              ? Positioned(
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.075,
-                                  bottom:
-                                      MediaQuery.of(context).size.width * 0.075,
-                                  //bottom: _phoneWidth / 4,
-                                  child: Icon(
-                                    MaterialIcons.person_add,
-                                    size: 40,
-                                  ),
-                                )
-                              : Text("")
-                        ],
-                      ),
+                      UIService.getProfilePicIcon(
+                          doesHaveProfilePhoto,
+                          context,
+                          widget._hairClientProfileProvider.hairClientProfile
+                              .profilePhotoUrl),
                     ],
                   ),
                   SizedBox(

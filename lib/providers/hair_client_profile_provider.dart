@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/models/hair_client_user_profile.dart';
 import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
@@ -33,14 +35,20 @@ class HairClientProfileProvider extends ChangeNotifier {
     );
     /*convert the response from string to JSON*/
     var jsonResponse = convert.jsonDecode(response.body);
-    /*create new HairClient Object object and set the attributes in contructor to build object*/
+    List<HairArtistUserProfile> favHairArtistProfiles = [];
+    (jsonResponse['favoriteHairArtists'] as List)
+        .forEach((backendHairArtistProfile) {
+      var hairArtistProfile = HairArtistProfileProvider.createUserProfile(
+          backendHairArtistProfile, false);
+      favHairArtistProfiles.add(hairArtistProfile);
+    }); /*create new HairClient Object object and set the attributes in contructor to build object*/
     _userProfile = new HairClientUserProfile(
       jsonResponse['uid'],
       jsonResponse['email'],
       auth.isHairArtist,
       jsonResponse['profilePhotoUrl'],
       jsonResponse['name'],
-      (jsonResponse['favouriteHairArtists'] as List).cast<String>(),
+      favHairArtistProfiles,
     );
     /*updates the profile object so wigets listen can use its data*/
     notifyListeners();
@@ -121,20 +129,19 @@ class HairClientProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addHairArtistFavorite(String artistUID) async {
-    _userProfile.addFavourite(artistUID);
+  Future<void> addHairArtistFavorite(HairArtistUserProfile hairArtist) async {
+    _userProfile.addFavourite(hairArtist);
     await http.post(
       Uri.parse(
           "http://192.168.0.11:3000/api/hairClientProfile/favouriteHairArtists"),
       body: {
         'uid': _userProfile.uid,
-        'favouriteHairArtists': artistUID,
+        'favouriteHairArtists': hairArtist.uid,
       },
       headers: {
         HttpHeaders.authorizationHeader: _loggedInUserIdToken,
       },
     );
-    print("added");
     notifyListeners();
   }
 
@@ -153,6 +160,13 @@ class HairClientProfileProvider extends ChangeNotifier {
     );
 
     notifyListeners();
-    print("remove");
+  }
+
+  static bool isAFavorite(
+      HairClientUserProfile hcup, HairArtistUserProfile haup) {
+    if (hcup.favouriteHairArtists.any((favHA) => favHA.uid == haup.uid)) {
+      return true;
+    }
+    return false;
   }
 }

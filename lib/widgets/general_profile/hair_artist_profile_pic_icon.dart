@@ -5,6 +5,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
+import 'package:gel/providers/ui_service.dart';
 import 'package:image_picker/image_picker.dart';
 
 class HairArtistProfilePicIcon extends StatefulWidget {
@@ -64,29 +65,8 @@ class _HairArtistProfilePicIconState extends State<HairArtistProfilePicIcon> {
       child: Center(
         child: Stack(
           children: [
-            doesHaveProfilePhoto
-                ? CircleAvatar(
-                    radius: widget._phoneWidth / 8,
-                    backgroundColor: Theme.of(context).cardColor,
-                    backgroundImage: NetworkImage(
-                        widget._hairArtistUserProfile.profilePhotoUrl!),
-                  )
-                : CircleAvatar(
-                    radius: widget._phoneWidth / 8,
-                    backgroundColor:
-                        Theme.of(context).cardColor.withOpacity(0.3),
-                  ),
-            !doesHaveProfilePhoto
-                ? Positioned(
-                    left: widget._phoneWidth * 0.080,
-                    bottom: widget._phoneWidth * 0.080,
-                    //bottom: _phoneWidth / 4,
-                    child: Icon(
-                      Icons.person,
-                      size: 40,
-                    ),
-                  )
-                : Text(""),
+            UIService.getProfilePicIcon(doesHaveProfilePhoto, context,
+                widget._hairArtistUserProfile.profilePhotoUrl),
             !widget._isForDisplay
                 ? Positioned(
                     left: widget._phoneWidth * 0.170,

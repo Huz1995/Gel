@@ -1,10 +1,12 @@
+import 'package:gel/models/hair_artist_user_profile.dart';
+
 class HairClientUserProfile {
   String _uid;
   String _email;
   bool _isHairArtist;
   String? _profilePhotoUrl;
   String _name;
-  List<String> favouriteHairArtists;
+  List<HairArtistUserProfile> favouriteHairArtists;
 
   HairClientUserProfile(
     this._uid,
@@ -35,16 +37,17 @@ class HairClientUserProfile {
     return _name;
   }
 
-  List<String> get favourites {
+  List<HairArtistUserProfile> get favourites {
     return favouriteHairArtists;
   }
 
-  void addFavourite(String artistUID) {
-    favouriteHairArtists.add(artistUID);
+  void addFavourite(HairArtistUserProfile hairArtist) {
+    favouriteHairArtists.add(hairArtist);
   }
 
   void removeFromFavourite(String artistUID) {
-    favouriteHairArtists.remove(artistUID);
+    favouriteHairArtists
+        .removeWhere((hairArtist) => hairArtist.uid == artistUID);
   }
 
   void setName(String name) {

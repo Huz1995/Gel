@@ -9,11 +9,11 @@ import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
+import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/general_profile/hair_artist_profile_display.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-import 'dart:ui' as ui;
 
 class MapHairArtistRetrievalProvider with ChangeNotifier {
   List<HairArtistUserProfile> _searchedHairArtists = [];
@@ -49,83 +49,6 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<ui.Image> _getImageFromUrl(String url) async {
-    Completer<ImageInfo> completer = Completer();
-    var img = new NetworkImage(url);
-    img
-        .resolve(ImageConfiguration())
-        .addListener(ImageStreamListener((ImageInfo info, bool _) {
-      completer.complete(info);
-    }));
-    ImageInfo imageInfo = await completer.future;
-    return imageInfo.image;
-  }
-
-  Future<BitmapDescriptor> _getMarkerIcon(String url, Size size) async {
-    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder);
-
-    final Radius radius = Radius.circular(size.width / 2);
-
-    final Paint tagPaint = Paint()..color = Colors.blue;
-    final double tagWidth = 40.0;
-
-    final Paint shadowPaint = Paint()..color = Colors.blue.withAlpha(100);
-    final double shadowWidth = 10.0;
-
-    final Paint borderPaint = Paint()..color = Colors.white;
-    final double borderWidth = 5.0;
-
-    final double imageOffset = shadowWidth + borderWidth;
-
-    // Add shadow circle
-    canvas.drawRRect(
-        RRect.fromRectAndCorners(
-          Rect.fromLTWH(0.0, 0.0, size.width, size.height),
-          topLeft: radius,
-          topRight: radius,
-          bottomLeft: radius,
-          bottomRight: radius,
-        ),
-        shadowPaint);
-
-    // Add border circle
-    canvas.drawRRect(
-        RRect.fromRectAndCorners(
-          Rect.fromLTWH(shadowWidth, shadowWidth,
-              size.width - (shadowWidth * 2), size.height - (shadowWidth * 2)),
-          topLeft: radius,
-          topRight: radius,
-          bottomLeft: radius,
-          bottomRight: radius,
-        ),
-        borderPaint);
-
-    // Oval for the image
-    Rect oval = Rect.fromLTWH(imageOffset, imageOffset,
-        size.width - (imageOffset * 2), size.height - (imageOffset * 2));
-
-    // Add path for oval image
-    canvas.clipPath(Path()..addOval(oval));
-
-    // Add image
-    ui.Image image = await _getImageFromUrl(
-        url); // Alternatively use your own method to get the image
-    paintImage(canvas: canvas, image: image, rect: oval, fit: BoxFit.fitWidth);
-
-    // Convert canvas to image
-    final ui.Image markerAsImage = await pictureRecorder
-        .endRecording()
-        .toImage(size.width.toInt(), size.height.toInt());
-
-    // Convert image to bytes
-    final ByteData? byteData =
-        await markerAsImage.toByteData(format: ui.ImageByteFormat.png);
-    final Uint8List uint8List = byteData!.buffer.asUint8List();
-
-    return BitmapDescriptor.fromBytes(uint8List);
-  }
-
   Future<void> getMarkers(Location location, BuildContext context,
       FontSizeProvider fsp, HairClientProfileProvider hcpp) async {
     await getHairArtistsAtLocation(location);
@@ -135,10 +58,12 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
       (userProfile) async {
         var location = userProfile.location;
         var marker = Marker(
-          icon: await _getMarkerIcon(
-            userProfile.profilePhotoUrl!,
-            Size(100, 100),
-          ),
+          icon: userProfile.profilePhotoUrl != null
+              ? await UIService.getMarkerIcon(
+                  userProfile.profilePhotoUrl!,
+                  Size(100, 100),
+                )
+              : BitmapDescriptor.defaultMarker,
           markerId: MarkerId(userProfile.uid),
           position: LatLng(
             location!.lat!,
@@ -152,8 +77,8 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
                   hairArtistUserProfile: userProfile,
                   hairClientProfileProvider: hcpp,
                   fontSizeProvider: fsp,
-                  isFavOfClient: hcpp.hairClientProfile.favouriteHairArtists
-                      .contains(userProfile.uid),
+                  isFavOfClient: HairClientProfileProvider.isAFavorite(
+                      hcpp.hairClientProfile, userProfile),
                   isForDisplay: true),
             ),
           ),

@@ -31,7 +31,7 @@ class BottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.face),
-          label: _isHairArtist ? "Profile" : "Favorites",
+          label: _isHairArtist ? "Profile" : "Favourites",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),
