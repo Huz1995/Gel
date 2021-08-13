@@ -4,8 +4,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/models/hair_client_user_profile.dart';
+import 'package:gel/models/review_model.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
+import 'package:gel/widgets/general_profile/hair_artist_about.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
@@ -43,13 +45,12 @@ class HairClientProfileProvider extends ChangeNotifier {
       favHairArtistProfiles.add(hairArtistProfile);
     }); /*create new HairClient Object object and set the attributes in contructor to build object*/
     _userProfile = new HairClientUserProfile(
-      jsonResponse['uid'],
-      jsonResponse['email'],
-      auth.isHairArtist,
-      jsonResponse['profilePhotoUrl'],
-      jsonResponse['name'],
-      favHairArtistProfiles,
-    );
+        jsonResponse['uid'],
+        jsonResponse['email'],
+        auth.isHairArtist,
+        jsonResponse['profilePhotoUrl'],
+        jsonResponse['name'],
+        favHairArtistProfiles);
     /*updates the profile object so wigets listen can use its data*/
     notifyListeners();
   }
@@ -168,5 +169,22 @@ class HairClientProfileProvider extends ChangeNotifier {
       return true;
     }
     return false;
+  }
+
+  Future<void> addReviewToHairArtist(
+      HairArtistUserProfile hairArtistUserProfile, Review review) async {
+    await http.post(
+      Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/review"),
+      body: {
+        'hairArtistUid': hairArtistUserProfile.uid,
+        'score': review.score.toString(),
+        'body': review.body,
+        'datetime': review.dateTime.toString(),
+        'hairClientUid': review.reviewer.uid,
+      },
+      headers: {
+        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+      },
+    );
   }
 }

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
+import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
@@ -10,6 +13,7 @@ import 'package:gel/widgets/general_profile/hair_artist_gallery.dart';
 import 'package:gel/widgets/general_profile/profile_tab_bar.dart';
 import 'package:gel/widgets/hairartist/profile/edit_hair_artist_profile_form.dart';
 import 'package:gel/widgets/hairartist/profile/gallery_picker.dart';
+import 'package:provider/provider.dart';
 
 import 'hair_artist_profile_pic_icon.dart';
 import 'hair_artist_reviews.dart';
@@ -58,6 +62,16 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    final _authProvider = Provider.of<AuthenticationProvider>(context);
+    /*to ensure when auto logout occurs then we remove this widget the tree*/
+    if (!_authProvider.isLoggedIn && widget._isForDisplay) {
+      Timer(
+        Duration(seconds: 1),
+        () {
+          Navigator.of(context).pop();
+        },
+      );
+    }
     return DefaultTabController(
       length: 3,
       child: Container(
@@ -242,7 +256,17 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                 hairArtistUserProfile: widget._hairArtistUserProfile,
                 fontSizeProvider: widget._fontSizeProvider,
               ),
-              HairArtistReviews(),
+              !widget._isForDisplay
+                  ? HairArtistReviews(
+                      hairArtistUserProfile: widget._hairArtistUserProfile,
+                      isForDisplay: widget._isForDisplay,
+                    )
+                  : HairArtistReviews(
+                      hairArtistUserProfile: widget._hairArtistUserProfile,
+                      isForDisplay: widget._isForDisplay,
+                      hairClientProfileProvider:
+                          widget._hairClientProfileProvider!,
+                    )
             ],
           ),
         ),

@@ -16,7 +16,7 @@ class HairClientHomePage extends StatefulWidget {
 }
 
 class _HairClientHomePageState extends State<HairClientHomePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {

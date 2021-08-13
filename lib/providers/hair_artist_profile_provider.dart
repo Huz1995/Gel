@@ -11,7 +11,7 @@ import 'dart:convert' as convert;
 
 class HairArtistProfileProvider extends ChangeNotifier {
   HairArtistUserProfile _userProfile = HairArtistUserProfile("", "", false, [],
-      null, HairArtistAboutInfo("", "", "", "", "", "", "", "", ""), null);
+      null, HairArtistAboutInfo("", "", "", "", "", "", "", "", ""), null, []);
   late String _loggedInUserIdToken;
 
   HairArtistProfileProvider(AuthenticationProvider auth) {
@@ -45,13 +45,15 @@ class HairArtistProfileProvider extends ChangeNotifier {
     );
 
     return new HairArtistUserProfile(
-        jsonResponse['uid'],
-        jsonResponse['email'],
-        jsonResponse['isHairArtist:'],
-        (jsonResponse['photoUrls'] as List).cast<String>(),
-        jsonResponse['profilePhotoUrl'],
-        about,
-        location);
+      jsonResponse['uid'],
+      jsonResponse['email'],
+      jsonResponse['isHairArtist:'],
+      (jsonResponse['photoUrls'] as List).cast<String>(),
+      jsonResponse['profilePhotoUrl'],
+      about,
+      location,
+      [],
+    );
   }
 
   Future<void> getUserDataFromBackend(AuthenticationProvider auth) async {

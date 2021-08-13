@@ -24,7 +24,7 @@ class FavouriteWidget extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(10.0),
-          height: 200,
+          height: 215,
           child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),

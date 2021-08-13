@@ -1,4 +1,5 @@
 import 'package:gel/models/location.dart';
+import 'package:gel/models/review_model.dart';
 
 class HairArtistAboutInfo {
   String name;
@@ -46,6 +47,7 @@ class HairArtistUserProfile {
   String? _profilePhotoUrl;
   HairArtistAboutInfo _about;
   Location? _location;
+  List<Review> reviews;
 
   HairArtistUserProfile(
     this._uid,
@@ -55,6 +57,7 @@ class HairArtistUserProfile {
     this._profilePhotoUrl,
     this._about,
     this._location,
+    this.reviews,
   );
 
   String get uid {
