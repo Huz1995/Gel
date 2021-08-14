@@ -47,7 +47,9 @@ class HairArtistUserProfile {
   String? _profilePhotoUrl;
   HairArtistAboutInfo _about;
   Location? _location;
-  List<Review> reviews;
+  List<Review> _reviews;
+  int _numReviews;
+  int _totalScore;
 
   HairArtistUserProfile(
     this._uid,
@@ -57,7 +59,9 @@ class HairArtistUserProfile {
     this._profilePhotoUrl,
     this._about,
     this._location,
-    this.reviews,
+    this._reviews,
+    this._numReviews,
+    this._totalScore,
   );
 
   String get uid {
@@ -88,6 +92,18 @@ class HairArtistUserProfile {
     return _location;
   }
 
+  int get numReviews {
+    return _numReviews;
+  }
+
+  int get totalScore {
+    return _totalScore;
+  }
+
+  List<Review> get reviews {
+    return _reviews;
+  }
+
   /*this adds a photo url to the array*/
   void addPhotoUrl(String url) {
     this._photoUrls.insert(0, url);
@@ -103,5 +119,36 @@ class HairArtistUserProfile {
 
   void deleteProfilePhoto() {
     this._profilePhotoUrl = null;
+  }
+
+  void addOneToReviewCount() {
+    this._numReviews += 1;
+  }
+
+  void removeOneFromReviewCount() {
+    this._numReviews -= 1;
+  }
+
+  void addToTotalScore(int score) {
+    this._totalScore += score;
+  }
+
+  void removeFromTotalScore(int score) {
+    this._totalScore -= score;
+  }
+
+  void addReview(Review review) {
+    _reviews.insert(0, review);
+  }
+
+  void removeReview(Review review) {
+    _reviews.remove(review);
+  }
+
+  double getAverageScore() {
+    if (numReviews != 0) {
+      return _totalScore / _numReviews;
+    }
+    return 0;
   }
 }

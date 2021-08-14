@@ -38,12 +38,14 @@ class HairClientProfileProvider extends ChangeNotifier {
     /*convert the response from string to JSON*/
     var jsonResponse = convert.jsonDecode(response.body);
     List<HairArtistUserProfile> favHairArtistProfiles = [];
-    (jsonResponse['favoriteHairArtists'] as List)
-        .forEach((backendHairArtistProfile) {
-      var hairArtistProfile = HairArtistProfileProvider.createUserProfile(
-          backendHairArtistProfile, false);
+    List<dynamic> backendHairArtistProfiles =
+        (jsonResponse['favoriteHairArtists'] as List);
+    for (int i = 0; i < backendHairArtistProfiles.length; i++) {
+      var hairArtistProfile = await HairArtistProfileProvider.createUserProfile(
+          backendHairArtistProfiles[i], false, _loggedInUserIdToken);
       favHairArtistProfiles.add(hairArtistProfile);
-    }); /*create new HairClient Object object and set the attributes in contructor to build object*/
+    }
+    /*create new HairClient Object object and set the attributes in contructor to build object*/
     _userProfile = new HairClientUserProfile(
         jsonResponse['uid'],
         jsonResponse['email'],
@@ -171,16 +173,33 @@ class HairClientProfileProvider extends ChangeNotifier {
     return false;
   }
 
-  Future<void> addReviewToHairArtist(
+  Future<String> addReviewToHairArtist(
       HairArtistUserProfile hairArtistUserProfile, Review review) async {
-    await http.post(
+    var response = await http.post(
       Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/review"),
       body: {
         'hairArtistUid': hairArtistUserProfile.uid,
         'score': review.score.toString(),
         'body': review.body,
         'datetime': review.dateTime.toString(),
-        'hairClientUid': review.reviewer.uid,
+        'hairClientUid': _userProfile.uid,
+      },
+      headers: {
+        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+      },
+    );
+    var jsonResponse = convert.jsonDecode(response.body);
+    return jsonResponse['_id'];
+  }
+
+  Future<void> removeReviewFromHairArtist(
+      HairArtistUserProfile hairArtistUserProfile, Review review) async {
+    await http.delete(
+      Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/review"),
+      body: {
+        'hairArtistUid': hairArtistUserProfile.uid,
+        'reviewId': review.id,
+        'score': review.score.toString(),
       },
       headers: {
         HttpHeaders.authorizationHeader: _loggedInUserIdToken,

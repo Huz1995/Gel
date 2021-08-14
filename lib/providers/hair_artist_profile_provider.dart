@@ -5,13 +5,23 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/models/location.dart';
+import 'package:gel/models/review_model.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class HairArtistProfileProvider extends ChangeNotifier {
-  HairArtistUserProfile _userProfile = HairArtistUserProfile("", "", false, [],
-      null, HairArtistAboutInfo("", "", "", "", "", "", "", "", ""), null, []);
+  HairArtistUserProfile _userProfile = HairArtistUserProfile(
+      "",
+      "",
+      false,
+      [],
+      null,
+      HairArtistAboutInfo("", "", "", "", "", "", "", "", ""),
+      null,
+      [],
+      0,
+      0);
   late String _loggedInUserIdToken;
 
   HairArtistProfileProvider(AuthenticationProvider auth) {
@@ -24,8 +34,8 @@ class HairArtistProfileProvider extends ChangeNotifier {
     return _userProfile;
   }
 
-  static HairArtistUserProfile createUserProfile(
-      dynamic jsonResponse, bool withLocation) {
+  static Future<HairArtistUserProfile> createUserProfile(dynamic jsonResponse,
+      bool withLocation, String loggedInUserIdToken) async {
     Location? location = withLocation
         ? Location(
             lng: jsonResponse['location']['coordinates'][0],
@@ -43,7 +53,6 @@ class HairArtistProfileProvider extends ChangeNotifier {
       jsonResponse['about']['hairTypes'],
       jsonResponse['about']['hairServCost'],
     );
-
     return new HairArtistUserProfile(
       jsonResponse['uid'],
       jsonResponse['email'],
@@ -52,8 +61,38 @@ class HairArtistProfileProvider extends ChangeNotifier {
       jsonResponse['profilePhotoUrl'],
       about,
       location,
-      [],
+      await _getReviews(jsonResponse['reviews'], loggedInUserIdToken),
+      jsonResponse['numReviews'],
+      jsonResponse['totalScore'],
     );
+  }
+
+  static Future<List<Review>> _getReviews(
+      dynamic jsonReviews, String loggedInUserIdToken) async {
+    List<Review> reviews = [];
+    List<dynamic> reviewList = (jsonReviews as List);
+    for (int i = 0; i < reviewList.length; i++) {
+      var response = await http.get(
+        Uri.parse("http://192.168.0.11:3000/api/hairClientProfile/reviewer/" +
+            reviewList[i]['reviewerUID']),
+        headers: {
+          HttpHeaders.authorizationHeader: loggedInUserIdToken,
+        },
+      );
+      var jsonResponse = convert.jsonDecode(response.body);
+      var reviewObj = Review(
+        reviewList[i]['_id'],
+        reviewList[i]['score'],
+        reviewList[i]['body'],
+        jsonResponse['reviewerProfilePhotoUrl'],
+        jsonResponse['reviewerName'],
+        reviewList[i]['reviewerUID'],
+        DateTime.parse(reviewList[i]['datetime']),
+      );
+      reviews.add(reviewObj);
+    }
+    print(reviews);
+    return reviews;
   }
 
   Future<void> getUserDataFromBackend(AuthenticationProvider auth) async {
@@ -65,11 +104,12 @@ class HairArtistProfileProvider extends ChangeNotifier {
         HttpHeaders.authorizationHeader: _loggedInUserIdToken,
       },
     ).then(
-      (response) {
+      (response) async {
         /*convert the response from string to JSON*/
         var jsonResponse = convert.jsonDecode(response.body);
         /*create new Hair artist about info object*/
-        _userProfile = createUserProfile(jsonResponse, false);
+        _userProfile =
+            await createUserProfile(jsonResponse, false, _loggedInUserIdToken);
         /*updates the profile object so wigets listen can use its data*/
         notifyListeners();
       },

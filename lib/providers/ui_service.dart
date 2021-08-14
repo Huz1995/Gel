@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gel/providers/text_size_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class UIService {
@@ -108,6 +109,59 @@ class UIService {
             size: 40,
           ),
         )
+      ],
+    );
+  }
+
+  static Widget noElementsToShowMessage(
+    BuildContext context,
+    bool isForDisplay,
+    Icon icon,
+    String titleClient,
+    String titleArtist,
+    String blurbArtist,
+  ) {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            CircleAvatar(
+              radius: MediaQuery.of(context).size.width / 7,
+              backgroundColor: Theme.of(context).cardColor.withOpacity(0.1),
+            ),
+            Positioned(
+              left: MediaQuery.of(context).size.width * 0.078,
+              bottom: MediaQuery.of(context).size.width * 0.078,
+              //bottom: _phoneWidth / 4,
+              child: icon,
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 15.0),
+          child: Text(
+            !isForDisplay ? titleArtist : titleClient,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.06,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        !isForDisplay
+            ? Padding(
+                padding: const EdgeInsets.fromLTRB(50, 10, 50, 0),
+                child: Text(
+                  blurbArtist,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                    color: Colors.black,
+                  ),
+                ),
+              )
+            : Text(""),
       ],
     );
   }

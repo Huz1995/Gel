@@ -38,14 +38,13 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
     );
     /*convert the response from string to JSON*/
     var jsonResponse = convert.jsonDecode(response.body);
-    (jsonResponse as List).forEach(
-      (rawHairArtistUserData) {
-        HairArtistUserProfile userProfile =
-            HairArtistProfileProvider.createUserProfile(
-                rawHairArtistUserData, true);
-        _searchedHairArtists.add(userProfile);
-      },
-    );
+    List<dynamic> rawHairArtistUserDataList = (jsonResponse as List);
+    for (int i = 0; i < rawHairArtistUserDataList.length; i++) {
+      HairArtistUserProfile userProfile =
+          await HairArtistProfileProvider.createUserProfile(
+              rawHairArtistUserDataList[i], true, _loggedInUserIdToken);
+      _searchedHairArtists.add(userProfile);
+    }
     notifyListeners();
   }
 

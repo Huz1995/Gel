@@ -6,6 +6,7 @@ import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
+import 'package:gel/providers/ui_service.dart';
 
 class HairArtistGallery extends StatelessWidget {
   const HairArtistGallery({
@@ -37,47 +38,16 @@ class HairArtistGallery extends StatelessWidget {
           child: _hairArtistUserProfile.photoUrls.isEmpty
               ? Container(
                   margin: EdgeInsets.only(top: 250.0),
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: MediaQuery.of(context).size.width / 7,
-                            backgroundColor:
-                                Theme.of(context).cardColor.withOpacity(0.1),
-                          ),
-                          Positioned(
-                            left: MediaQuery.of(context).size.width * 0.078,
-                            bottom: MediaQuery.of(context).size.width * 0.078,
-                            //bottom: _phoneWidth / 4,
-                            child: Icon(
-                              FontAwesome5.images,
-                              size: 50,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
-                        child: Text(
-                          !_isForDisplay
-                              ? "Upload Images"
-                              : "Artist Has No Images",
-                          textAlign: TextAlign.center,
-                          style: _fontSizeProvider.headline2,
-                        ),
-                      ),
-                      !_isForDisplay
-                          ? Padding(
-                              padding: const EdgeInsets.fromLTRB(50, 10, 50, 0),
-                              child: Text(
-                                "Uploading images is to your portfolio is a key part of gaining exposure and buisiness. Highlight your work and styles to the world!",
-                                textAlign: TextAlign.center,
-                                style: _fontSizeProvider.bodyText4,
-                              ),
-                            )
-                          : Text(""),
-                    ],
+                  child: UIService.noElementsToShowMessage(
+                    context,
+                    _isForDisplay,
+                    Icon(
+                      FontAwesome5.images,
+                      size: 50,
+                    ),
+                    "Artist Has No Images",
+                    "Upload Images",
+                    "Uploading images is to your portfolio is a key part of gaining exposure and buisiness. Highlight your work and styles to the world!",
                   ),
                 )
               : CustomScrollView(
