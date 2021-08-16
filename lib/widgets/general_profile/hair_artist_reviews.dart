@@ -146,8 +146,7 @@ class _HairArtistReviewsState extends State<HairArtistReviews> {
               ),
               widget.isForDisplay!
                   ? Container(
-                      height: 100,
-                      padding: EdgeInsets.only(top: 15),
+                      height: 80,
                       child: Center(
                         child: Column(
                           children: [

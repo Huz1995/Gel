@@ -2,6 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+/*class that provides static methods that return 
+and alter dialog with custoom titles, buttons, and on pressed functions*/
+
 class CustomDialogs {
   static Future<void> showMyDialogTwoButtons(
     BuildContext context,

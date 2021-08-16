@@ -30,8 +30,8 @@ class FavouriteWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(30.0),
             ),
             color: listIndex! % 2 == 0
-                ? Theme.of(context).primaryColor.withOpacity(0.2)
-                : Theme.of(context).accentColor.withOpacity(0.2),
+                ? Theme.of(context).primaryColor.withOpacity(0.05)
+                : Theme.of(context).accentColor.withOpacity(0.05),
             elevation: 20,
             child: TextButton(
               onPressed: () => Navigator.of(context).push(

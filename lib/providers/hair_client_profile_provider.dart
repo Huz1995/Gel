@@ -14,18 +14,24 @@ import 'dart:convert' as convert;
 class HairClientProfileProvider extends ChangeNotifier {
   HairClientUserProfile _userProfile =
       HairClientUserProfile("", "", false, "", "", []);
+  /*this token is used to send headers to back end to protect routes*/
   late String _loggedInUserIdToken;
 
+  /*when the provider is init, send the auth provider to store the logged in user token
+  so can protect the routes on the back end*/
   HairClientProfileProvider(AuthenticationProvider auth) {
-    /* when we initate the hair artist profile then get the user data from the back end*/
+    /* when we initate the hair client profile then get the user data from the back end*/
     _loggedInUserIdToken = auth.idToken;
+    /*when logged in get client data from the back end*/
     getUserDataFromBackend(auth);
   }
 
+  /*function that return the hair client user object*/
   HairClientUserProfile get hairClientProfile {
     return _userProfile;
   }
 
+  /*function that gets the client data form the backend when logs in*/
   Future<void> getUserDataFromBackend(AuthenticationProvider auth) async {
     /*issue a get req to hairClientProfile to get their information to display*/
     var response = await http.get(
@@ -37,12 +43,17 @@ class HairClientProfileProvider extends ChangeNotifier {
     );
     /*convert the response from string to JSON*/
     var jsonResponse = convert.jsonDecode(response.body);
+    /*for the favorite hair artits the client has need to form
+    HairArtistUserProfies and store in a list in the client object*/
     List<HairArtistUserProfile> favHairArtistProfiles = [];
     List<dynamic> backendHairArtistProfiles =
         (jsonResponse['favoriteHairArtists'] as List);
     for (int i = 0; i < backendHairArtistProfiles.length; i++) {
+      /*we use the HairArtistProfileProvider static method to create a user profile
+      out of the raw jsonResponse coming in from the backend*/
       var hairArtistProfile = await HairArtistProfileProvider.createUserProfile(
           backendHairArtistProfiles[i], false, _loggedInUserIdToken);
+      /*store the object in list*/
       favHairArtistProfiles.add(hairArtistProfile);
     }
     /*create new HairClient Object object and set the attributes in contructor to build object*/
@@ -57,6 +68,7 @@ class HairClientProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /*function that takes in a name form edit profile widget and then stores in db*/
   Future<void> setName() async {
     await http.put(
       Uri.parse("http://192.168.0.11:3000/api/hairClientProfile/setName/" +
@@ -73,7 +85,7 @@ class HairClientProfileProvider extends ChangeNotifier {
   }
 
   void addProfilePicture(File file) async {
-    /*create a storeage ref from firebase*/
+    /*create a storeage ref from firebase and create path using a user email*/
     print(file);
     final ref = FirebaseStorage.instance
         .ref()
@@ -107,9 +119,12 @@ class HairClientProfileProvider extends ChangeNotifier {
     }
   }
 
+  /*function that reviews a profile picture*/
   void removeProfilePicture() async {
     void Function() removeProfileAtBackend = () async {
+      /*remove from user profile object for ui*/
       _userProfile.deleteProfilePhoto();
+      /*remove from the database*/
       http.delete(
         Uri.parse(
             "http://192.168.0.11:3000/api/hairClientProfile/profilepicture"),
@@ -121,7 +136,7 @@ class HairClientProfileProvider extends ChangeNotifier {
         },
       );
     };
-    _userProfile.deleteProfilePhoto();
+    /*create a ref from the url and delete it*/
     try {
       final ref =
           FirebaseStorage.instance.refFromURL(_userProfile.profilePhotoUrl!);
@@ -132,8 +147,11 @@ class HairClientProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /*function that adds favorite hair artist to the hair client profile and db*/
   Future<void> addHairArtistFavorite(HairArtistUserProfile hairArtist) async {
+    /*add to favs to update ui*/
     _userProfile.addFavourite(hairArtist);
+    /*just post the uid, the back end will fetch the profile when the client logs on*/
     await http.post(
       Uri.parse(
           "http://192.168.0.11:3000/api/hairClientProfile/favouriteHairArtists"),
@@ -148,6 +166,7 @@ class HairClientProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /*function that removes the hair artist from the ui and db*/
   Future<void> removeHairArtistFavorite(String artistUID) async {
     _userProfile.removeFromFavourite(artistUID);
     await http.delete(
@@ -165,6 +184,7 @@ class HairClientProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /*static function that checks if the hairclient user object has hair artist as a fav*/
   static bool isAFavorite(
       HairClientUserProfile hcup, HairArtistUserProfile haup) {
     if (hcup.favouriteHairArtists.any((favHA) => favHA.uid == haup.uid)) {
@@ -173,8 +193,12 @@ class HairClientProfileProvider extends ChangeNotifier {
     return false;
   }
 
+  /*function that adds a review from hair client to the hair artist profile in
+  the back end*/
   Future<String> addReviewToHairArtist(
       HairArtistUserProfile hairArtistUserProfile, Review review) async {
+    /*take the hair artist user profile and and the review object created by the hair client
+    send to the back end so can store the review details in the hair artist profile*/
     var response = await http.post(
       Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/review"),
       body: {
@@ -188,10 +212,15 @@ class HairClientProfileProvider extends ChangeNotifier {
         HttpHeaders.authorizationHeader: _loggedInUserIdToken,
       },
     );
+    /*the reponse contains and id of the response sub-object that is create by mongodb,
+    we take this id and store it in the review object in the ui so if the user deletes it issuing another
+    get req toget the reviews for artsist, they can delete it by matching the id's in the db*/
     var jsonResponse = convert.jsonDecode(response.body);
     return jsonResponse['_id'];
   }
 
+  /*function that removes the review from hair artsis profile if
+  user who created review double taps and deletes it*/
   Future<void> removeReviewFromHairArtist(
       HairArtistUserProfile hairArtistUserProfile, Review review) async {
     await http.delete(

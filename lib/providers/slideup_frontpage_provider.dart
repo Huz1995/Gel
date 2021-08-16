@@ -24,6 +24,7 @@ class SlideUpStateProvider with ChangeNotifier {
 
   SlideUpStateProvider(this._panelController);
 
+  /*take in an eent on the ui and sets the form state*/
   void setFormOnPanel(AuthenticationForm event) {
     if (event == AuthenticationForm.userRegistration) {
       _formState = FrontPageFormState(true, false, false);

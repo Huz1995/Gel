@@ -8,6 +8,7 @@ import 'package:gel/providers/text_size_provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class UIService {
+  /*function that created image from the url*/
   static Future<ui.Image> getImageFromUrl(String url) async {
     Completer<ImageInfo> completer = Completer();
     var img = new NetworkImage(url);
@@ -20,6 +21,7 @@ class UIService {
     return imageInfo.image;
   }
 
+  /*function that makes marker from url where image is stored*/
   static Future<BitmapDescriptor> getMarkerIcon(String url, Size size) async {
     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
@@ -85,6 +87,8 @@ class UIService {
     return BitmapDescriptor.fromBytes(uint8List);
   }
 
+  /*Function that creates a profile icon from url, if doesnt have url then will
+  return a defaul profile icon*/
   static Widget getProfilePicIcon(
       bool hasProfilePic, BuildContext context, String? url) {
     if (hasProfilePic) {
@@ -113,6 +117,7 @@ class UIService {
     );
   }
 
+  /*ui function that returns a widget when the hair artists has no reviews or photos*/
   static Widget noElementsToShowMessage(
     BuildContext context,
     bool isForDisplay,

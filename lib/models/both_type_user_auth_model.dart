@@ -1,3 +1,4 @@
+/*class model is used to tak data input from register form and save as an obkect*/
 class UserRegisterFormData {
   String? _uid;
   String? _email;

@@ -1,3 +1,4 @@
+/*creates a login object ued to send data to backend*/
 class LoginFormData {
   String? _email;
   String? _password;

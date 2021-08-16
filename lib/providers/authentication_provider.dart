@@ -22,21 +22,23 @@ class AuthenticationProvider with ChangeNotifier {
 
   AuthenticationProvider(this.navigatorKey);
 
-  // haripatel130@gmail.com
-  //register with email
   Future<void> registerEmailPassword(UserRegisterFormData registerData) async {
     /*register the user with firebase auth and set the UID returned in register data*/
     await _auth.createUserWithEmailAndPassword(
       email: registerData.email!,
       password: registerData.password!,
     );
+    /*after create user we need to send email verif link to the user*/
     try {
       await _auth.currentUser!.sendEmailVerification();
     } catch (e) {}
+    /*function that perodically checks _auth to see if email is verif*/
     _waitingForUserToVerifiedEmail();
+    /*init stream controller*/
     _streamController = StreamController();
     Stream boolStream = _streamController.stream;
     boolStream.listen(
+      /*listen if the bool emit is true*/
       (userVerifedEmail) async {
         if (userVerifedEmail) {
           /*add the firebase uid to reg data model to send to backend*/
@@ -47,7 +49,8 @@ class AuthenticationProvider with ChangeNotifier {
                 "http://192.168.0.11:3000/api/authentication/registration"),
             body: registerData.toObject(),
           );
-          /*set isLogged in and hairArtist booleans so main.dart can render correct screen*/
+          /*set isLogged in and hairArtist booleans so main.dart can render correct screen
+          so user logs in after registration*/
           await _setFrontEndLoginStateAfterRegistration(registerData);
           navigatorKey.currentState!.pop();
           navigatorKey.currentState!.pop();
@@ -56,13 +59,17 @@ class AuthenticationProvider with ChangeNotifier {
     );
   }
 
+  /*function that perodically checks _auth to see if email is verif*/
   void _waitingForUserToVerifiedEmail() {
     _emailVerifTimer = Timer.periodic(
       Duration(seconds: 2),
       (_) async {
+        /*reset the current user to refresh details*/
         await _auth.currentUser!.reload();
         if (_auth.currentUser!.emailVerified) {
+          /*if verified add this state to the stream*/
           _streamController.add(true);
+          /*once true close timer and stream*/
           _emailVerifTimer.cancel();
           _streamController.close();
         } else {
@@ -93,24 +100,32 @@ class AuthenticationProvider with ChangeNotifier {
     return credential;
   }
 
+  /*function that registers user and stores in datbase after
+  authenicated with google or facebook for the first time*/
   Future<void> _registerUser(String photoURL) async {
     UserRegisterFormData registerData = UserRegisterFormData();
     registerData.setEmail(_auth.currentUser!.email);
     registerData.setUID(_auth.currentUser!.uid);
     registerData.setIsHairArtist(_isHairArtist);
     registerData.setPhotoURL(photoURL);
-    /*need to check if the user exist*/
+    /*Send the data to the bak end*/
     var response = await http.get(
       Uri.parse("http://192.168.0.11:3000/api/authentication/" +
           _auth.currentUser!.uid),
     );
+    /*the data base will check is user is already registered and end response*/
     if (response.body == "User does not exist") {
       await http.post(
         Uri.parse("http://192.168.0.11:3000/api/authentication/registration"),
         body: registerData.toObject(),
       );
+      /*set isLogged in and hairArtist booleans so main.dart can render correct screen
+      so user logs in after registration*/
       await _setFrontEndLoginStateAfterRegistration(registerData);
-    } else {
+    }
+    /*else user has already registered so sign user out form 3rd party providers so can
+    reg again and send a error to the ui using this provider function*/
+    else {
       _facebookSignIn.logOut();
       _googleSignIn.signOut();
       throw ("This account is already registered with Gel");
@@ -135,6 +150,7 @@ class AuthenticationProvider with ChangeNotifier {
     );
   }
 
+  /*function that allows user to reg with google*/
   Future<void> googleRegistration() async {
     final AuthCredential credential = await _googleGetAuthCredential();
     try {
@@ -149,6 +165,7 @@ class AuthenticationProvider with ChangeNotifier {
     }
   }
 
+  /*function that allows user to reg with google*/
   Future<void> facebookRegistration() async {
     final FacebookLoginResult result = await _facebookSignIn.logIn(['email']);
     switch (result.status) {
@@ -167,13 +184,13 @@ class AuthenticationProvider with ChangeNotifier {
         }
         break;
       case FacebookLoginStatus.cancelledByUser:
-        print('Login cancelled by the user.');
         break;
       case FacebookLoginStatus.error:
         throw (result.errorMessage);
     }
   }
 
+  /*allows user to login with email and password*/
   Future<void> loginEmailPassword(LoginFormData loginData) async {
     try {
       await _auth.signInWithEmailAndPassword(
@@ -181,10 +198,10 @@ class AuthenticationProvider with ChangeNotifier {
     } catch (e) {
       throw e.toString();
     }
-    /*same as above*/
+    /*set the login state*/
     _isLoggedIn = true;
     _idToken = await _auth.currentUser!.getIdToken();
-    /*need to query the database to see if hair artist or client logs in
+    /*need to query the database to see if user is hair artist or client logs in
       to render the correct screen*/
     var response = await http.get(
       Uri.parse("http://192.168.0.11:3000/api/authentication/" +
@@ -202,11 +219,15 @@ class AuthenticationProvider with ChangeNotifier {
     );
   }
 
+  /*function that aids the user to login with 3rd party provider like google/fb*/
   Future<void> _loginUser() async {
+    /*check if user exists in the back end before as google/fb will just login, need 
+    to register first*/
     var response = await http.get(
       Uri.parse("http://192.168.0.11:3000/api/authentication/" +
           _auth.currentUser!.uid),
     );
+    /*if the user exists then log in the user*/
     if (response.body != "User does not exist") {
       _isHairArtist = (response.body == 'true');
       _isLoggedIn = true;
@@ -220,7 +241,9 @@ class AuthenticationProvider with ChangeNotifier {
           await logUserOut();
         },
       );
-    } else {
+    }
+    /*the user is not registered to reset and throw error*/
+    else {
       _facebookSignIn.logOut();
       _googleSignIn.signOut();
       _auth.currentUser!.delete();
@@ -228,6 +251,7 @@ class AuthenticationProvider with ChangeNotifier {
     }
   }
 
+  /*function that logsin with google*/
   Future<void> loginWithGoogle() async {
     final AuthCredential credential = await _googleGetAuthCredential();
     try {
@@ -242,6 +266,7 @@ class AuthenticationProvider with ChangeNotifier {
     }
   }
 
+  /*function that logs in with facebook*/
   Future<void> loginWithFacebook() async {
     final FacebookLoginResult result = await _facebookSignIn.logIn(['email']);
     switch (result.status) {
@@ -260,13 +285,13 @@ class AuthenticationProvider with ChangeNotifier {
         }
         break;
       case FacebookLoginStatus.cancelledByUser:
-        print('Login cancelled by the user.');
         break;
       case FacebookLoginStatus.error:
         throw (result.errorMessage);
     }
   }
 
+  /*function that uses firebase to update their password*/
   Future<void> changePassword(String password) async {
     try {
       await _auth.currentUser!.updatePassword(password);
@@ -275,6 +300,7 @@ class AuthenticationProvider with ChangeNotifier {
     }
   }
 
+  /*if user forget password, firebase will set an email*/
   Future<void> forgotPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
@@ -283,6 +309,8 @@ class AuthenticationProvider with ChangeNotifier {
     }
   }
 
+  /*function that reset attributes in the provider so now user
+  logs out*/
   Future<void> logUserOut() async {
     _isLoggedIn = false;
     _isHairArtist = false;

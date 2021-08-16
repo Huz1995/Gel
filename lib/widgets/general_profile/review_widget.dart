@@ -34,7 +34,7 @@ class _ReviewWidgetState extends State<ReviewWidget> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
-          color: Theme.of(context).accentColor.withOpacity(0.4),
+          color: Theme.of(context).cardColor.withOpacity(0),
           elevation: 20,
           child: Row(
             children: [
@@ -52,7 +52,7 @@ class _ReviewWidgetState extends State<ReviewWidget> {
                       itemCount: 5,
                       itemSize: 20.0,
                     ),
-                    SizedBox(height: 5),
+                    SizedBox(height: 10),
                     UIService.getProfilePicIcon(
                         (widget.review!.reviewerProfilePhotoUrl != null),
                         context,
@@ -67,9 +67,16 @@ class _ReviewWidgetState extends State<ReviewWidget> {
                   ],
                 ),
               ),
-              Container(
-                child: Text(widget.review!.body),
-              )
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: SingleChildScrollView(
+                    child: Container(
+                      child: Text(widget.review!.body),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

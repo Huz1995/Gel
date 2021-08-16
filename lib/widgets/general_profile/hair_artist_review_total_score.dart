@@ -10,7 +10,7 @@ class HairArtistReviewTotalScore extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.only(top: 15),
         child: RatingBarIndicator(
           rating: score!,
           itemBuilder: (context, index) => Icon(

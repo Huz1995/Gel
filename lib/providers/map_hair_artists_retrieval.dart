@@ -15,15 +15,19 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
+/*provider that retreives the hair artists within 5km radius from location search*/
 class MapHairArtistRetrievalProvider with ChangeNotifier {
   List<HairArtistUserProfile> _searchedHairArtists = [];
   Set<Marker> _markers = {};
   late String _loggedInUserIdToken;
 
+  /*need auth provider to use idToken to protect routes*/
   MapHairArtistRetrievalProvider(AuthenticationProvider auth) {
     _loggedInUserIdToken = auth.idToken;
   }
 
+  /*function that takes location object produced in map wiget when search
+  and stores the hair artists at this location*/
   Future<void> getHairArtistsAtLocation(Location location) async {
     _searchedHairArtists = [];
     var response = await http.post(
@@ -40,19 +44,25 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
     var jsonResponse = convert.jsonDecode(response.body);
     List<dynamic> rawHairArtistUserDataList = (jsonResponse as List);
     for (int i = 0; i < rawHairArtistUserDataList.length; i++) {
+      /*create a hairartist user profile out of the raw json data*/
       HairArtistUserProfile userProfile =
           await HairArtistProfileProvider.createUserProfile(
               rawHairArtistUserDataList[i], true, _loggedInUserIdToken);
+      /*add to the list and let widgets kknow using change notiifiers*/
       _searchedHairArtists.add(userProfile);
     }
     notifyListeners();
   }
 
+  /*this function uses the ui service to use the profile url of each hair artist
+  at location to create markers with the photo url*/
   Future<void> getMarkers(Location location, BuildContext context,
       FontSizeProvider fsp, HairClientProfileProvider hcpp) async {
+    /*use the functions above to create hair artist profile at location*/
     await getHairArtistsAtLocation(location);
     _markers = {};
     notifyListeners();
+    /*for each hair artist we create a marker*/
     _searchedHairArtists.forEach(
       (userProfile) async {
         var location = userProfile.location;
@@ -68,6 +78,8 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
             location!.lat!,
             location.lng!,
           ),
+          /*pass context into this function do we can push to the Hair Artist profile
+          display to sho the hair artist profile to the user when tapped on the marker*/
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => HairArtistProfileDisplay(
@@ -81,7 +93,7 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
                   isForDisplay: true),
             ),
           ),
-        );
+        ); /*add marker to set and notify listener to update ui*/
         _markers.add(marker);
       },
     );
