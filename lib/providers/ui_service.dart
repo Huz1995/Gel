@@ -111,6 +111,7 @@ class UIService {
           child: Icon(
             Icons.person,
             size: 40,
+            color: Colors.black,
           ),
         )
       ],

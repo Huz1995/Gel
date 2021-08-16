@@ -102,14 +102,14 @@ class _HairArtistReviewsState extends State<HairArtistReviews> {
           child: Column(
             children: [
               SizedBox(
-                height: 180,
+                height: MediaQuery.of(context).size.height * 0.23,
               ),
               HairArtistReviewTotalScore(
                 score: widget._averageScore,
               ),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(20),
                   height: 200,
                   width: double.infinity,
                   child: _reviews.isEmpty
@@ -123,25 +123,39 @@ class _HairArtistReviewsState extends State<HairArtistReviews> {
                           "No one has left a review to the artist, be the first!",
                           "No one has left you a review",
                           "")
-                      : CustomScrollView(
-                          slivers: [
-                            SliverList(
-                              delegate: SliverChildListDelegate(
-                                _reviews
-                                    .map((review) => ReviewWidget(
-                                          review: review,
-                                          hairClientUid: widget
-                                              .hairClientProfileProvider!
-                                              .hairClientProfile
-                                              .uid,
-                                          removeReviewFromState:
-                                              removeReviewFromState,
-                                        ))
-                                    .toList(),
-                              ),
+                      : widget.isForDisplay!
+                          ? CustomScrollView(
+                              slivers: [
+                                SliverList(
+                                  delegate: SliverChildListDelegate(
+                                    _reviews
+                                        .map((review) => ReviewWidget(
+                                              review: review,
+                                              hairClientUid: widget
+                                                  .hairClientProfileProvider!
+                                                  .hairClientProfile
+                                                  .uid,
+                                              removeReviewFromState:
+                                                  removeReviewFromState,
+                                            ))
+                                        .toList(),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : CustomScrollView(
+                              slivers: [
+                                SliverList(
+                                  delegate: SliverChildListDelegate(
+                                    _reviews
+                                        .map((review) => ReviewWidget(
+                                              review: review,
+                                            ))
+                                        .toList(),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
                 ),
               ),
               widget.isForDisplay!
@@ -165,7 +179,9 @@ class _HairArtistReviewsState extends State<HairArtistReviews> {
                         ),
                       ),
                     )
-                  : Text(""),
+                  : SizedBox(
+                      height: 0,
+                    ),
             ],
           ),
         ),

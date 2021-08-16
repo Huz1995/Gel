@@ -19,21 +19,21 @@ class HairArtistProfileProvider extends ChangeNotifier {
       false,
       [],
       null,
-      HairArtistAboutInfo("", "", "", "", "", "", "", "", ""),
+      HairArtistAboutInfo("", "", "", "", "", "", "", "", "", "", ""),
       null,
       [],
       0,
       0);
   /*this token is used to send headers to back end to protect routes*/
   late String _loggedInUserIdToken;
+  late AuthenticationProvider _auth;
 
   /*when the provider is init, send the auth provider to store the logged in user token
   so can protect the routes on the back end*/
   HairArtistProfileProvider(AuthenticationProvider auth) {
     /* when we initate the hair artist profile then get the user data from the back end*/
     _loggedInUserIdToken = auth.idToken;
-    /*when logged in get artist data from the back end*/
-    getUserDataFromBackend(auth);
+    _auth = auth;
   }
 
   /*function that return the hair artist user object*/
@@ -57,6 +57,8 @@ class HairArtistProfileProvider extends ChangeNotifier {
     HairArtistAboutInfo about = new HairArtistAboutInfo(
       jsonResponse['about']['name'],
       jsonResponse['about']['contactNumber'],
+      jsonResponse['about']['dialCode'],
+      jsonResponse['about']['isoCode'],
       jsonResponse['about']['instaUrl'],
       jsonResponse['about']['description'],
       jsonResponse['about']['chatiness'],
@@ -115,11 +117,11 @@ class HairArtistProfileProvider extends ChangeNotifier {
     return reviews;
   }
 
-  Future<void> getUserDataFromBackend(AuthenticationProvider auth) async {
+  Future<void> getUserDataFromBackend() async {
     /*issue a get req to hairArtistProfile to get their information to display*/
     http.get(
       Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/" +
-          auth.firebaseAuth.currentUser!.uid),
+          _auth.firebaseAuth.currentUser!.uid),
       headers: {
         HttpHeaders.authorizationHeader: _loggedInUserIdToken,
       },

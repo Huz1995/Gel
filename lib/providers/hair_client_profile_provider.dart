@@ -22,8 +22,6 @@ class HairClientProfileProvider extends ChangeNotifier {
   HairClientProfileProvider(AuthenticationProvider auth) {
     /* when we initate the hair client profile then get the user data from the back end*/
     _loggedInUserIdToken = auth.idToken;
-    /*when logged in get client data from the back end*/
-    getUserDataFromBackend(auth);
   }
 
   /*function that return the hair client user object*/

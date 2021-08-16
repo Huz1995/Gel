@@ -4,6 +4,8 @@ import 'package:gel/models/review_model.dart';
 class HairArtistAboutInfo {
   String name;
   String contactNumber;
+  String dialCode;
+  String isoCode;
   String instaUrl;
   String description;
   String chatiness;
@@ -15,6 +17,8 @@ class HairArtistAboutInfo {
   HairArtistAboutInfo(
     this.name,
     this.contactNumber,
+    this.dialCode,
+    this.isoCode,
     this.instaUrl,
     this.description,
     this.chatiness,
@@ -28,6 +32,8 @@ class HairArtistAboutInfo {
     return {
       'name': name,
       'contactNumber': contactNumber,
+      'dialCode': dialCode,
+      'isoCode': isoCode,
       'instaUrl': instaUrl,
       'description': description,
       'chatiness': chatiness,

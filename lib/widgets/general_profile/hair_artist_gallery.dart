@@ -37,7 +37,8 @@ class HairArtistGallery extends StatelessWidget {
           width: double.infinity,
           child: _hairArtistUserProfile.photoUrls.isEmpty
               ? Container(
-                  margin: EdgeInsets.only(top: 250.0),
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.25),
                   child: UIService.noElementsToShowMessage(
                     context,
                     _isForDisplay,

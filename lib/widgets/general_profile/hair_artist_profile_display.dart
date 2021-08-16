@@ -56,8 +56,11 @@ class HairArtistProfileDisplay extends StatefulWidget {
 
 class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
   @override
-  void dispose() {
-    super.dispose();
+  void initState() {
+    if (!widget._isForDisplay) {
+      widget._hairArtistProvider!.getUserDataFromBackend();
+    }
+    super.initState();
   }
 
   @override
@@ -88,14 +91,16 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                 sliver: SliverAppBar(
                   leading: Container(
                     margin: EdgeInsets.fromLTRB(15, 10, 0, 0),
-                    child: TextButton(
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.black,
-                        size: 30,
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
+                    child: widget._isForDisplay
+                        ? TextButton(
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.black,
+                              size: 30,
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                          )
+                        : Text(""),
                   ),
                   actions: [
                     Container(

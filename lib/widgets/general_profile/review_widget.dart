@@ -22,13 +22,16 @@ class _ReviewWidgetState extends State<ReviewWidget> {
     var _fontSizeProvider = Provider.of<FontSizeProvider>(context);
     return Container(
       padding: const EdgeInsets.all(10.0),
-      height: 215,
+      height: 230,
       child: GestureDetector(
         onDoubleTap: () {
-          if (widget.review!.reviewerUid == widget.hairClientUid!) {
-            print("delete");
-            widget.removeReviewFromState!(widget.review!);
-          }
+          if (widget.hairClientUid != null) {
+            if (widget.review!.reviewerUid == widget.hairClientUid!) {
+              print("delete");
+              widget.removeReviewFromState!(widget.review!);
+            }
+          } else
+            print("nothing");
         },
         child: Card(
           shape: RoundedRectangleBorder(
