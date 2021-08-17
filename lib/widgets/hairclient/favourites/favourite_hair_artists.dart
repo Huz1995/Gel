@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
+import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/hairclient/favourites/favourite_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -28,18 +29,7 @@ class _FavouriteHairArtistsState extends State<FavouriteHairArtists> {
     final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white, //change your color here
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        // backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          "Favourites",
-          style: _fontSizeProvider.headline3,
-        ),
-      ),
+      appBar: UIService.generalAppBar(context, "Favourites"),
       body: ListView.builder(
         itemCount: _hairClientProfileProvider
             .hairClientProfile.favouriteHairArtists.length,

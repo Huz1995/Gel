@@ -118,6 +118,26 @@ class UIService {
     );
   }
 
+  static PreferredSizeWidget? generalAppBar(
+      BuildContext context, String title) {
+    return AppBar(
+      backgroundColor: Colors.white, //change your color here
+      iconTheme: IconThemeData(
+        color: Colors.black, //change your color here
+      ),
+      // backgroundColor: Colors.white,
+      elevation: 0,
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: MediaQuery.of(context).size.width * 0.05,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
   /*ui function that returns a widget when the hair artists has no reviews or photos*/
   static Widget noElementsToShowMessage(
     BuildContext context,

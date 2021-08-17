@@ -123,7 +123,7 @@ class _EditHairArtistProfileFormState extends State<EditHairArtistProfileForm> {
                           selectorType: PhoneInputSelectorType.DIALOG,
                         ),
                         ignoreBlank: true,
-                        autoValidateMode: AutovalidateMode.disabled,
+                        autoValidateMode: AutovalidateMode.always,
                         selectorTextStyle: TextStyle(color: Colors.black),
                         initialValue: _number,
                         textFieldController: controller,
@@ -141,10 +141,16 @@ class _EditHairArtistProfileFormState extends State<EditHairArtistProfileForm> {
                                 .dialCode = number.dialCode!;
                             widget._hairArtistProvider.hairArtistProfile.about
                                 .isoCode = number.isoCode!;
+                          } else {
+                            widget._hairArtistProvider.hairArtistProfile.about
+                                .contactNumber = number.parseNumber();
+                            widget._hairArtistProvider.hairArtistProfile.about
+                                .dialCode = "";
+                            widget._hairArtistProvider.hairArtistProfile.about
+                                .isoCode = "";
                           }
                         },
                       ),
-
                       SizedBox(
                         height: 20,
                       ),
@@ -181,29 +187,6 @@ class _EditHairArtistProfileFormState extends State<EditHairArtistProfileForm> {
                           ),
                         ),
                       ),
-
-                      // Padding(
-                      //   padding: const EdgeInsets.only(bottom: 15.0),
-                      //   child: TextFormField(
-                      //     initialValue: _hairArtistProvider
-                      //         .hairArtistProfile.about.contactNumber,
-                      //     textInputAction: TextInputAction.done,
-                      //     keyboardType: TextInputType.number,
-                      //     onSaved: (value) => {
-                      //       _hairArtistProvider
-                      //           .hairArtistProfile.about.contactNumber = value!,
-                      //     },
-                      //     decoration: InputDecoration(
-                      //       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      //       labelText: 'Contact Number',
-                      //       contentPadding:
-                      //           EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                      //       border: OutlineInputBorder(
-                      //           borderRadius: BorderRadius.circular(15.0)),
-                      //     ),
-                      //   ),
-                      // ),
-
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: TextFormField(

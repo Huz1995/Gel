@@ -8,6 +8,7 @@ import 'package:gel/widgets/general/bottom_nav_bar.dart';
 import 'package:gel/widgets/hairclient/explore/hair_client_explore.dart';
 import 'package:gel/widgets/hairclient/favourites/favourite_hair_artists.dart';
 import 'package:gel/widgets/hairclient/settings/hair_client_settings.dart';
+import 'package:gel/widgets/messages/message_main_page.dart';
 import 'package:provider/provider.dart';
 
 class HairClientHomePage extends StatefulWidget {
@@ -16,7 +17,7 @@ class HairClientHomePage extends StatefulWidget {
 }
 
 class _HairClientHomePageState extends State<HairClientHomePage> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +25,7 @@ class _HairClientHomePageState extends State<HairClientHomePage> {
 
     final List<Widget> _widgetOptions = <Widget>[
       HairClientExplore(),
-      Text(
-        'Index 2: Messages',
-      ),
+      MessagesMainPage(),
       FavouriteHairArtists(),
       HairClientSettings(),
     ];

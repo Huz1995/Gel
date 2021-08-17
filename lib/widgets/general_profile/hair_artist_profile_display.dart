@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/providers/authentication_provider.dart';
+import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
+import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/general/small_button.dart';
 import 'package:gel/widgets/general_profile/hair_artist_about.dart';
 import 'package:gel/widgets/general_profile/hair_artist_gallery.dart';
@@ -14,6 +16,7 @@ import 'package:gel/widgets/general_profile/profile_tab_bar.dart';
 import 'package:gel/widgets/hairartist/profile/edit_hair_artist_profile_form.dart';
 import 'package:gel/widgets/hairartist/profile/gallery_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'hair_artist_profile_pic_icon.dart';
 import 'hair_artist_reviews.dart';
@@ -63,6 +66,33 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
     super.initState();
   }
 
+  _launchPhoneURL(String phoneNumber) async {
+    String url = 'tel:' + phoneNumber;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _callHairArist() {
+    String number = widget._hairArtistUserProfile.about.dialCode +
+        widget._hairArtistUserProfile.about.contactNumber;
+    if (number != "") {
+      _launchPhoneURL(number);
+    } else {
+      CustomDialogs.showMyDialogOneButton(
+        context,
+        Text("No Number Found"),
+        [Text("The hair artist has not uploaded their number")],
+        Text("Back"),
+        () {
+          Navigator.of(context).pop();
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
@@ -98,7 +128,11 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                               color: Colors.black,
                               size: 30,
                             ),
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () async {
+                              await widget._hairClientProfileProvider!
+                                  .getUserDataFromBackend(_authProvider);
+                              Navigator.pop(context);
+                            },
                           )
                         : Text(""),
                   ),
@@ -220,7 +254,7 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                                             Theme.of(context).primaryColor,
                                         child: Text("Call"),
                                         buttonWidth: 125,
-                                        onPressed: () {},
+                                        onPressed: _callHairArist,
                                       ),
                                       SizedBox(width: 10),
                                       SmallButton(
