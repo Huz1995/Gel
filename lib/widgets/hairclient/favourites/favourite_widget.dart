@@ -37,15 +37,15 @@ class FavouriteWidget extends StatelessWidget {
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => HairArtistProfileDisplay(
-                      phoneWidth: MediaQuery.of(context).size.width,
-                      phoneHeight: MediaQuery.of(context).size.height,
-                      hairArtistUserProfile: hairArtistUserProfile!,
-                      hairClientProfileProvider: _hairClientProfileProvider,
-                      fontSizeProvider: _fontSizeProvider,
-                      isFavOfClient: HairClientProfileProvider.isAFavorite(
-                          _hairClientProfileProvider.hairClientProfile,
-                          hairArtistUserProfile!),
-                      isForDisplay: true),
+                    hairArtistUserProfile: hairArtistUserProfile!,
+                    hairClientProfileProvider: _hairClientProfileProvider,
+                    fontSizeProvider: _fontSizeProvider,
+                    isFavOfClient: HairClientProfileProvider.isAFavorite(
+                        _hairClientProfileProvider.hairClientProfile,
+                        hairArtistUserProfile!),
+                    isForDisplay: true,
+                    isDisplayForArtist: false,
+                  ),
                 ),
               ),
               child: Row(

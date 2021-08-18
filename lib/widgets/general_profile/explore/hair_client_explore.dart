@@ -7,12 +7,16 @@ import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/map_hair_artists_retrieval.dart';
 import 'package:gel/providers/map_places_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
+import 'package:gel/widgets/general_profile/hair_artist_profile_display.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
 class HairClientExplore extends StatefulWidget {
+  late bool? isForClientRoute;
+  late HairClientProfileProvider? _hairClientProfileProvider;
+  HairClientExplore({this.isForClientRoute});
   @override
   _HairClientExploreState createState() => _HairClientExploreState();
 }
@@ -47,7 +51,7 @@ class _HairClientExploreState extends State<HairClientExplore> {
     );
   }
 
-  Future<void> _goToPlace(Location location) async {
+  Future<void> _moveMapToLocation(Location location) async {
     _googleMapController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -74,8 +78,12 @@ class _HairClientExploreState extends State<HairClientExplore> {
   Widget build(BuildContext context) {
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
-    final _hairClientProfileProvider =
-        Provider.of<HairClientProfileProvider>(context);
+    if (widget.isForClientRoute!) {
+      setState(() {
+        widget._hairClientProfileProvider =
+            Provider.of<HairClientProfileProvider>(context);
+      });
+    }
     final _mapLocationProvider = Provider.of<MapPlacesProvider>(context);
     final List<PlaceSearch> _placeSearchResults =
         _mapLocationProvider.searchResults;
@@ -83,6 +91,39 @@ class _HairClientExploreState extends State<HairClientExplore> {
         Provider.of<MapHairArtistRetrievalProvider>(context);
     final _markers = _hairArtistRetrievalProvider.markers;
 
+    void Function()? _onTap({PlaceSearch? result, bool? isDisplayForArtist}) {
+      return () async {
+        var location =
+            await _mapLocationProvider.getPlaceDetails(result!.placeId!);
+        _moveMapToLocation(location);
+        _floatingSearchBarController.close();
+        _hairArtistRetrievalProvider.getMarkers(
+          location: location,
+          onTap: (userProfile) => () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => HairArtistProfileDisplay(
+                  hairArtistUserProfile: userProfile,
+                  hairClientProfileProvider: isDisplayForArtist!
+                      ? null
+                      : widget._hairClientProfileProvider,
+                  fontSizeProvider: _fontSizeProvider,
+                  isFavOfClient: isDisplayForArtist!
+                      ? null
+                      : HairClientProfileProvider.isAFavorite(
+                          widget._hairClientProfileProvider!.hairClientProfile,
+                          userProfile),
+                  isForDisplay: true,
+                  isDisplayForArtist: isDisplayForArtist!,
+                ),
+              ),
+            );
+          },
+        );
+      };
+    }
+
+    print(widget.isForClientRoute);
     return Scaffold(
         body: Stack(
       children: [
@@ -149,18 +190,15 @@ class _HairClientExploreState extends State<HairClientExplore> {
                             child: Text(result.description!),
                           ),
                         ),
-                        onTap: () async {
-                          var place = await _mapLocationProvider
-                              .getPlaceDetails(result.placeId!);
-                          _goToPlace(place);
-                          _floatingSearchBarController.close();
-                          _hairArtistRetrievalProvider.getMarkers(
-                            place,
-                            context,
-                            _fontSizeProvider,
-                            _hairClientProfileProvider,
-                          );
-                        },
+                        onTap: widget.isForClientRoute!
+                            ? _onTap(
+                                result: result,
+                                isDisplayForArtist: false,
+                              )
+                            : _onTap(
+                                result: result,
+                                isDisplayForArtist: true,
+                              ),
                       );
                     },
                   ).toList(),

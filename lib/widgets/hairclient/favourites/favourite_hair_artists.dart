@@ -17,6 +17,7 @@ class _FavouriteHairArtistsState extends State<FavouriteHairArtists> {
   @override
   void initState() {
     super.initState();
+    /*when initstate of this widget call the api to update favorite data*/
     Provider.of<HairClientProfileProvider>(context, listen: false)
         .getUserDataFromBackend(
             Provider.of<AuthenticationProvider>(context, listen: false));
@@ -26,8 +27,8 @@ class _FavouriteHairArtistsState extends State<FavouriteHairArtists> {
   Widget build(BuildContext context) {
     final _hairClientProfileProvider =
         Provider.of<HairClientProfileProvider>(context);
-    final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
-
+    print(_hairClientProfileProvider
+        .hairClientProfile.favouriteHairArtists.length);
     return Scaffold(
       appBar: UIService.generalAppBar(context, "Favourites"),
       body: ListView.builder(

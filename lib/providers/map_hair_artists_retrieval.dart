@@ -56,10 +56,12 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
 
   /*this function uses the ui service to use the profile url of each hair artist
   at location to create markers with the photo url*/
-  Future<void> getMarkers(Location location, BuildContext context,
-      FontSizeProvider fsp, HairClientProfileProvider hcpp) async {
+  Future<void> getMarkers({
+    Location? location,
+    void Function()? onTap(HairArtistUserProfile userProfile)?,
+  }) async {
     /*use the functions above to create hair artist profile at location*/
-    await getHairArtistsAtLocation(location);
+    await getHairArtistsAtLocation(location!);
     _markers = {};
     notifyListeners();
     /*for each hair artist we create a marker*/
@@ -78,21 +80,8 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
             location!.lat!,
             location.lng!,
           ),
-          /*pass context into this function do we can push to the Hair Artist profile
-          display to sho the hair artist profile to the user when tapped on the marker*/
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => HairArtistProfileDisplay(
-                  phoneWidth: MediaQuery.of(context).size.width,
-                  phoneHeight: MediaQuery.of(context).size.height,
-                  hairArtistUserProfile: userProfile,
-                  hairClientProfileProvider: hcpp,
-                  fontSizeProvider: fsp,
-                  isFavOfClient: HairClientProfileProvider.isAFavorite(
-                      hcpp.hairClientProfile, userProfile),
-                  isForDisplay: true),
-            ),
-          ),
+          /*this function is passed from the widget but will push the user to the artist profile page*/
+          onTap: onTap!(userProfile),
         ); /*add marker to set and notify listener to update ui*/
         _markers.add(marker);
       },

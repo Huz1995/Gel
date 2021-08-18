@@ -28,6 +28,10 @@ class HairArtistProfileProvider extends ChangeNotifier {
   late String _loggedInUserIdToken;
   late AuthenticationProvider _auth;
 
+  /*chat state values*/
+  late String activeUser;
+  late String activeRoom;
+
   /*when the provider is init, send the auth provider to store the logged in user token
   so can protect the routes on the back end*/
   HairArtistProfileProvider(AuthenticationProvider auth) {

@@ -24,31 +24,28 @@ import 'hair_artist_reviews.dart';
 class HairArtistProfileDisplay extends StatefulWidget {
   HairArtistProfileDisplay(
       {Key? key,
-      required double phoneWidth,
-      required double phoneHeight,
-      HairArtistProfileProvider? hairArtistProvider,
+      HairArtistProfileProvider? hairArtistProfileProvider,
       HairClientProfileProvider? hairClientProfileProvider,
       required HairArtistUserProfile hairArtistUserProfile,
       required FontSizeProvider fontSizeProvider,
       required bool isForDisplay,
+      required bool isDisplayForArtist,
       bool? isFavOfClient,
       required})
-      : _phoneWidth = phoneWidth,
-        _phoneHeight = phoneHeight,
-        _hairArtistProvider = hairArtistProvider,
+      : _hairArtistProfileProvider = hairArtistProfileProvider,
         _isForDisplay = isForDisplay,
         _fontSizeProvider = fontSizeProvider,
         _hairArtistUserProfile = hairArtistUserProfile,
         _hairClientProfileProvider = hairClientProfileProvider,
         _isFavOfClient = isFavOfClient,
+        _isDisplayForArtist = isDisplayForArtist,
         super(key: key);
 
-  final double _phoneWidth;
-  final double _phoneHeight;
-  final HairArtistProfileProvider? _hairArtistProvider;
+  final HairArtistProfileProvider? _hairArtistProfileProvider;
   final FontSizeProvider _fontSizeProvider;
   final HairArtistUserProfile _hairArtistUserProfile;
   final bool _isForDisplay;
+  final bool _isDisplayForArtist;
   final HairClientProfileProvider? _hairClientProfileProvider;
   bool? _isFavOfClient;
 
@@ -61,12 +58,12 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
   @override
   void initState() {
     if (!widget._isForDisplay) {
-      widget._hairArtistProvider!.getUserDataFromBackend();
+      widget._hairArtistProfileProvider!.getUserDataFromBackend();
     }
     super.initState();
   }
 
-  _launchPhoneURL(String phoneNumber) async {
+  void _launchPhoneURL(String phoneNumber) async {
     String url = 'tel:' + phoneNumber;
     if (await canLaunch(url)) {
       await launch(url);
@@ -75,7 +72,7 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
     }
   }
 
-  _callHairArist() {
+  void _callHairArist() {
     String number = widget._hairArtistUserProfile.about.dialCode +
         widget._hairArtistUserProfile.about.contactNumber;
     if (number != "") {
@@ -93,8 +90,42 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
     }
   }
 
+  Widget _favouriteOfClient() {
+    if (widget._isFavOfClient!) {
+      return TextButton(
+          child: Icon(
+            MaterialIcons.remove_circle_outline,
+            color: Theme.of(context).accentColor,
+            size: 30,
+          ),
+          onPressed: () {
+            widget._hairClientProfileProvider!
+                .removeHairArtistFavorite(widget._hairArtistUserProfile.uid);
+            setState(() {
+              widget._isFavOfClient = false;
+            });
+          });
+    }
+    return TextButton(
+        child: Icon(
+          MaterialIcons.favorite_border,
+          color: Theme.of(context).accentColor,
+          size: 30,
+        ),
+        onPressed: () {
+          widget._hairClientProfileProvider!
+              .addHairArtistFavorite(widget._hairArtistUserProfile);
+          setState(() {
+            widget._isFavOfClient = true;
+          });
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _phoneWidth = MediaQuery.of(context).size.width;
+    final _phoneHeight = MediaQuery.of(context).size.height;
+
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     /*to ensure when auto logout occurs then we remove this widget the tree*/
     if (!_authProvider.isLoggedIn && widget._isForDisplay) {
@@ -129,8 +160,10 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                               size: 30,
                             ),
                             onPressed: () async {
-                              await widget._hairClientProfileProvider!
-                                  .getUserDataFromBackend(_authProvider);
+                              if (!widget._isDisplayForArtist) {
+                                await widget._hairClientProfileProvider!
+                                    .getUserDataFromBackend(_authProvider);
+                              }
                               Navigator.pop(context);
                             },
                           )
@@ -141,43 +174,17 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                       margin: EdgeInsets.fromLTRB(0, 10, 15, 0),
                       width: 50.0,
                       height: 50.0,
-                      child: !widget._isForDisplay
-                          ? GalleryPicker()
-                          : widget._isFavOfClient!
-                              ? TextButton(
-                                  child: Icon(
-                                    MaterialIcons.remove_circle_outline,
-                                    color: Theme.of(context).accentColor,
-                                    size: 30,
-                                  ),
-                                  onPressed: () {
-                                    widget._hairClientProfileProvider!
-                                        .removeHairArtistFavorite(
-                                            widget._hairArtistUserProfile.uid);
-                                    setState(() {
-                                      widget._isFavOfClient = false;
-                                    });
-                                  })
-                              : TextButton(
-                                  child: Icon(
-                                    MaterialIcons.favorite_border,
-                                    color: Theme.of(context).accentColor,
-                                    size: 30,
-                                  ),
-                                  onPressed: () {
-                                    widget._hairClientProfileProvider!
-                                        .addHairArtistFavorite(
-                                            widget._hairArtistUserProfile);
-                                    setState(() {
-                                      widget._isFavOfClient = true;
-                                    });
-                                  }),
+                      child: widget._isForDisplay
+                          ? !widget._isDisplayForArtist
+                              ? _favouriteOfClient()
+                              : Text("")
+                          : GalleryPicker(),
                     ),
                   ],
                   elevation: 0,
                   backgroundColor: Colors.white,
-                  expandedHeight: widget._phoneWidth * 0.73,
-                  collapsedHeight: widget._phoneHeight * 0.1,
+                  expandedHeight: _phoneWidth * 0.73,
+                  collapsedHeight: _phoneHeight * 0.1,
                   flexibleSpace: LayoutBuilder(
                     builder: (context, constraints) {
                       var top = constraints.biggest.height;
@@ -188,11 +195,11 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                           duration: Duration(milliseconds: 0),
                           child: Container(
                             margin: EdgeInsets.only(
-                              bottom: widget._phoneHeight * 0.06,
+                              bottom: _phoneHeight * 0.06,
                             ),
                             child: Text(
-                              top >= widget._phoneHeight * 0.1 &&
-                                      top < widget._phoneHeight * 0.3
+                              top >= _phoneHeight * 0.1 &&
+                                      top < _phoneHeight * 0.3
                                   ? widget._hairArtistUserProfile.about.name
                                   : "",
                               style: widget._fontSizeProvider.headline2,
@@ -202,26 +209,26 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                         background: Column(
                           children: [
                             SizedBox(
-                              height: widget._phoneHeight * 0.08,
+                              height: _phoneHeight * 0.08,
                             ),
                             !widget._isForDisplay
                                 ? HairArtistProfilePicIcon(
-                                    phoneWidth: widget._phoneWidth,
+                                    phoneWidth: _phoneWidth,
                                     hairArtistProfileProvider:
-                                        widget._hairArtistProvider!,
+                                        widget._hairArtistProfileProvider!,
                                     hairArtistUserProfile:
                                         widget._hairArtistUserProfile,
                                     isForDisplay: widget._isForDisplay,
                                   )
                                 : HairArtistProfilePicIcon(
-                                    phoneWidth: widget._phoneWidth,
+                                    phoneWidth: _phoneWidth,
                                     hairArtistUserProfile:
                                         widget._hairArtistUserProfile,
                                     isForDisplay: widget._isForDisplay,
                                   ),
                             Padding(
                               padding: EdgeInsets.all(
-                                widget._phoneHeight * 0.015,
+                                _phoneHeight * 0.015,
                               ),
                               child: Text(
                                 widget._hairArtistUserProfile.about.name,
@@ -239,7 +246,7 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                                           builder: (BuildContext context) =>
                                               new EditHairArtistProfileForm(
                                             widget._fontSizeProvider,
-                                            widget._hairArtistProvider!,
+                                            widget._hairArtistProfileProvider!,
                                           ),
                                         ),
                                       );
@@ -281,7 +288,7 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
             children: [
               !widget._isForDisplay
                   ? HairArtistGallery(
-                      hairArtistProvider: widget._hairArtistProvider,
+                      hairArtistProvider: widget._hairArtistProfileProvider,
                       fontSizeProvider: widget._fontSizeProvider,
                       isForDisplay: widget._isForDisplay,
                       hairArtistUserProfile: widget._hairArtistUserProfile,
@@ -295,16 +302,18 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                 hairArtistUserProfile: widget._hairArtistUserProfile,
                 fontSizeProvider: widget._fontSizeProvider,
               ),
-              !widget._isForDisplay
+              (!widget._isForDisplay || widget._isDisplayForArtist)
                   ? HairArtistReviews(
                       hairArtistUserProfile: widget._hairArtistUserProfile,
                       isForDisplay: widget._isForDisplay,
+                      isDisplayForArtist: widget._isDisplayForArtist,
                     )
                   : HairArtistReviews(
                       hairArtistUserProfile: widget._hairArtistUserProfile,
                       isForDisplay: widget._isForDisplay,
                       hairClientProfileProvider:
                           widget._hairClientProfileProvider!,
+                      isDisplayForArtist: widget._isDisplayForArtist,
                     )
             ],
           ),

@@ -13,12 +13,14 @@ import 'hair_artist_review_total_score.dart';
 
 class HairArtistReviews extends StatefulWidget {
   late bool? isForDisplay;
+  late bool? isDisplayForArtist;
   late HairArtistUserProfile? hairArtistUserProfile;
   late HairClientProfileProvider? hairClientProfileProvider;
   late double _averageScore;
 
   HairArtistReviews({
     this.isForDisplay,
+    this.isDisplayForArtist,
     this.hairArtistUserProfile,
     this.hairClientProfileProvider,
   }) {
@@ -125,7 +127,7 @@ class _HairArtistReviewsState extends State<HairArtistReviews> {
                           "No one has left a review to the artist, be the first!",
                           "No one has left you a review",
                           "")
-                      : widget.isForDisplay!
+                      : (widget.isForDisplay! && !widget.isDisplayForArtist!)
                           ? CustomScrollView(
                               slivers: [
                                 SliverList(
@@ -160,7 +162,7 @@ class _HairArtistReviewsState extends State<HairArtistReviews> {
                             ),
                 ),
               ),
-              widget.isForDisplay!
+              (widget.isForDisplay! && !widget.isDisplayForArtist!)
                   ? Container(
                       height: 80,
                       child: Center(

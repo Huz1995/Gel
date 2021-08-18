@@ -75,17 +75,16 @@ class _HairArtistProfileMainPageState extends State<HairArtistProfileMainPage> {
   Widget build(BuildContext context) {
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
-    final _hairArtistProvider = Provider.of<HairArtistProfileProvider>(context);
-    final _hairArtistUserProfile = _hairArtistProvider.hairArtistProfile;
-    final _phoneHeight = MediaQuery.of(context).size.height;
-    final _phoneWidth = MediaQuery.of(context).size.width;
+    final _hairArtistProfileProvider =
+        Provider.of<HairArtistProfileProvider>(context);
+    final _hairArtistUserProfile = _hairArtistProfileProvider.hairArtistProfile;
+
     return HairArtistProfileDisplay(
-      phoneWidth: _phoneWidth,
-      phoneHeight: _phoneHeight,
-      hairArtistProvider: _hairArtistProvider,
+      hairArtistProfileProvider: _hairArtistProfileProvider,
       fontSizeProvider: _fontSizeProvider,
       hairArtistUserProfile: _hairArtistUserProfile,
       isForDisplay: false,
+      isDisplayForArtist: false,
     );
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gel/screens/hair_client_after_login.dart';
-import 'package:gel/screens/hair_artist_after_login.dart';
+import 'package:gel/screens/hair_artist_providers.dart';
+
+import 'package:gel/screens/hair_client_providers.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -45,9 +46,9 @@ class MyApp extends StatelessWidget {
         home: Consumer<AuthenticationProvider>(
           builder: (context, value, child) {
             if (value.isLoggedIn && value.isHairArtist) {
-              return HairArtistHomePage();
+              return HairArtistProviders();
             } else if (value.isLoggedIn && !value.isHairArtist) {
-              return HairClientHomePage();
+              return HairClientProviders();
             } else {
               return FrontPage();
             }
