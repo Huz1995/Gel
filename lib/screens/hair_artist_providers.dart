@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
@@ -13,7 +15,16 @@ class HairArtistProviders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-
+    /*to ensure when auto logout occurs then we remove this widget the tree*/
+    if (!_authProvider.isLoggedIn) {
+      Timer(
+        Duration(seconds: 1),
+        () => Navigator.popUntil(
+          context,
+          ModalRoute.withName('/landing'),
+        ),
+      );
+    }
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(

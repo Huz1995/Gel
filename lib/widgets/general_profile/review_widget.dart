@@ -27,7 +27,6 @@ class _ReviewWidgetState extends State<ReviewWidget> {
         onDoubleTap: () {
           if (widget.hairClientUid != null) {
             if (widget.review!.reviewerUid == widget.hairClientUid!) {
-              print("delete");
               widget.removeReviewFromState!(widget.review!);
             }
           } else

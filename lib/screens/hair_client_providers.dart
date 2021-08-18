@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
@@ -13,7 +15,15 @@ class HairClientProviders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthenticationProvider>(context);
-
+    if (!_authProvider.isLoggedIn) {
+      Timer(
+        Duration(seconds: 1),
+        () => Navigator.popUntil(
+          context,
+          ModalRoute.withName('/landing'),
+        ),
+      );
+    }
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(

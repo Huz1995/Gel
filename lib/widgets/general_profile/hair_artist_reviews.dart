@@ -37,54 +37,52 @@ class HairArtistReviews extends StatefulWidget {
 }
 
 class _HairArtistReviewsState extends State<HairArtistReviews> {
-  Widget buildRatingDialog(BuildContext context) {
-    return SafeArea(
-      child: ClipRect(
-        child: RatingDialog(
-          // your app's name?
-          title: 'What you think of the Artist',
-          // encourage your user to leave a high rating?
-          message:
-              'Tap a star to set your rating. Add more description here if you want.',
-          // your app's logo?
-          image: UIService.getProfilePicIcon(
-              widget.hairArtistUserProfile!.profilePhotoUrl != null,
-              context,
-              widget.hairArtistUserProfile!.profilePhotoUrl),
-          submitButton: 'Submit',
-          onSubmitted: (response) async {
-            print('rating: ${response.rating}, comment: ${response.comment}');
-            Review review = Review(
-                null,
-                response.rating,
-                response.comment,
-                widget.hairClientProfileProvider!.hairClientProfile
-                    .profilePhotoUrl,
-                widget.hairClientProfileProvider!.hairClientProfile.name,
-                widget.hairClientProfileProvider!.hairClientProfile.uid,
-                DateTime.now());
-
-            var _id = await widget.hairClientProfileProvider!
-                .addReviewToHairArtist(widget.hairArtistUserProfile!, review);
-            review.addId(_id);
-            print(_id);
-            setState(
-              () {
-                widget.hairArtistUserProfile!.addReview(review);
-                widget.hairArtistUserProfile!.addToTotalScore(review.score);
-                widget.hairArtistUserProfile!.addOneToReviewCount();
-                widget._averageScore =
-                    widget.hairArtistUserProfile!.getAverageScore();
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final _dialog = RatingDialog(
+      // your app's name?
+      title: 'What you think of the Artist',
+      // encourage your user to leave a high rating?
+      message:
+          'Tap a star to set your rating. Add more description here if you want.',
+      // your app's logo?
+      image: UIService.getProfilePicIcon(
+          widget.hairArtistUserProfile!.profilePhotoUrl != null,
+          context,
+          widget.hairArtistUserProfile!.profilePhotoUrl),
+      submitButton: 'Submit',
+      onSubmitted: (response) async {
+        print('rating: ${response.rating}, comment: ${response.comment}');
+        Review review = Review(
+          null,
+          response.rating,
+          response.comment,
+          widget.hairClientProfileProvider!.hairClientProfile.profilePhotoUrl,
+          widget.hairClientProfileProvider!.hairClientProfile.name,
+          widget.hairClientProfileProvider!.hairClientProfile.uid,
+          DateTime.now(),
+        );
+        var _id = await widget.hairClientProfileProvider!
+            .addReviewToHairArtist(widget.hairArtistUserProfile!, review);
+        review.addId(_id);
+        print(_id);
+        setState(
+          () {
+            widget.hairArtistUserProfile!.addReview(review);
+            widget.hairArtistUserProfile!.addToTotalScore(review.score);
+            widget.hairArtistUserProfile!.addOneToReviewCount();
+            widget._averageScore =
+                widget.hairArtistUserProfile!.getAverageScore();
+          },
+        );
+        // TODO: add your own logic
+        if (response.rating < 3.0) {
+          // send their comments to your email or anywhere you wish
+          // ask the user to contact you instead of leaving a bad review
+        } else {}
+      },
+    );
+
     final _reviews = widget.hairArtistUserProfile!.reviews;
     void removeReviewFromState(Review review) {
       widget.hairClientProfileProvider!
@@ -172,7 +170,7 @@ class _HairArtistReviewsState extends State<HairArtistReviews> {
                                 backgroundColor: Theme.of(context).primaryColor,
                                 onPressed: () => showDialog(
                                     context: context,
-                                    builder: buildRatingDialog),
+                                    builder: (context) => _dialog),
                                 //     () {
                                 //   Navigator.of(context).push(MaterialPageRoute(
                                 //       builder: buildRatingDialog));

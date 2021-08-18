@@ -62,6 +62,7 @@ class HairClientProfileProvider extends ChangeNotifier {
         jsonResponse['profilePhotoUrl'],
         jsonResponse['name'],
         favHairArtistProfiles);
+    print(_userProfile.name);
     /*updates the profile object so wigets listen can use its data*/
     notifyListeners();
   }

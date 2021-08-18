@@ -9,6 +9,7 @@ import 'package:gel/widgets/general_profile/change_password.dart';
 import 'package:gel/widgets/hairclient/settings/edit_hair_client_profile_form.dart';
 import 'package:provider/provider.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:rating_dialog/rating_dialog.dart';
 
 class HairClientSettings extends StatelessWidget {
   @override

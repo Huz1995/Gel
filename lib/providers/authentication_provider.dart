@@ -142,12 +142,7 @@ class AuthenticationProvider with ChangeNotifier {
     _idToken = await _auth.currentUser!.getIdToken();
     /*timer is set so the animations of slide panel are in sync*/
     notifyListeners();
-    _logoutTimer = Timer(
-      Duration(seconds: 3600),
-      () async {
-        await logUserOut();
-      },
-    );
+    _logoutTimer = _logOutWhenTimerUp();
   }
 
   /*function that allows user to reg with google*/
@@ -211,12 +206,7 @@ class AuthenticationProvider with ChangeNotifier {
     /*notify the listeners listen to the changes in notifier atttributes*/
     notifyListeners();
     /*Firebase idToken expires in an hour so log usre out*/
-    _logoutTimer = Timer(
-      Duration(seconds: 3600),
-      () async {
-        await logUserOut();
-      },
-    );
+    _logoutTimer = _logOutWhenTimerUp();
   }
 
   /*function that aids the user to login with 3rd party provider like google/fb*/
@@ -235,12 +225,7 @@ class AuthenticationProvider with ChangeNotifier {
       /*notify the listeners listen to the changes in notifier atttributes*/
       notifyListeners();
       /*Firebase idToken expires in an hour so log usre out*/
-      _logoutTimer = Timer(
-        Duration(seconds: 3600),
-        () async {
-          await logUserOut();
-        },
-      );
+      _logoutTimer = _logOutWhenTimerUp();
     }
     /*the user is not registered to reset and throw error*/
     else {
@@ -320,6 +305,15 @@ class AuthenticationProvider with ChangeNotifier {
     await _googleSignIn.signOut();
     await _facebookSignIn.logOut();
     notifyListeners();
+  }
+
+  Timer _logOutWhenTimerUp() {
+    return Timer(
+      Duration(seconds: 3600),
+      () async {
+        await logUserOut();
+      },
+    );
   }
 
   bool get isLoggedIn {
