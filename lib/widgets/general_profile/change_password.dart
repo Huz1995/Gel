@@ -37,11 +37,11 @@ class ChangePasswordForm extends StatelessWidget {
         _authenticationProvider.changePassword(_password).then(
           (_) async {
             await CustomDialogs.showMyDialogOneButton(
-              context,
-              Text("Success"),
-              [Text("Password has been changed")],
-              Text("ok"),
-              () {
+              context: context,
+              title: Text("Success"),
+              body: [Text("Password has been changed")],
+              buttonChild: Text("ok"),
+              buttonOnPressed: () {
                 Navigator.of(context).pop();
               },
             ).then(

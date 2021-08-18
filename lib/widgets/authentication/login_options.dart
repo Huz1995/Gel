@@ -32,15 +32,16 @@ class LoginOptions extends StatelessWidget {
               try {
                 await _authenticationProvider.loginWithFacebook();
               } catch (e) {
+                String errMsg = e.toString();
                 return CustomDialogs.showMyDialogOneButton(
-                  context,
-                  Text('Error'),
-                  <Widget>[Text(e.toString())],
-                  Text(
+                  context: context,
+                  title: Text('Error'),
+                  body: <Widget>[Text(errMsg)],
+                  buttonChild: Text(
                     'Back',
                     style: TextStyle(color: Theme.of(context).accentColor),
                   ),
-                  () {
+                  buttonOnPressed: () {
                     Navigator.of(context).pop();
                   },
                 );
@@ -67,14 +68,14 @@ class LoginOptions extends StatelessWidget {
                 String errMsg = e.toString();
                 if (errMsg != "Null check operator used on a null value") {
                   return CustomDialogs.showMyDialogOneButton(
-                    context,
-                    Text('Error'),
-                    <Widget>[Text(e.toString())],
-                    Text(
+                    context: context,
+                    title: Text('Error'),
+                    body: <Widget>[Text(errMsg)],
+                    buttonChild: Text(
                       'Back',
                       style: TextStyle(color: Theme.of(context).accentColor),
                     ),
-                    () {
+                    buttonOnPressed: () {
                       Navigator.of(context).pop();
                     },
                   );

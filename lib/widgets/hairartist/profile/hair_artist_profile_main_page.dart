@@ -34,14 +34,14 @@ class _HairArtistProfileMainPageState extends State<HairArtistProfileMainPage> {
               if (value == LocationPermission.denied ||
                   value == LocationPermission.deniedForever) {
                 CustomDialogs.showMyDialogOneButton(
-                  context,
-                  Text("Warning"),
-                  [
+                  context: context,
+                  title: Text("Warning"),
+                  body: [
                     Text(
                         "In order for people in you area to discover your services, you will need to add location services, in settings you can update your location services"),
                   ],
-                  Text("Ok"),
-                  () {
+                  buttonChild: Text("Ok"),
+                  buttonOnPressed: () {
                     Navigator.of(context).pop();
                   },
                 );

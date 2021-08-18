@@ -83,30 +83,32 @@ class _HairArtistProfilePicIconState extends State<HairArtistProfilePicIcon> {
                         ),
                         onPressed: () => doesHaveProfilePhoto
                             ? CustomDialogs.showMyDialogThreeButtons(
-                                context,
-                                Text("Update Profile Picture"),
-                                [
+                                context: context,
+                                title: Text("Update Profile Picture"),
+                                body: [
                                   Text("Please select one of the options below")
                                 ],
-                                Text("Cancel"),
-                                () {
+                                buttonOnechild: Text("Cancel"),
+                                buttonOneOnPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                Text("Remove"),
-                                () {
+                                buttonTwochild: Text("Remove"),
+                                buttonTwoOnPressed: () {
                                   widget._hairArtistProfileProvider!
                                       .removeProfilePicture();
                                   Navigator.of(context).pop();
                                 },
-                                Text("Replace"),
-                                () {
+                                buttonThreechild: Text("Replace"),
+                                buttonThreeOnPressed: () {
                                   Navigator.of(context).pop();
                                   CustomDialogs.showMyDialogTwoButtons(
-                                    context,
-                                    Text("Replace"),
-                                    [Text("Please choose Camera or Gallery")],
-                                    Text("Camera"),
-                                    () {
+                                    context: context,
+                                    title: Text("Replace"),
+                                    body: [
+                                      Text("Please choose Camera or Gallery")
+                                    ],
+                                    buttonOnechild: Text("Camera"),
+                                    buttonOneOnPressed: () {
                                       Navigator.of(context).pop();
                                       setState(
                                         () {
@@ -114,8 +116,8 @@ class _HairArtistProfilePicIconState extends State<HairArtistProfilePicIcon> {
                                         },
                                       );
                                     },
-                                    Text("Gallery"),
-                                    () {
+                                    buttonTwochild: Text("Gallery"),
+                                    buttonTwoOnPressed: () {
                                       Navigator.of(context).pop();
                                       setState(
                                         () {
@@ -128,24 +130,26 @@ class _HairArtistProfilePicIconState extends State<HairArtistProfilePicIcon> {
                                 },
                               )
                             : CustomDialogs.showMyDialogTwoButtons(
-                                context,
-                                Text("Update Profile Picture"),
-                                [
+                                context: context,
+                                title: Text("Update Profile Picture"),
+                                body: [
                                   Text("Please select one of the options below")
                                 ],
-                                Text("Cancel"),
-                                () {
+                                buttonOnechild: Text("Cancel"),
+                                buttonOneOnPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                Text("Add"),
-                                () {
+                                buttonTwochild: Text("Add"),
+                                buttonTwoOnPressed: () {
                                   Navigator.of(context).pop();
                                   CustomDialogs.showMyDialogTwoButtons(
-                                    context,
-                                    Text("Add"),
-                                    [Text("Please choose Camera or Gallery")],
-                                    Text("Camera"),
-                                    () {
+                                    context: context,
+                                    title: Text("Add"),
+                                    body: [
+                                      Text("Please choose Camera or Gallery")
+                                    ],
+                                    buttonOnechild: Text("Camera"),
+                                    buttonOneOnPressed: () {
                                       Navigator.of(context).pop();
                                       setState(
                                         () {
@@ -153,8 +157,8 @@ class _HairArtistProfilePicIconState extends State<HairArtistProfilePicIcon> {
                                         },
                                       );
                                     },
-                                    Text("Gallery"),
-                                    () {
+                                    buttonTwochild: Text("Gallery"),
+                                    buttonTwoOnPressed: () {
                                       Navigator.of(context).pop();
                                       setState(
                                         () {

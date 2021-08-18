@@ -50,18 +50,18 @@ class _GalleryPickerState extends State<GalleryPicker> {
       ),
       onPressed: () {
         CustomDialogs.showMyDialogThreeButtons(
-          context,
-          Text("Add Photo"),
-          [
+          context: context,
+          title: Text("Add Photo"),
+          body: [
             Text(
                 "Would you like to select an image from your camera or gallery?")
           ],
-          Text("Cancel"),
-          () {
+          buttonOnechild: Text("Cancel"),
+          buttonOneOnPressed: () {
             Navigator.of(context).pop();
           },
-          Text("Camera"),
-          () {
+          buttonTwochild: Text("Camera"),
+          buttonTwoOnPressed: () {
             Navigator.of(context).pop();
             setState(
               () {
@@ -70,8 +70,8 @@ class _GalleryPickerState extends State<GalleryPicker> {
             );
             _pickImage();
           },
-          Text("Gallery"),
-          () {
+          buttonThreechild: Text("Gallery"),
+          buttonThreeOnPressed: () {
             Navigator.of(context).pop();
             setState(
               () {

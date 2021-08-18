@@ -79,11 +79,11 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
       _launchPhoneURL(number);
     } else {
       CustomDialogs.showMyDialogOneButton(
-        context,
-        Text("No Number Found"),
-        [Text("The hair artist has not uploaded their number")],
-        Text("Back"),
-        () {
+        context: context,
+        title: Text("No Number Found"),
+        body: [Text("The hair artist has not uploaded their number")],
+        buttonChild: Text("Back"),
+        buttonOnPressed: () {
           Navigator.of(context).pop();
         },
       );

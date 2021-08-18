@@ -6,17 +6,17 @@ import 'package:flutter/material.dart';
 and alter dialog with custoom titles, buttons, and on pressed functions*/
 
 class CustomDialogs {
-  static Future<void> showMyDialogTwoButtons(
-    BuildContext context,
-    Widget title,
-    List<Widget> children,
-    Widget buttonOnechild,
+  static Future<void> showMyDialogTwoButtons({
+    BuildContext? context,
+    Widget? title,
+    List<Widget>? body,
+    Widget? buttonOnechild,
     void Function()? buttonOneOnPressed,
-    Widget buttonTwochild,
+    Widget? buttonTwochild,
     void Function()? buttonTwoOnPressed,
-  ) async {
+  }) async {
     return showDialog<void>(
-      context: context,
+      context: context!,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return BackdropFilter(
@@ -27,16 +27,16 @@ class CustomDialogs {
             title: title,
             content: SingleChildScrollView(
               child: Column(
-                children: children,
+                children: body!,
               ),
             ),
             actions: <Widget>[
               TextButton(
-                child: buttonOnechild,
+                child: buttonOnechild!,
                 onPressed: buttonOneOnPressed,
               ),
               TextButton(
-                child: buttonTwochild,
+                child: buttonTwochild!,
                 onPressed: buttonTwoOnPressed,
               ),
             ],
@@ -46,19 +46,19 @@ class CustomDialogs {
     );
   }
 
-  static Future<void> showMyDialogThreeButtons(
-    BuildContext context,
-    Widget title,
-    List<Widget> children,
-    Widget buttonOnechild,
+  static Future<void> showMyDialogThreeButtons({
+    BuildContext? context,
+    Widget? title,
+    List<Widget>? body,
+    Widget? buttonOnechild,
     void Function()? buttonOneOnPressed,
-    Widget buttonTwochild,
+    Widget? buttonTwochild,
     void Function()? buttonTwoOnPressed,
-    Widget buttonThreechild,
+    Widget? buttonThreechild,
     void Function()? buttonThreeOnPressed,
-  ) async {
+  }) async {
     return showDialog<void>(
-      context: context,
+      context: context!,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return BackdropFilter(
@@ -69,20 +69,20 @@ class CustomDialogs {
             title: title,
             content: SingleChildScrollView(
               child: Column(
-                children: children,
+                children: body!,
               ),
             ),
             actions: <Widget>[
               TextButton(
-                child: buttonOnechild,
+                child: buttonOnechild!,
                 onPressed: buttonOneOnPressed,
               ),
               TextButton(
-                child: buttonTwochild,
+                child: buttonTwochild!,
                 onPressed: buttonTwoOnPressed,
               ),
               TextButton(
-                child: buttonThreechild,
+                child: buttonThreechild!,
                 onPressed: buttonThreeOnPressed,
               ),
             ],
@@ -92,15 +92,15 @@ class CustomDialogs {
     );
   }
 
-  static Future<void> showMyDialogOneButton(
-    BuildContext context,
-    Widget title,
-    List<Widget> children,
-    Widget buttonChild,
+  static Future<void> showMyDialogOneButton({
+    BuildContext? context,
+    Widget? title,
+    List<Widget>? body,
+    Widget? buttonChild,
     void Function()? buttonOnPressed,
-  ) async {
+  }) async {
     return showDialog<void>(
-      context: context,
+      context: context!,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return BackdropFilter(
@@ -111,12 +111,12 @@ class CustomDialogs {
             title: title,
             content: SingleChildScrollView(
               child: Column(
-                children: children,
+                children: body!,
               ),
             ),
             actions: <Widget>[
               TextButton(
-                child: buttonChild,
+                child: buttonChild!,
                 onPressed: buttonOnPressed,
               ),
             ],

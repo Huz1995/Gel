@@ -43,14 +43,14 @@ class RegistrationOptions extends StatelessWidget {
             onPressed: () async {
               try {
                 await _authenticationProvider.facebookRegistration();
-              } catch (e) {
+              } catch (error) {
                 return CustomDialogs.showMyDialogOneButton(
-                  context,
-                  Text("Error"),
-                  [Text(e.toString())],
-                  Text('Back',
+                  context: context,
+                  title: Text("Error"),
+                  body: [Text(error.toString())],
+                  buttonChild: Text('Back',
                       style: TextStyle(color: Theme.of(context).accentColor)),
-                  () async {
+                  buttonOnPressed: () async {
                     Navigator.of(context).pop();
                   },
                 );
@@ -75,16 +75,16 @@ class RegistrationOptions extends StatelessWidget {
             onPressed: () async {
               try {
                 await _authenticationProvider.googleRegistration();
-              } catch (e) {
-                if (e.toString() !=
+              } catch (error) {
+                if (error.toString() !=
                     "Null check operator used on a null value") {
                   return CustomDialogs.showMyDialogOneButton(
-                    context,
-                    Text("Error"),
-                    [Text(e.toString())],
-                    Text('Back',
+                    context: context,
+                    title: Text("Error"),
+                    body: [Text(error.toString())],
+                    buttonChild: Text('Back',
                         style: TextStyle(color: Theme.of(context).accentColor)),
-                    () async {
+                    buttonOnPressed: () async {
                       Navigator.of(context).pop();
                     },
                   );

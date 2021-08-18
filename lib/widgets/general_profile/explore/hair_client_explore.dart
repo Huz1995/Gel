@@ -22,10 +22,14 @@ class HairClientExplore extends StatefulWidget {
 }
 
 class _HairClientExploreState extends State<HairClientExplore> {
+  /*init controllers*/
   late GoogleMapController _googleMapController;
   FloatingSearchBarController _floatingSearchBarController =
       FloatingSearchBarController();
   late MapHairArtistRetrievalProvider _harp;
+
+  /*function that goes to user location when map is loaded
+  if permissions are ok*/
   void _onMapCreated() {
     Geolocator.checkPermission().then(
       (allowed) {
@@ -36,14 +40,9 @@ class _HairClientExploreState extends State<HairClientExplore> {
           Geolocator.getCurrentPosition().then(
             (pos) {
               print(pos);
-              _googleMapController.animateCamera(
-                CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                    target: LatLng(pos.latitude, pos.longitude),
-                    zoom: 10,
-                  ),
-                ),
-              );
+              Location location =
+                  Location(lat: pos.latitude, lng: pos.longitude);
+              _moveMapToLocation(location);
             },
           );
         }
@@ -51,6 +50,8 @@ class _HairClientExploreState extends State<HairClientExplore> {
     );
   }
 
+  /*function that takes in a location and moves to location using
+  the controller*/
   Future<void> _moveMapToLocation(Location location) async {
     _googleMapController.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -64,12 +65,14 @@ class _HairClientExploreState extends State<HairClientExplore> {
 
   @override
   void initState() {
+    /*when init state store the provider*/
     _harp = Provider.of<MapHairArtistRetrievalProvider>(context, listen: false);
     super.initState();
   }
 
   @override
   void dispose() {
+    /*when leave map use provider to rid markers from memory*/
     _harp.resetMarkers();
     super.dispose();
   }
@@ -78,12 +81,14 @@ class _HairClientExploreState extends State<HairClientExplore> {
   Widget build(BuildContext context) {
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
+    /*if widget is coming from the hair client route then get the provider*/
     if (widget.isForClientRoute!) {
       setState(() {
         widget._hairClientProfileProvider =
             Provider.of<HairClientProfileProvider>(context);
       });
     }
+    /*init required providers*/
     final _mapLocationProvider = Provider.of<MapPlacesProvider>(context);
     final List<PlaceSearch> _placeSearchResults =
         _mapLocationProvider.searchResults;
@@ -91,30 +96,46 @@ class _HairClientExploreState extends State<HairClientExplore> {
         Provider.of<MapHairArtistRetrievalProvider>(context);
     final _markers = _hairArtistRetrievalProvider.markers;
 
+    /*function that exeutes when the user taps on a place when searching
+    for a place iin the search bar*/
     void Function()? _onTap({PlaceSearch? result, bool? isDisplayForArtist}) {
       return () async {
+        /*get location details from the places the user chose*/
         var location =
             await _mapLocationProvider.getPlaceDetails(result!.placeId!);
+        /*move the map to the location*/
         _moveMapToLocation(location);
+        /*closed the place list from the search bar*/
         _floatingSearchBarController.close();
+        /*use the hair artist retrival provider to get hair artists
+        within search radius critera and create markers from them*/
         _hairArtistRetrievalProvider.getMarkers(
+          /*send location to back end*/
           location: location,
+          /*send an on tap function so the hair retrieval provider can use
+          to create on tap for markers*/
+          /*the provider with iterate for each hair artist profile, so send this to
+          to on tap funnction to create the hair artist user display widget*/
           onTap: (userProfile) => () {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => HairArtistProfileDisplay(
                   hairArtistUserProfile: userProfile,
+                  /*if the hair artist display is coming from the artist route of the map
+                  we dont need hair artist provider*/
                   hairClientProfileProvider: isDisplayForArtist!
                       ? null
                       : widget._hairClientProfileProvider,
                   fontSizeProvider: _fontSizeProvider,
-                  isFavOfClient: isDisplayForArtist!
+                  /*if the hair artist display is coming from the artist route of the map
+                  we dont need too check if artist if favorite of the client*/
+                  isFavOfClient: isDisplayForArtist
                       ? null
                       : HairClientProfileProvider.isAFavorite(
                           widget._hairClientProfileProvider!.hairClientProfile,
                           userProfile),
                   isForDisplay: true,
-                  isDisplayForArtist: isDisplayForArtist!,
+                  isDisplayForArtist: isDisplayForArtist,
                 ),
               ),
             );
@@ -123,10 +144,10 @@ class _HairClientExploreState extends State<HairClientExplore> {
       };
     }
 
-    print(widget.isForClientRoute);
     return Scaffold(
         body: Stack(
       children: [
+        /*google map is at bottom of the stack*/
         GoogleMap(
           mapType: MapType.normal,
           initialCameraPosition: CameraPosition(
@@ -141,6 +162,7 @@ class _HairClientExploreState extends State<HairClientExplore> {
             _onMapCreated();
           },
         ),
+        /*put the search bar on top of the map*/
         FloatingSearchBar(
           textInputAction: TextInputAction.done,
           controller: _floatingSearchBarController,
@@ -155,6 +177,10 @@ class _HairClientExploreState extends State<HairClientExplore> {
           openAxisAlignment: 0.0,
           width: 600,
           debounceDelay: const Duration(milliseconds: 500),
+          /*when the user is changing search use the location provider
+          to constantly get the search results from api, this uses
+          notify listeners to update the PlaceSearch array so we can display
+          new array on the map*/
           onQueryChanged: (query) {
             _mapLocationProvider.getAutoComplete(query);
           },
@@ -162,6 +188,7 @@ class _HairClientExploreState extends State<HairClientExplore> {
           // animating between opened and closed stated.
           transition: CircularFloatingSearchBarTransition(),
           actions: [
+            /*actions on the search bar*/
             FloatingSearchBarAction(
               showIfOpened: false,
               child: CircularButton(
@@ -174,6 +201,7 @@ class _HairClientExploreState extends State<HairClientExplore> {
             ),
           ],
           builder: (context, transition) {
+            /*use clip reect to display the places user searched in form list*/
             return ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Material(
@@ -181,6 +209,9 @@ class _HairClientExploreState extends State<HairClientExplore> {
                 elevation: 4.0,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
+                  /*for the placeSearch results the map location provider
+                  gets when user changes the search query, we map to a gesture detector
+                  so when user clicks we can use the ontap funcyion above*/
                   children: _placeSearchResults.map(
                     (result) {
                       return GestureDetector(
@@ -190,6 +221,8 @@ class _HairClientExploreState extends State<HairClientExplore> {
                             child: Text(result.description!),
                           ),
                         ),
+                        /*depending if the search is coming from client part or the
+                        artist part of the app*/
                         onTap: widget.isForClientRoute!
                             ? _onTap(
                                 result: result,

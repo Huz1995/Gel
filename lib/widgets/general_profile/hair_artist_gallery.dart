@@ -68,23 +68,23 @@ class HairArtistGallery extends StatelessWidget {
                             return GestureDetector(
                               onDoubleTap: () =>
                                   CustomDialogs.showMyDialogTwoButtons(
-                                context,
-                                Text('DELETE'),
-                                [
-                                  Text('Would you like to delete this photo?'),
+                                context: context,
+                                title: Text('DELETE'),
+                                body: [
+                                  Text('Would you like to delete this photo?')
                                 ],
-                                Text(
+                                buttonOnechild: Text(
                                   'Delete',
                                   style: TextStyle(
                                       color: Theme.of(context).accentColor),
                                 ),
-                                () async {
+                                buttonOneOnPressed: () async {
                                   await _hairArtistProvider!
                                       .deletePhotoUrl(url);
                                   Navigator.of(context).pop();
                                 },
-                                Text('Cancel'),
-                                () {
+                                buttonTwochild: Text('Cancel'),
+                                buttonTwoOnPressed: () {
                                   Navigator.of(context).pop();
                                 },
                               ),
