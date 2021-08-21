@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gel/screens/hair_artist_providers.dart';
-
-import 'package:gel/screens/hair_client_providers.dart';
+import 'package:gel/screens/hair_artist_providers_init.dart';
+import 'package:gel/screens/hair_client_providers_init.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 import './screens/front_page.dart';
 import 'package:gel/screens/unauth_map_page.dart';
 import 'package:gel/providers/authentication_provider.dart';

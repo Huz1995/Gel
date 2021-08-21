@@ -20,7 +20,7 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
 
   @override
   void initState() {
-    socket = Provider.of<MessagesProviderClient>(context, listen: false).socket;
+    socketServer();
     // TODO: implement initState
     super.initState();
   }
@@ -31,29 +31,43 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
     super.dispose();
   }
 
+  void socketServer() {
+    try {
+      socket = IO.io("http://192.168.0.11:3000", <String, dynamic>{
+        'transports': ['websocket'],
+        'autoConnect': false,
+      });
+      socket.connect();
+      socket.on('connect', (_) => print("connect: ${socket.id}"));
+      print("herre");
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _hairClientProfileProvider =
         Provider.of<HairClientProfileProvider>(context);
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
-    //final _messagesProvider = Provider.of<MessagesProvider>(context);
-
-    print(_hairClientProfileProvider.hairClientProfile.hairArtistMessagingUids);
 
     return Scaffold(
       appBar: UIService.generalAppBar(context, "Messages", null),
-      body: ListView.builder(
-        itemCount: _hairClientProfileProvider
-            .hairClientProfile.hairArtistMessagingUids.length,
-        itemBuilder: (context, index) {
-          return MessageWidget(
-            listIndex: index,
-            uid: _hairClientProfileProvider
-                .hairClientProfile.hairArtistMessagingUids[index],
-          );
-        },
-        physics: ScrollPhysics(),
+      // body: ListView.builder(
+      //   itemCount: _hairClientProfileProvider
+      //       .hairClientProfile.favouriteHairArtists.length,
+      //   itemBuilder: (context, index) {
+      //     return MessageWidget(
+      //       listIndex: index,
+      //       hairArtistUserProfile: _hairClientProfileProvider
+      //           .hairClientProfile.favouriteHairArtists[index],
+      //     );
+      //   },
+      //   physics: ScrollPhysics(),
+      // ),
+      body: Center(
+        child: Text("hhw"),
       ),
     );
   }

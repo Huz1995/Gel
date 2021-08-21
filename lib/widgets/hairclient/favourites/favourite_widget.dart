@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
+import 'package:gel/providers/messages_provider_client.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/general_profile/hair_artist_profile_display.dart';
@@ -18,7 +19,8 @@ class FavouriteWidget extends StatelessWidget {
     final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
     final _hairClientProfileProvider =
         Provider.of<HairClientProfileProvider>(context);
-
+    final _messageProviderClient =
+        Provider.of<MessagesProviderClient>(context, listen: false);
     return GestureDetector(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
@@ -31,6 +33,7 @@ class FavouriteWidget extends StatelessWidget {
                 hairArtistUserProfile!),
             isForDisplay: true,
             isDisplayForArtist: false,
+            messageProviderClient: _messageProviderClient,
           ),
         ),
       ),

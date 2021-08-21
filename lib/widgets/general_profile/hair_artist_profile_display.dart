@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
+import 'package:gel/models/hair_client_user_profile.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
-import 'package:gel/providers/messages_provider.dart';
+import 'package:gel/providers/messages_provider_client.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/general/small_button.dart';
@@ -27,6 +28,7 @@ class HairArtistProfileDisplay extends StatefulWidget {
       {Key? key,
       HairArtistProfileProvider? hairArtistProfileProvider,
       HairClientProfileProvider? hairClientProfileProvider,
+      MessagesProviderClient? messageProviderClient,
       required HairArtistUserProfile hairArtistUserProfile,
       required FontSizeProvider fontSizeProvider,
       required bool isForDisplay,
@@ -40,6 +42,7 @@ class HairArtistProfileDisplay extends StatefulWidget {
         _hairClientProfileProvider = hairClientProfileProvider,
         _isFavOfClient = isFavOfClient,
         _isDisplayForArtist = isDisplayForArtist,
+        _messageProviderClient = messageProviderClient,
         super(key: key);
 
   final HairArtistProfileProvider? _hairArtistProfileProvider;
@@ -49,6 +52,7 @@ class HairArtistProfileDisplay extends StatefulWidget {
   final bool _isDisplayForArtist;
   final HairClientProfileProvider? _hairClientProfileProvider;
   bool? _isFavOfClient;
+  final MessagesProviderClient? _messageProviderClient;
 
   @override
   _HairArtistProfileDisplayState createState() =>
@@ -120,6 +124,20 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
             widget._isFavOfClient = true;
           });
         });
+  }
+
+  void Function()? _onPressMessage() {
+    HairClientUserProfile profileObj =
+        widget._hairClientProfileProvider!.hairClientProfile;
+    if (!profileObj.hairArtistMessagingUids
+        .contains(widget._hairArtistUserProfile.uid)) {
+      widget._hairClientProfileProvider!.hairClientProfile
+          .addArtistUidToMessageList(widget._hairArtistUserProfile.uid);
+      Navigator.of(context).pop();
+      widget._hairClientProfileProvider!.setHairClientBottomNavBarState(1);
+      widget._messageProviderClient!.addNewMessageToUsers(
+          profileObj.uid, widget._hairArtistUserProfile.uid);
+    }
   }
 
   @override
@@ -273,20 +291,7 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                                                           .accentColor,
                                                   child: Text("Message"),
                                                   buttonWidth: 125,
-                                                  onPressed: () {
-                                                    widget
-                                                        ._hairClientProfileProvider!
-                                                        .hairClientProfile
-                                                        .addArtistUidToMessageList(
-                                                            widget
-                                                                ._hairArtistUserProfile
-                                                                .uid);
-                                                    Navigator.of(context).pop();
-                                                    widget
-                                                        ._hairClientProfileProvider!
-                                                        .setHairClientBottomNavBarState(
-                                                            1);
-                                                  },
+                                                  onPressed: _onPressMessage,
                                                 )
                                               ],
                                             )

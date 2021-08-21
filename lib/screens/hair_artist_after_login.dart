@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gel/providers/hair_artist_profile_provider.dart';
+import 'package:gel/providers/messages_provider_artist.dart';
 import 'package:gel/widgets/general/bottom_nav_bar.dart';
 import 'package:gel/widgets/general_profile/explore/hair_client_explore.dart';
 import 'package:gel/widgets/hairartist/profile/hair_artist_profile_main_page.dart';
 import 'package:gel/widgets/hairartist/settings/hair_artist_settings.dart';
 import 'package:gel/widgets/messages/message_main_page_artist.dart';
+import 'package:provider/provider.dart';
 
 class HairArtistHomePage extends StatefulWidget {
   @override
@@ -15,6 +18,8 @@ class _HairArtistHomePageState extends State<HairArtistHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final MessagesProviderArtist _messagesProvider =
+        Provider.of<MessagesProviderArtist>(context, listen: false);
     final List<Widget> _widgetOptions = <Widget>[
       HairClientExplore(isForClientRoute: false),
       MessagesMainPageArtitst(),

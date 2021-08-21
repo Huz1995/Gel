@@ -29,10 +29,6 @@ class HairArtistProfileProvider extends ChangeNotifier {
   late String _loggedInUserIdToken;
   late AuthenticationProvider _auth;
 
-  /*chat state values*/
-  late String activeUser;
-  late String activeRoom;
-
   /*when the provider is init, send the auth provider to store the logged in user token
   so can protect the routes on the back end*/
   HairArtistProfileProvider(AuthenticationProvider auth) {
@@ -123,25 +119,26 @@ class HairArtistProfileProvider extends ChangeNotifier {
     return reviews;
   }
 
-  Future<void> getUserDataFromBackend() async {
+  Future<int> getUserDataFromBackend() async {
     /*issue a get req to hairArtistProfile to get their information to display*/
-    http.get(
+    var response = await http.get(
       Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/" +
           _auth.firebaseAuth.currentUser!.uid),
       headers: {
         HttpHeaders.authorizationHeader: _loggedInUserIdToken,
       },
-    ).then(
-      (response) async {
-        /*convert the response from string to JSON*/
-        var jsonResponse = convert.jsonDecode(response.body);
-        /*create new Hair artist about info object*/
-        _userProfile =
-            await createUserProfile(jsonResponse, false, _loggedInUserIdToken);
-        /*updates the profile object so wigets listen can use its data*/
-        notifyListeners();
-      },
     );
+
+    /*convert the response from string to JSON*/
+    var jsonResponse = convert.jsonDecode(response.body);
+    /*create new Hair artist about info object*/
+    _userProfile =
+        await createUserProfile(jsonResponse, false, _loggedInUserIdToken);
+    /*updates the profile object so wigets listen can use its data*/
+    notifyListeners();
+    print(1);
+
+    return 2;
   }
 
   Future<void> saveNewImage(File file) async {
@@ -287,5 +284,10 @@ class HairArtistProfileProvider extends ChangeNotifier {
         HttpHeaders.authorizationHeader: _loggedInUserIdToken,
       },
     );
+  }
+
+  void addClientUIDToHairArtistMessages(String clientUID) {
+    _userProfile.addHairClientUIDToMessagesList(clientUID);
+    notifyListeners();
   }
 }

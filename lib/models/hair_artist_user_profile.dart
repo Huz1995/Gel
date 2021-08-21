@@ -108,6 +108,10 @@ class HairArtistUserProfile {
     return _totalScore;
   }
 
+  List<String> get hairClientMessagingUids {
+    return _hairClientMessagingUids;
+  }
+
   List<Review> get reviews {
     return _reviews;
   }
@@ -158,5 +162,9 @@ class HairArtistUserProfile {
       return _totalScore / _numReviews;
     }
     return 0;
+  }
+
+  void addHairClientUIDToMessagesList(String clientUID) {
+    _hairClientMessagingUids.add(clientUID);
   }
 }
