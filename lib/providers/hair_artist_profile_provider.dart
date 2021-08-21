@@ -23,7 +23,8 @@ class HairArtistProfileProvider extends ChangeNotifier {
       null,
       [],
       0,
-      0);
+      0,
+      []);
   /*this token is used to send headers to back end to protect routes*/
   late String _loggedInUserIdToken;
   late AuthenticationProvider _auth;
@@ -82,6 +83,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
       await _getReviews(jsonResponse['reviews'], loggedInUserIdToken),
       jsonResponse['numReviews'],
       jsonResponse['totalScore'],
+      (jsonResponse['hairClientMessagingUids'] as List).cast<String>(),
     );
   }
 

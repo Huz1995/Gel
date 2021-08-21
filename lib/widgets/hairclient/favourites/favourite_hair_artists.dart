@@ -30,7 +30,7 @@ class _FavouriteHairArtistsState extends State<FavouriteHairArtists> {
     print(_hairClientProfileProvider
         .hairClientProfile.favouriteHairArtists.length);
     return Scaffold(
-      appBar: UIService.generalAppBar(context, "Favourites"),
+      appBar: UIService.generalAppBar(context, "Favourites", null),
       body: ListView.builder(
         itemCount: _hairClientProfileProvider
             .hairClientProfile.favouriteHairArtists.length,

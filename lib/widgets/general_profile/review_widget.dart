@@ -56,9 +56,10 @@ class _ReviewWidgetState extends State<ReviewWidget> {
                     ),
                     SizedBox(height: 10),
                     UIService.getProfilePicIcon(
-                        (widget.review!.reviewerProfilePhotoUrl != null),
-                        context,
-                        widget.review!.reviewerProfilePhotoUrl),
+                        hasProfilePic:
+                            (widget.review!.reviewerProfilePhotoUrl != null),
+                        context: context,
+                        url: widget.review!.reviewerProfilePhotoUrl),
                     SizedBox(
                       height: 10,
                     ),

@@ -15,7 +15,7 @@ class HairArtistSettings extends StatelessWidget {
     final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     return Scaffold(
-      appBar: UIService.generalAppBar(context, "Settings"),
+      appBar: UIService.generalAppBar(context, "Settings", null),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

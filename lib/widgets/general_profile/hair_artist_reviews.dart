@@ -47,9 +47,9 @@ class _HairArtistReviewsState extends State<HairArtistReviews> {
           'Tap a star to set your rating. Add more description here if you want.',
       // your app's logo?
       image: UIService.getProfilePicIcon(
-          widget.hairArtistUserProfile!.profilePhotoUrl != null,
-          context,
-          widget.hairArtistUserProfile!.profilePhotoUrl),
+          hasProfilePic: widget.hairArtistUserProfile!.profilePhotoUrl != null,
+          context: context,
+          url: widget.hairArtistUserProfile!.profilePhotoUrl),
       submitButton: 'Submit',
       onSubmitted: (response) async {
         print('rating: ${response.rating}, comment: ${response.comment}');

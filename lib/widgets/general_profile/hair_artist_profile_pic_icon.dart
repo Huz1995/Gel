@@ -65,8 +65,10 @@ class _HairArtistProfilePicIconState extends State<HairArtistProfilePicIcon> {
       child: Center(
         child: Stack(
           children: [
-            UIService.getProfilePicIcon(doesHaveProfilePhoto, context,
-                widget._hairArtistUserProfile.profilePhotoUrl),
+            UIService.getProfilePicIcon(
+                hasProfilePic: doesHaveProfilePhoto,
+                context: context,
+                url: widget._hairArtistUserProfile.profilePhotoUrl),
             !widget._isForDisplay
                 ? Positioned(
                     left: widget._phoneWidth * 0.170,

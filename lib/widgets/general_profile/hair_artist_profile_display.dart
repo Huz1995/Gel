@@ -7,6 +7,7 @@ import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
+import 'package:gel/providers/messages_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/general/small_button.dart';
@@ -125,7 +126,6 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
   Widget build(BuildContext context) {
     final _phoneWidth = MediaQuery.of(context).size.width;
     final _phoneHeight = MediaQuery.of(context).size.height;
-
     final _authProvider = Provider.of<AuthenticationProvider>(context);
     /*to ensure when auto logout occurs then we remove this widget the tree*/
     if (!_authProvider.isLoggedIn && widget._isForDisplay) {
@@ -263,14 +263,37 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                                         buttonWidth: 125,
                                         onPressed: _callHairArist,
                                       ),
-                                      SizedBox(width: 10),
-                                      SmallButton(
-                                        backgroundColor:
-                                            Theme.of(context).accentColor,
-                                        child: Text("Message"),
-                                        buttonWidth: 125,
-                                        onPressed: () {},
-                                      )
+                                      !widget._isDisplayForArtist
+                                          ? Row(
+                                              children: [
+                                                SizedBox(width: 10),
+                                                SmallButton(
+                                                  backgroundColor:
+                                                      Theme.of(context)
+                                                          .accentColor,
+                                                  child: Text("Message"),
+                                                  buttonWidth: 125,
+                                                  onPressed: () {
+                                                    widget
+                                                        ._hairClientProfileProvider!
+                                                        .hairClientProfile
+                                                        .addArtistUidToMessageList(
+                                                            widget
+                                                                ._hairArtistUserProfile
+                                                                .uid);
+                                                    Navigator.of(context).pop();
+                                                    widget
+                                                        ._hairClientProfileProvider!
+                                                        .setHairClientBottomNavBarState(
+                                                            1);
+                                                  },
+                                                )
+                                              ],
+                                            )
+                                          : SizedBox(
+                                              height: 0,
+                                              width: 0,
+                                            ),
                                     ],
                                   ),
                           ],

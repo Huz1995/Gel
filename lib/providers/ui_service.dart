@@ -90,19 +90,25 @@ class UIService {
   /*Function that creates a profile icon from url, if doesnt have url then will
   return a defaul profile icon*/
   static Widget getProfilePicIcon(
-      bool hasProfilePic, BuildContext context, String? url) {
-    if (hasProfilePic) {
+      {bool? hasProfilePic,
+      BuildContext? context,
+      String? url,
+      double? radius}) {
+    if (hasProfilePic!) {
       return CircleAvatar(
-        radius: MediaQuery.of(context).size.width / 8,
-        backgroundColor: Theme.of(context).cardColor,
+        radius:
+            (radius == null) ? MediaQuery.of(context!).size.width / 8 : radius,
+        backgroundColor: Theme.of(context!).cardColor,
         backgroundImage: NetworkImage(url!),
       );
     }
     return Stack(
       children: [
         CircleAvatar(
-          radius: MediaQuery.of(context).size.width / 8,
-          backgroundColor: Theme.of(context).cardColor.withOpacity(0.3),
+          radius: (radius == null)
+              ? MediaQuery.of(context!).size.width / 8
+              : radius,
+          backgroundColor: Theme.of(context!).cardColor.withOpacity(0.3),
         ),
         Positioned(
           left: MediaQuery.of(context).size.width * 0.075,
@@ -119,8 +125,9 @@ class UIService {
   }
 
   static PreferredSizeWidget? generalAppBar(
-      BuildContext context, String title) {
+      BuildContext context, String title, Widget? flexibleSpace) {
     return AppBar(
+      flexibleSpace: flexibleSpace,
       backgroundColor: Colors.white, //change your color here
       iconTheme: IconThemeData(
         color: Colors.black, //change your color here

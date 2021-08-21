@@ -116,10 +116,10 @@ class _EditHairClientProfileFormState extends State<EditHairClientProfileForm> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       UIService.getProfilePicIcon(
-                          doesHaveProfilePhoto,
-                          context,
-                          widget._hairClientProfileProvider.hairClientProfile
-                              .profilePhotoUrl),
+                          hasProfilePic: doesHaveProfilePhoto,
+                          context: context,
+                          url: widget._hairClientProfileProvider
+                              .hairClientProfile.profilePhotoUrl),
                     ],
                   ),
                   SizedBox(

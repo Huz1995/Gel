@@ -7,6 +7,7 @@ class HairClientUserProfile {
   String? _profilePhotoUrl;
   String _name;
   List<HairArtistUserProfile> favouriteHairArtists;
+  List<String> _hairArtistMessagingUids;
 
   HairClientUserProfile(
     this._uid,
@@ -15,6 +16,7 @@ class HairClientUserProfile {
     this._profilePhotoUrl,
     this._name,
     this.favouriteHairArtists,
+    this._hairArtistMessagingUids,
   );
 
   String get uid {
@@ -35,6 +37,10 @@ class HairClientUserProfile {
 
   String get name {
     return _name;
+  }
+
+  List<String> get hairArtistMessagingUids {
+    return _hairArtistMessagingUids;
   }
 
   List<HairArtistUserProfile> get favourites {
@@ -60,5 +66,11 @@ class HairClientUserProfile {
 
   void addProfilePictureUrl(String url) {
     this._profilePhotoUrl = url;
+  }
+
+  void addArtistUidToMessageList(String artistUid) {
+    if (!_hairArtistMessagingUids.contains(artistUid)) {
+      _hairArtistMessagingUids.add(artistUid);
+    }
   }
 }

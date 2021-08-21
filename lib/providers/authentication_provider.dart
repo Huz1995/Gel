@@ -21,7 +21,7 @@ class AuthenticationProvider with ChangeNotifier {
   final GlobalKey<NavigatorState> navigatorKey;
 
   AuthenticationProvider(this.navigatorKey);
-
+  /*heroku connection https://gel-backend.herokuapp.com*/
   Future<void> registerEmailPassword(UserRegisterFormData registerData) async {
     /*register the user with firebase auth and set the UID returned in register data*/
     await _auth.createUserWithEmailAndPassword(

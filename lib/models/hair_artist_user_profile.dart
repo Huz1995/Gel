@@ -56,6 +56,7 @@ class HairArtistUserProfile {
   List<Review> _reviews;
   int _numReviews;
   int _totalScore;
+  List<String> _hairClientMessagingUids;
 
   HairArtistUserProfile(
     this._uid,
@@ -68,6 +69,7 @@ class HairArtistUserProfile {
     this._reviews,
     this._numReviews,
     this._totalScore,
+    this._hairClientMessagingUids,
   );
 
   String get uid {

@@ -5,6 +5,7 @@ import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/map_hair_artists_retrieval.dart';
 import 'package:gel/providers/map_places_provider.dart';
+import 'package:gel/providers/messages_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/screens/hair_client_after_login.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,9 @@ class HairClientProviders extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => MapHairArtistRetrievalProvider(_authProvider),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MessagesProvider(),
         ),
       ],
       child: HairClientHomePage(),

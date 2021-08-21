@@ -20,7 +20,7 @@ class HairClientSettings extends StatelessWidget {
     final _hairClientProfileProvider =
         Provider.of<HairClientProfileProvider>(context, listen: true);
     return Scaffold(
-      appBar: UIService.generalAppBar(context, "Settings"),
+      appBar: UIService.generalAppBar(context, "Settings", null),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

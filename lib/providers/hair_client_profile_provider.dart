@@ -13,15 +13,25 @@ import 'dart:convert' as convert;
 
 class HairClientProfileProvider extends ChangeNotifier {
   HairClientUserProfile _userProfile =
-      HairClientUserProfile("", "", false, "", "", []);
+      HairClientUserProfile("", "", false, "", "", [], []);
   /*this token is used to send headers to back end to protect routes*/
   late String _loggedInUserIdToken;
+  int _hairClientBottomNavBarState = 2;
 
   /*when the provider is init, send the auth provider to store the logged in user token
   so can protect the routes on the back end*/
   HairClientProfileProvider(AuthenticationProvider auth) {
     /* when we initate the hair client profile then get the user data from the back end*/
     _loggedInUserIdToken = auth.idToken;
+  }
+
+  int get hairClientBottomNavBarState {
+    return _hairClientBottomNavBarState;
+  }
+
+  void setHairClientBottomNavBarState(int stateNumber) {
+    _hairClientBottomNavBarState = stateNumber;
+    notifyListeners();
   }
 
   /*function that return the hair client user object*/
@@ -54,14 +64,17 @@ class HairClientProfileProvider extends ChangeNotifier {
       /*store the object in list*/
       favHairArtistProfiles.add(hairArtistProfile);
     }
+    print(jsonResponse['hairArtistMessagingUids']);
     /*create new HairClient Object object and set the attributes in contructor to build object*/
     _userProfile = new HairClientUserProfile(
-        jsonResponse['uid'],
-        jsonResponse['email'],
-        auth.isHairArtist,
-        jsonResponse['profilePhotoUrl'],
-        jsonResponse['name'],
-        favHairArtistProfiles);
+      jsonResponse['uid'],
+      jsonResponse['email'],
+      auth.isHairArtist,
+      jsonResponse['profilePhotoUrl'],
+      jsonResponse['name'],
+      favHairArtistProfiles,
+      (jsonResponse['hairArtistMessagingUids'] as List).cast<String>(),
+    );
     print(_userProfile.name);
     /*updates the profile object so wigets listen can use its data*/
     notifyListeners();
