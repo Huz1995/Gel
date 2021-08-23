@@ -6,8 +6,8 @@ import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/map_hair_artists_retrieval.dart';
 import 'package:gel/providers/map_places_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
+import 'package:gel/screens/hair_artist_after_login.dart';
 import 'package:provider/provider.dart';
-import 'hair_artist_msg_provider_init.dart';
 
 class HairArtistProviders extends StatelessWidget {
   const HairArtistProviders({Key? key}) : super(key: key);
@@ -40,7 +40,7 @@ class HairArtistProviders extends StatelessWidget {
           create: (context) => MapHairArtistRetrievalProvider(_authProvider),
         ),
       ],
-      child: HairArtistMessageProviderInit(),
+      child: HairArtistHomePage(),
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:gel/models/place_search.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/map_hair_artists_retrieval.dart';
 import 'package:gel/providers/map_places_provider.dart';
-import 'package:gel/providers/messages_provider_client.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/widgets/general_profile/hair_artist_profile_display.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -82,8 +81,7 @@ class _HairClientExploreState extends State<HairClientExplore> {
   Widget build(BuildContext context) {
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
-    final _messageProviderClient =
-        Provider.of<MessagesProviderClient>(context, listen: false);
+
     /*if widget is coming from the hair client route then get the provider*/
     if (widget.isForClientRoute!) {
       setState(() {
@@ -139,7 +137,6 @@ class _HairClientExploreState extends State<HairClientExplore> {
                           userProfile),
                   isForDisplay: true,
                   isDisplayForArtist: isDisplayForArtist,
-                  messageProviderClient: _messageProviderClient,
                 ),
               ),
             );

@@ -16,6 +16,7 @@ class HairClientProfileProvider extends ChangeNotifier {
   /*this token is used to send headers to back end to protect routes*/
   late String _loggedInUserIdToken;
   int _hairClientBottomNavBarState = 2;
+  String? _newArtistUIDForMessages;
 
   /*when the provider is init, send the auth provider to store the logged in user token
   so can protect the routes on the back end*/
@@ -245,5 +246,13 @@ class HairClientProfileProvider extends ChangeNotifier {
         HttpHeaders.authorizationHeader: _loggedInUserIdToken,
       },
     );
+  }
+
+  void setnewArtistUIDForMessages(String? artistUID) {
+    _newArtistUIDForMessages = artistUID;
+  }
+
+  String? get newArtistUIDForMessages {
+    return _newArtistUIDForMessages;
   }
 }

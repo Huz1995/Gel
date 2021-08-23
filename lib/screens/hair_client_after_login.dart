@@ -13,17 +13,23 @@ class HairClientHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _hairClientProvider = Provider.of<HairClientProfileProvider>(context);
     int _selectedIndex = _hairClientProvider.hairClientBottomNavBarState;
+    String? _newArtistUIDForMessages =
+        _hairClientProvider.newArtistUIDForMessages;
 
     final List<Widget> _widgetOptions = <Widget>[
       HairClientExplore(
         isForClientRoute: true,
       ),
-      MessagesMainPageClient(),
+      MessagesMainPageClient(
+        newArtistUIDForMessages: _newArtistUIDForMessages,
+        hairClientProvider: _hairClientProvider,
+      ),
       FavouriteHairArtists(),
       HairClientSettings(),
     ];
 
     void _onIconTapped(int index) {
+      _hairClientProvider.setnewArtistUIDForMessages(null);
       _hairClientProvider.setHairClientBottomNavBarState(index);
     }
 

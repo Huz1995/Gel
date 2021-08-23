@@ -8,33 +8,31 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-class MessagesProviderArtist extends ChangeNotifier {
+class MessagesSerivce {
   late IO.Socket _socket;
-  HairArtistProfileProvider _hairArtistProfileProvider;
-  late String _loggedInUserIdToken;
+  late AuthenticationProvider _auth;
 
-  MessagesProviderArtist(
-      this._hairArtistProfileProvider, AuthenticationProvider auth) {
-    initMessageProvider();
-    _loggedInUserIdToken = auth.idToken;
-    // print("here");
+  MessagesSerivce(AuthenticationProvider auth) {
+    _auth = auth;
   }
 
-  Future<void> initMessageProvider() async {
-    await _hairArtistProfileProvider.getUserDataFromBackend();
-    _socketStart();
-    print(_hairArtistProfileProvider.hairArtistProfile.uid);
+  Future<void> artistRecieveNewMsgInit(
+      HairArtistProfileProvider hairArtistProfileProvider) async {
     _socket.on(
-      _hairArtistProfileProvider.hairArtistProfile.uid,
+      hairArtistProfileProvider.hairArtistProfile.uid,
       (data) => {
-        _hairArtistProfileProvider
-            .addClientUIDToHairArtistMessages(data['clientUID']),
+        if (!hairArtistProfileProvider.hairArtistProfile.hairClientMessagingUids
+            .contains(data['clientUID']))
+          {
+            hairArtistProfileProvider
+                .addClientUIDToHairArtistMessages(data['clientUID']),
+          },
         print(data['clientUID']),
       },
     );
   }
 
-  void _socketStart() {
+  void socketStart() {
     try {
       _socket = IO.io("http://192.168.0.11:3000", <String, dynamic>{
         'transports': ['websocket'],
@@ -47,16 +45,24 @@ class MessagesProviderArtist extends ChangeNotifier {
     }
   }
 
-  Future<List<MetaChatData>> getChatMetaDataForArtist(
-      List<String> clientUIDs, String artistName, String artistUid) async {
+  void addNewMessageToUsers(String clientId, String artistId) {
+    print("new user");
+    _socket.emit("_storeNewUIDs", {
+      'clientUID': clientId,
+      'artistUID': artistId,
+    });
+  }
+
+  Future<List<MetaChatData>> getChatMetaDataForUser(List<String> recieverUIDs,
+      String senderName, String senderUID, String artistOrClient) async {
     var response = await http.post(
       Uri.parse(
-          "http://192.168.0.11:3000/api/messages/metaChatDataArtistSender"),
+          "http://192.168.0.11:3000/api/messages/metaChatData${artistOrClient}Sender"),
       body: {
-        'hairClientUIDs': clientUIDs.toString(),
+        'recieverUIDs': recieverUIDs.toString(),
       },
       headers: {
-        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+        HttpHeaders.authorizationHeader: _auth.idToken,
       },
     );
     var jsonResponse = (convert.jsonDecode(response.body) as List);
@@ -67,8 +73,8 @@ class MessagesProviderArtist extends ChangeNotifier {
           receiverPhotoUrl: jsonResponse[i]['profilePhotoUrl'],
           receiverUID: jsonResponse[i]['receiverUID'],
           recieverName: jsonResponse[i]['receiverName'],
-          senderName: artistName,
-          senderUID: artistUid);
+          senderName: senderName,
+          senderUID: senderName);
       metaChatDataArray.add(metaChatData);
     }
     return metaChatDataArray;
@@ -78,9 +84,7 @@ class MessagesProviderArtist extends ChangeNotifier {
     return _socket;
   }
 
-  @override
-  void dispose() {
+  void disconnectSocket() {
     _socket.disconnect();
-    super.dispose();
   }
 }

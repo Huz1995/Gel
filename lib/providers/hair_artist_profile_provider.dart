@@ -28,6 +28,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
   /*this token is used to send headers to back end to protect routes*/
   late String _loggedInUserIdToken;
   late AuthenticationProvider _auth;
+  String? _newArtistUIDForMessages;
 
   /*when the provider is init, send the auth provider to store the logged in user token
   so can protect the routes on the back end*/
@@ -286,5 +287,10 @@ class HairArtistProfileProvider extends ChangeNotifier {
   void addClientUIDToHairArtistMessages(String clientUID) {
     _userProfile.addHairClientUIDToMessagesList(clientUID);
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
