@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gel/models/meta_chat_model.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
+import 'package:gel/providers/messages_provider_artist.dart';
 import 'package:gel/providers/messages_provider_client.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
@@ -35,20 +37,34 @@ class _MessagesMainPageArtitstState extends State<MessagesMainPageArtitst> {
         Provider.of<HairArtistProfileProvider>(context);
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
+    final _messageProviderArtist = Provider.of<MessagesProviderArtist>(context);
 
     return Scaffold(
       appBar: UIService.generalAppBar(context, "Messages", null),
-      body: ListView.builder(
-        itemCount: _hairArtistProfileProvider
-            .hairArtistProfile.hairClientMessagingUids.length,
-        itemBuilder: (context, index) {
-          return MessageWidget(
-            listIndex: index,
-            uid: _hairArtistProfileProvider
-                .hairArtistProfile.hairClientMessagingUids[index],
-          );
+      body: FutureBuilder(
+        future: _messageProviderArtist.getChatMetaDataForArtist(
+            _hairArtistProfileProvider
+                .hairArtistProfile.hairClientMessagingUids,
+            _hairArtistProfileProvider.hairArtistProfile.about.name,
+            _hairArtistProfileProvider.hairArtistProfile.uid),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<MetaChatData>> metaChatDataArray) {
+          print(metaChatDataArray.data);
+          if (metaChatDataArray.hasData) {
+            return ListView.builder(
+              itemCount: _hairArtistProfileProvider
+                  .hairArtistProfile.hairClientMessagingUids.length,
+              itemBuilder: (context, index) {
+                return MessageWidget(
+                  listIndex: index,
+                  metaChatData: metaChatDataArray.data?[index],
+                );
+              },
+              physics: ScrollPhysics(),
+            );
+          }
+          return Text("");
         },
-        physics: ScrollPhysics(),
       ),
     );
   }

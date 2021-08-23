@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:gel/models/chat_message_model.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
+import 'package:gel/models/meta_chat_model.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
 
 class ChatPage extends StatefulWidget {
-  late HairArtistUserProfile? hairArtistUserProfile;
+  late MetaChatData? metaChatData;
   late FontSizeProvider? fontSizeProvider;
 
-  ChatPage({this.hairArtistUserProfile, this.fontSizeProvider});
+  ChatPage({this.metaChatData, this.fontSizeProvider});
 
   List<ChatMessage> messages = [
     ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
@@ -51,9 +52,9 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 UIService.getProfilePicIcon(
                     hasProfilePic:
-                        (widget.hairArtistUserProfile!.profilePhotoUrl != null),
+                        (widget.metaChatData!.receiverPhotoUrl != null),
                     context: context,
-                    url: widget.hairArtistUserProfile!.profilePhotoUrl,
+                    url: widget.metaChatData!.receiverPhotoUrl,
                     radius: 20),
                 SizedBox(
                   width: 12,
@@ -64,7 +65,7 @@ class _ChatPageState extends State<ChatPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        widget.hairArtistUserProfile!.about.name,
+                        widget.metaChatData!.recieverName!,
                         style: widget.fontSizeProvider!.headline4,
                       ),
                       SizedBox(

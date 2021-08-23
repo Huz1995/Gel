@@ -137,6 +137,9 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
       widget._hairClientProfileProvider!.setHairClientBottomNavBarState(1);
       widget._messageProviderClient!.addNewMessageToUsers(
           profileObj.uid, widget._hairArtistUserProfile.uid);
+    } else {
+      Navigator.of(context).pop();
+      widget._hairClientProfileProvider!.setHairClientBottomNavBarState(1);
     }
   }
 

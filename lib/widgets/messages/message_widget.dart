@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
+import 'package:gel/models/meta_chat_model.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/messages/chat_page.dart';
@@ -8,22 +9,22 @@ import 'package:provider/provider.dart';
 
 class MessageWidget extends StatelessWidget {
   late int? listIndex;
-  late String? uid;
+  late MetaChatData? metaChatData;
 
-  MessageWidget({this.listIndex, this.uid});
+  MessageWidget({this.listIndex, this.metaChatData});
 
   Widget build(BuildContext context) {
     final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
 
     return GestureDetector(
-      // onTap: () => Navigator.of(context).push(
-      //   MaterialPageRoute(
-      //     builder: (context) => ChatPage(
-      //       hairArtistUserProfile: hairArtistUserProfile,
-      //       fontSizeProvider: _fontSizeProvider,
-      //     ),
-      //   ),
-      // ),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ChatPage(
+            metaChatData: metaChatData,
+            fontSizeProvider: _fontSizeProvider,
+          ),
+        ),
+      ),
       child: Container(
         padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
         child: Card(
@@ -36,12 +37,11 @@ class MessageWidget extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: <Widget>[
-                    // UIService.getProfilePicIcon(
-                    //     hasProfilePic:
-                    //         (hairArtistUserProfile!.profilePhotoUrl != null),
-                    //     context: context,
-                    //     url: hairArtistUserProfile!.profilePhotoUrl,
-                    //     radius: 30),
+                    UIService.getProfilePicIcon(
+                        hasProfilePic: (metaChatData!.receiverPhotoUrl != null),
+                        context: context,
+                        url: metaChatData!.receiverPhotoUrl,
+                        radius: 30),
                     SizedBox(
                       width: 16,
                     ),
@@ -52,7 +52,7 @@ class MessageWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              uid!,
+                              metaChatData!.recieverName!,
                               style: _fontSizeProvider.headline4,
                             ),
                             SizedBox(

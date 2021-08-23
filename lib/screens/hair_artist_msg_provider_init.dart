@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/messages_provider_artist.dart';
 
@@ -12,9 +13,12 @@ class HairArtistMessageProviderInit extends StatelessWidget {
   Widget build(BuildContext context) {
     final hairArtistProfileProvider =
         Provider.of<HairArtistProfileProvider>(context, listen: false);
+    final _authProvider =
+        Provider.of<AuthenticationProvider>(context, listen: false);
 
     return ChangeNotifierProvider(
-      create: (context) => MessagesProviderArtist(hairArtistProfileProvider),
+      create: (context) =>
+          MessagesProviderArtist(hairArtistProfileProvider, _authProvider),
       child: HairArtistHomePage(),
     );
   }

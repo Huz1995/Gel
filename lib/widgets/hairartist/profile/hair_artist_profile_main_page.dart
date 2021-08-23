@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
@@ -18,12 +16,12 @@ class HairArtistProfileMainPage extends StatefulWidget {
 }
 
 class _HairArtistProfileMainPageState extends State<HairArtistProfileMainPage> {
+  /*stream that updates postion of the artist*/
   late StreamSubscription<Position> _positionStream;
 
   @override
   void initState() {
     super.initState();
-    print("dffd");
 
     Geolocator.checkPermission().then(
       (value) async {
@@ -51,9 +49,10 @@ class _HairArtistProfileMainPageState extends State<HairArtistProfileMainPage> {
             },
           );
         } else {
+          /*if permissions allowed will update the position if the phone moves 3 meteres*/
           _positionStream = Geolocator.getPositionStream(distanceFilter: 3)
               .listen((position) {
-            print(position);
+            /*user provider to update location and send data to api*/
             Provider.of<HairArtistProfileProvider>(context, listen: false)
                 .updateHairArtistLocation(
               position.latitude,

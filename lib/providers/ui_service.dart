@@ -110,16 +110,16 @@ class UIService {
               : radius,
           backgroundColor: Theme.of(context!).cardColor.withOpacity(0.3),
         ),
-        Positioned(
-          left: MediaQuery.of(context).size.width * 0.075,
-          bottom: MediaQuery.of(context).size.width * 0.075,
-          //bottom: _phoneWidth / 4,
-          child: Icon(
-            Icons.person,
-            size: 40,
-            color: Colors.black,
-          ),
-        )
+        // Positioned(
+        //   left: MediaQuery.of(context).size.width * 0.075,
+        //   bottom: MediaQuery.of(context).size.width * 0.075,
+        //   //bottom: _phoneWidth / 4,
+        //   child: Icon(
+        //     Icons.person,
+        //     size: 40,
+        //     color: Colors.black,
+        //   ),
+        // )
       ],
     );
   }

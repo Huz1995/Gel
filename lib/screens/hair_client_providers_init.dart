@@ -40,7 +40,7 @@ class HairClientProviders extends StatelessWidget {
           create: (context) => MapHairArtistRetrievalProvider(_authProvider),
         ),
         ChangeNotifierProvider(
-          create: (context) => MessagesProviderClient(),
+          create: (context) => MessagesProviderClient(_authProvider),
         ),
       ],
       child: HairClientHomePage(),

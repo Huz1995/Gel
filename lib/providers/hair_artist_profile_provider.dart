@@ -119,7 +119,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
     return reviews;
   }
 
-  Future<int> getUserDataFromBackend() async {
+  Future<void> getUserDataFromBackend() async {
     /*issue a get req to hairArtistProfile to get their information to display*/
     var response = await http.get(
       Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/" +
@@ -136,9 +136,6 @@ class HairArtistProfileProvider extends ChangeNotifier {
         await createUserProfile(jsonResponse, false, _loggedInUserIdToken);
     /*updates the profile object so wigets listen can use its data*/
     notifyListeners();
-    print(1);
-
-    return 2;
   }
 
   Future<void> saveNewImage(File file) async {
