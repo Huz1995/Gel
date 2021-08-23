@@ -79,6 +79,7 @@ class _MessagesMainPageArtitstState extends State<MessagesMainPageArtitst> {
                 return MessageWidget(
                   listIndex: index,
                   metaChatData: metaChatDataArray.data?[index],
+                  msgService: _msgService,
                 );
               },
               physics: ScrollPhysics(),

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:gel/models/chat_message_model.dart';
+import 'package:gel/models/chat_room_model.dart';
 import 'package:gel/models/meta_chat_model.dart';
 import 'package:gel/providers/authentication_provider.dart';
 import 'package:gel/providers/hair_artist_profile_provider.dart';
@@ -68,16 +70,53 @@ class MessagesSerivce {
     var jsonResponse = (convert.jsonDecode(response.body) as List);
     List<MetaChatData> metaChatDataArray = [];
     print(jsonResponse);
+
     for (int i = 0; i < jsonResponse.length; i++) {
+      String roomID;
+      if (artistOrClient == "Artist") {
+        roomID = jsonResponse[i]['receiverUID'] + " " + senderUID;
+      } else {
+        roomID = senderUID + " " + jsonResponse[i]['receiverUID'];
+      }
       var metaChatData = MetaChatData(
           receiverPhotoUrl: jsonResponse[i]['profilePhotoUrl'],
           receiverUID: jsonResponse[i]['receiverUID'],
           recieverName: jsonResponse[i]['receiverName'],
           senderName: senderName,
-          senderUID: senderName);
+          senderUID: senderName,
+          roomID: roomID);
       metaChatDataArray.add(metaChatData);
     }
     return metaChatDataArray;
+  }
+
+  Future<ChatRoom> getChatRoom(String roomId) async {
+    var response = await http.get(
+      Uri.parse("http://192.168.0.11:3000/api/messages/chatroom/" + roomId),
+      headers: {
+        HttpHeaders.authorizationHeader: _auth.idToken,
+      },
+    );
+    var jsonReponse = convert.jsonDecode(response.body);
+    var jsonMessages = jsonReponse['messages'] as List;
+    List<Message> messages = [];
+    for (int i = 0; i < jsonMessages.length; i++) {
+      Message message = Message(
+        id: jsonMessages[i]['_id'],
+        roomID: jsonMessages[i]['roomID'],
+        txtMsg: jsonMessages[i]['txtMsg'],
+        receiverUID: jsonMessages[i]['receiverUID'],
+        senderUID: jsonMessages[i]['senderUID'],
+        time: DateTime.parse(jsonMessages[i]['time']),
+      );
+      messages.add(message);
+    }
+    var chatRoom = new ChatRoom(
+      roomID: jsonReponse['roomID'],
+      messages: messages,
+    );
+    chatRoom.printChatRoom();
+    return chatRoom;
   }
 
   IO.Socket get socket {
@@ -85,6 +124,7 @@ class MessagesSerivce {
   }
 
   void disconnectSocket() {
+    print("Socket disconneted");
     _socket.disconnect();
   }
 }

@@ -8,12 +8,12 @@ class MetaChatData {
   String? senderName;
   String? roomID;
 
-  MetaChatData(
-      {this.receiverUID,
-      this.recieverName,
-      this.receiverPhotoUrl,
-      this.senderUID,
-      this.senderName}) {
-    roomID = receiverUID! + senderUID!;
-  }
+  MetaChatData({
+    this.receiverUID,
+    this.recieverName,
+    this.receiverPhotoUrl,
+    this.senderUID,
+    this.senderName,
+    this.roomID,
+  });
 }

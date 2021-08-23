@@ -55,17 +55,7 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
 
     return Scaffold(
       appBar: UIService.generalAppBar(context, "Messages", null),
-      body:
-          // ListView.builder(
-          //   itemCount: widget.hairClientProvider!.hairClientProfile
-          //       .hairArtistMessagingUids.length,
-          //   itemBuilder: (context, index) {
-          //     return Text(widget.hairClientProvider!.hairClientProfile
-          //         .hairArtistMessagingUids[index]);
-          //   },
-          // ),
-
-          FutureBuilder(
+      body: FutureBuilder(
         future: _msgService.getChatMetaDataForUser(
             widget
                 .hairClientProvider!.hairClientProfile.hairArtistMessagingUids,
@@ -83,6 +73,7 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
                 return MessageWidget(
                   listIndex: index,
                   metaChatData: metaChatDataArray.data?[index],
+                  msgService: _msgService,
                 );
               },
               physics: ScrollPhysics(),

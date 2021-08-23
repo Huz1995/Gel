@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/models/meta_chat_model.dart';
+import 'package:gel/providers/messages_service.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/messages/chat_page.dart';
@@ -10,21 +11,25 @@ import 'package:provider/provider.dart';
 class MessageWidget extends StatelessWidget {
   late int? listIndex;
   late MetaChatData? metaChatData;
-
-  MessageWidget({this.listIndex, this.metaChatData});
+  late MessagesSerivce? msgService;
+  MessageWidget({this.listIndex, this.metaChatData, this.msgService});
 
   Widget build(BuildContext context) {
     final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
 
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => ChatPage(
-            metaChatData: metaChatData,
-            fontSizeProvider: _fontSizeProvider,
+      onTap: () {
+        msgService!.disconnectSocket();
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ChatPage(
+              metaChatData: metaChatData,
+              fontSizeProvider: _fontSizeProvider,
+              msgService: msgService,
+            ),
           ),
-        ),
-      ),
+        );
+      },
       child: Container(
         padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
         child: Card(

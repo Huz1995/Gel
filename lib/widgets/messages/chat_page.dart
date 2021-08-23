@@ -1,34 +1,46 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gel/models/chat_message_model.dart';
+import 'package:gel/models/chat_room_model.dart';
 import 'package:gel/models/hair_artist_user_profile.dart';
 import 'package:gel/models/meta_chat_model.dart';
+import 'package:gel/providers/messages_service.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
 
 class ChatPage extends StatefulWidget {
   late MetaChatData? metaChatData;
   late FontSizeProvider? fontSizeProvider;
+  late MessagesSerivce? msgService;
 
-  ChatPage({this.metaChatData, this.fontSizeProvider});
-
-  List<ChatMessage> messages = [
-    ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-  ];
+  ChatPage({this.metaChatData, this.fontSizeProvider, this.msgService});
 
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
+  late ChatRoom _chatRoom;
+  List<Message> messages = [
+    Message(txtMsg: '323', roomID: "sdsd", receiverUID: "sender"),
+    Message(txtMsg: "Hello, Will", receiverUID: "receiver"),
+    Message(txtMsg: "How have you been?", receiverUID: "receiver"),
+    Message(
+        txtMsg: "Hey Kriss, I am doing fine dude. wbu?", receiverUID: "sender"),
+    Message(txtMsg: "ehhhh, doing OK.", receiverUID: "receiver"),
+    Message(txtMsg: "Is there any thing wrong?", receiverUID: "sender"),
+  ];
+  @override
+  void initState() {
+    widget.msgService!.socketStart();
+    widget.msgService!.getChatRoom(widget.metaChatData!.roomID!);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _controller = TextEditingController();
     return Scaffold(
       appBar: UIService.generalAppBar(
         context,
@@ -84,7 +96,7 @@ class _ChatPageState extends State<ChatPage> {
           Expanded(
             child: Container(
               child: ListView.builder(
-                itemCount: widget.messages.length,
+                itemCount: messages.length,
                 shrinkWrap: true,
                 padding: EdgeInsets.only(top: 10, bottom: 10),
                 physics: AlwaysScrollableScrollPhysics(),
@@ -93,21 +105,19 @@ class _ChatPageState extends State<ChatPage> {
                     padding: EdgeInsets.only(
                         left: 16, right: 16, top: 10, bottom: 10),
                     child: Align(
-                      alignment:
-                          (widget.messages[index].messageType == "receiver"
-                              ? Alignment.topLeft
-                              : Alignment.topRight),
+                      alignment: (messages[index].receiverUID == "receiver"
+                          ? Alignment.topLeft
+                          : Alignment.topRight),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: (widget.messages[index].messageType ==
-                                  "receiver"
+                          color: (messages[index].receiverUID == "receiver"
                               ? Theme.of(context).primaryColor.withOpacity(0.5)
                               : Theme.of(context).accentColor.withOpacity(0.5)),
                         ),
                         padding: EdgeInsets.all(16),
                         child: Text(
-                          widget.messages[index].messageContent!,
+                          messages[index].txtMsg!,
                           style: TextStyle(fontSize: 15),
                         ),
                       ),
@@ -151,6 +161,7 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                         Expanded(
                           child: TextField(
+                            controller: _controller,
                             decoration: InputDecoration(
                                 hintText: "Write message...",
                                 hintStyle: TextStyle(color: Colors.black54),
@@ -161,7 +172,10 @@ class _ChatPageState extends State<ChatPage> {
                           width: 15,
                         ),
                         FloatingActionButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            print(_controller.value.text);
+                            _controller.clear();
+                          },
                           child: Icon(
                             Icons.send,
                             color: Colors.white,
