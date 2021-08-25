@@ -125,12 +125,12 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
         widget._hairClientProfileProvider!.hairClientProfile;
     if (!profileObj.hairArtistMessagingUids
         .contains(widget._hairArtistUserProfile.uid)) {
-      widget._hairClientProfileProvider!.hairClientProfile
+      widget._hairClientProfileProvider!
           .addArtistUidToMessageList(widget._hairArtistUserProfile.uid);
-      Navigator.of(context).pop();
       widget._hairClientProfileProvider!.setHairClientBottomNavBarState(1);
       widget._hairClientProfileProvider!
           .setnewArtistUIDForMessages(widget._hairArtistUserProfile.uid);
+      Navigator.of(context).pop();
     } else {
       Navigator.of(context).pop();
       widget._hairClientProfileProvider!.setHairClientBottomNavBarState(1);
@@ -177,7 +177,7 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
                             onPressed: () async {
                               if (!widget._isDisplayForArtist) {
                                 await widget._hairClientProfileProvider!
-                                    .getUserDataFromBackend(_authProvider);
+                                    .getUserDataFromBackend();
                               }
                               Navigator.pop(context);
                             },

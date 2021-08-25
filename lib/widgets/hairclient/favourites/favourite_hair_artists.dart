@@ -19,8 +19,7 @@ class _FavouriteHairArtistsState extends State<FavouriteHairArtists> {
     super.initState();
     /*when initstate of this widget call the api to update favorite data*/
     Provider.of<HairClientProfileProvider>(context, listen: false)
-        .getUserDataFromBackend(
-            Provider.of<AuthenticationProvider>(context, listen: false));
+        .getUserDataFromBackend();
   }
 
   @override

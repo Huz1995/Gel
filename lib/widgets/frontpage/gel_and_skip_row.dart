@@ -21,20 +21,20 @@ class GelAndSkip extends StatelessWidget {
             image: AssetImage("assets/images/logo.png"),
           ),
           Spacer(flex: 1),
-          SmallButton(
-            child: Text(
-              "Skip",
-              style: Provider.of<FontSizeProvider>(context).bodyText2,
-            ),
-            backgroundColor: Theme.of(context).cardColor.withOpacity(0.6),
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                '/map',
-              );
-            },
-            buttonWidth: 60,
-          ),
+          // SmallButton(
+          //   child: Text(
+          //     "Skip",
+          //     style: Provider.of<FontSizeProvider>(context).bodyText2,
+          //   ),
+          //   backgroundColor: Theme.of(context).cardColor.withOpacity(0.6),
+          //   onPressed: () {
+          //     Navigator.pushNamed(
+          //       context,
+          //       '/map',
+          //     );
+          //   },
+          //   buttonWidth: 60,
+          // ),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.08,
           ),

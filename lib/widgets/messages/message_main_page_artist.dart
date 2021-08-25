@@ -33,6 +33,12 @@ class _MessagesMainPageArtitstState extends State<MessagesMainPageArtitst> {
         Provider.of<AuthenticationProvider>(context, listen: false));
     widget.hairArtistProvider!.getUserDataFromBackend();
     _msgService.socketStart();
+    if (this.mounted) {
+      _msgService.socket.on(widget.hairArtistProvider!.hairArtistProfile.uid,
+          (_) {
+        widget.hairArtistProvider!.getUserDataFromBackend();
+      });
+    }
     _msgService.artistRecieveNewMsgInit(widget.hairArtistProvider!);
     super.initState();
   }
@@ -47,7 +53,6 @@ class _MessagesMainPageArtitstState extends State<MessagesMainPageArtitst> {
   Widget build(BuildContext context) {
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
-
     return Scaffold(
       appBar: UIService.generalAppBar(context, "Messages", null),
       body: FutureBuilder(
@@ -70,22 +75,27 @@ class _MessagesMainPageArtitstState extends State<MessagesMainPageArtitst> {
                       onTap: () {
                         Navigator.of(context)
                             .push(
-                              MaterialPageRoute(
-                                builder: (context) => ChatPage(
-                                  metaChatData: metaChatData,
-                                  fontSizeProvider: _fontSizeProvider,
-                                  msgService: _msgService,
-                                ),
-                              ),
-                            )
-                            .then((_) => setState(() {}));
+                          MaterialPageRoute(
+                            builder: (context) => ChatPage(
+                              metaChatData: metaChatData,
+                              fontSizeProvider: _fontSizeProvider,
+                              msgService: _msgService,
+                            ),
+                          ),
+                        )
+                            .then(
+                          (_) {
+                            _msgService.socketStart();
+                            setState(() {});
+                          },
+                        );
                       },
                     ),
                   )
                   .toList(),
             );
           }
-          return Text("Hellor");
+          return Text("");
         },
       ),
     );

@@ -87,7 +87,8 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
-    _socket.destroy();
+    _socket.disconnect();
+    _socket.on('disconnect', (data) => print("gone"));
     widget.msgService!.socketStart();
     super.dispose();
   }

@@ -14,15 +14,15 @@ class HairClientProfileProvider extends ChangeNotifier {
   HairClientUserProfile _userProfile =
       HairClientUserProfile("", "", false, "", "", [], []);
   /*this token is used to send headers to back end to protect routes*/
-  late String _loggedInUserIdToken;
   int _hairClientBottomNavBarState = 2;
   String? _newArtistUIDForMessages;
+  AuthenticationProvider? _auth;
 
   /*when the provider is init, send the auth provider to store the logged in user token
   so can protect the routes on the back end*/
   HairClientProfileProvider(AuthenticationProvider auth) {
     /* when we initate the hair client profile then get the user data from the back end*/
-    _loggedInUserIdToken = auth.idToken;
+    _auth = auth;
   }
 
   int get hairClientBottomNavBarState {
@@ -40,13 +40,13 @@ class HairClientProfileProvider extends ChangeNotifier {
   }
 
   /*function that gets the client data form the backend when logs in*/
-  Future<void> getUserDataFromBackend(AuthenticationProvider auth) async {
+  Future<void> getUserDataFromBackend() async {
     /*issue a get req to hairClientProfile to get their information to display*/
     var response = await http.get(
       Uri.parse("http://192.168.0.11:3000/api/hairClientProfile/" +
-          auth.firebaseAuth.currentUser!.uid),
+          _auth!.firebaseAuth.currentUser!.uid),
       headers: {
-        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+        HttpHeaders.authorizationHeader: _auth!.idToken,
       },
     );
     /*convert the response from string to JSON*/
@@ -60,7 +60,7 @@ class HairClientProfileProvider extends ChangeNotifier {
       /*we use the HairArtistProfileProvider static method to create a user profile
       out of the raw jsonResponse coming in from the backend*/
       var hairArtistProfile = await HairArtistProfileProvider.createUserProfile(
-          backendHairArtistProfiles[i], false, _loggedInUserIdToken);
+          backendHairArtistProfiles[i], false, _auth!.idToken);
       /*store the object in list*/
       favHairArtistProfiles.add(hairArtistProfile);
     }
@@ -69,7 +69,7 @@ class HairClientProfileProvider extends ChangeNotifier {
     _userProfile = new HairClientUserProfile(
       jsonResponse['uid'],
       jsonResponse['email'],
-      auth.isHairArtist,
+      _auth!.isHairArtist,
       jsonResponse['profilePhotoUrl'],
       jsonResponse['name'],
       favHairArtistProfiles,
@@ -90,7 +90,7 @@ class HairClientProfileProvider extends ChangeNotifier {
         'name': _userProfile.name,
       },
       headers: {
-        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+        HttpHeaders.authorizationHeader: _auth!.idToken,
       },
     );
     notifyListeners();
@@ -121,7 +121,7 @@ class HairClientProfileProvider extends ChangeNotifier {
               'photoUrl': photoUrl,
             },
             headers: {
-              HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+              HttpHeaders.authorizationHeader: _auth!.idToken,
             },
           );
         },
@@ -144,7 +144,7 @@ class HairClientProfileProvider extends ChangeNotifier {
           'uid': _userProfile.uid,
         },
         headers: {
-          HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+          HttpHeaders.authorizationHeader: _auth!.idToken,
         },
       );
     };
@@ -172,7 +172,7 @@ class HairClientProfileProvider extends ChangeNotifier {
         'favouriteHairArtists': hairArtist.uid,
       },
       headers: {
-        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+        HttpHeaders.authorizationHeader: _auth!.idToken,
       },
     );
     notifyListeners();
@@ -189,7 +189,7 @@ class HairClientProfileProvider extends ChangeNotifier {
         'favouriteHairArtists': artistUID,
       },
       headers: {
-        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+        HttpHeaders.authorizationHeader: _auth!.idToken,
       },
     );
 
@@ -221,7 +221,7 @@ class HairClientProfileProvider extends ChangeNotifier {
         'hairClientUid': _userProfile.uid,
       },
       headers: {
-        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+        HttpHeaders.authorizationHeader: _auth!.idToken,
       },
     );
     /*the reponse contains and id of the response sub-object that is create by mongodb,
@@ -243,9 +243,14 @@ class HairClientProfileProvider extends ChangeNotifier {
         'score': review.score.toString(),
       },
       headers: {
-        HttpHeaders.authorizationHeader: _loggedInUserIdToken,
+        HttpHeaders.authorizationHeader: _auth!.idToken,
       },
     );
+  }
+
+  void addArtistUidToMessageList(String artistUID) {
+    _userProfile.addArtistUidToMessageList(artistUID);
+    notifyListeners();
   }
 
   void setnewArtistUIDForMessages(String? artistUID) {

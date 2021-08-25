@@ -16,6 +16,7 @@ class MessageWidget extends StatelessWidget {
   MessageWidget({this.metaChatData, this.msgService, this.onTap});
 
   Widget build(BuildContext context) {
+    print("ere");
     final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
 
     return GestureDetector(
@@ -61,12 +62,15 @@ class MessageWidget extends StatelessWidget {
                             SizedBox(
                               height: 6,
                             ),
-                            Text(
-                              "LATEST WISGET TEST",
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey.shade900,
-                                  fontWeight: FontWeight.normal),
+                            Container(
+                              height: 40,
+                              child: Text(
+                                metaChatData!.latestMessageTxt!,
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.grey.shade900,
+                                    fontWeight: FontWeight.normal),
+                              ),
                             ),
                           ],
                         ),
@@ -75,14 +79,15 @@ class MessageWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              // Text(
-              //   widget.time,
-              //   style: TextStyle(
-              //       fontSize: 12,
-              //       fontWeight: widget.isMessageRead
-              //           ? FontWeight.bold
-              //           : FontWeight.normal),
-              // ),
+              Text(
+                metaChatData!.latestMessageTime == null
+                    ? " "
+                    : metaChatData!.latestMessageTime!.toString(),
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey.shade900,
+                    fontWeight: FontWeight.normal),
+              ),
             ],
           ),
         ),

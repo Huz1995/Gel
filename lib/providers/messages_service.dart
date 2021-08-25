@@ -48,7 +48,6 @@ class MessagesSerivce {
   }
 
   void addNewMessageToUsers(String clientId, String artistId) {
-    print("new user");
     _socket.emit("_storeNewUIDs", {
       'clientUID': clientId,
       'artistUID': artistId,
@@ -65,6 +64,7 @@ class MessagesSerivce {
       Uri.parse(
           "http://192.168.0.11:3000/api/messages/metaChatData${artistOrClient}Sender"),
       body: {
+        'senderUID': senderUID,
         'recieverUIDs': recieverUIDs.toString(),
       },
       headers: {
@@ -74,7 +74,6 @@ class MessagesSerivce {
     var jsonResponse = (convert.jsonDecode(response.body) as List);
     List<MetaChatData> metaChatDataArray = [];
     print(jsonResponse);
-
     for (int i = 0; i < jsonResponse.length; i++) {
       String roomID;
       if (artistOrClient == "Artist") {
@@ -83,17 +82,20 @@ class MessagesSerivce {
         roomID = senderUID + " " + jsonResponse[i]['receiverUID'];
       }
       var metaChatData = MetaChatData(
-          receiverPhotoUrl: jsonResponse[i]['profilePhotoUrl'],
-          receiverUID: jsonResponse[i]['receiverUID'],
-          recieverName: jsonResponse[i]['receiverName'],
-          senderName: senderName,
-          senderUID: senderUID,
-          roomID: roomID);
-      // print("CMD\n");
-      // metaChatData.printCMD();
-      // print("\n");
-
-      metaChatDataArray.add(metaChatData);
+        receiverPhotoUrl: jsonResponse[i]['profilePhotoUrl'],
+        receiverUID: jsonResponse[i]['receiverUID'],
+        recieverName: jsonResponse[i]['receiverName'],
+        senderName: senderName,
+        senderUID: senderUID,
+        roomID: roomID,
+        latestMessageTxt: jsonResponse[i]['latestMessageTxt'],
+        latestMessageTime: jsonResponse[i]['latestMessageTime'] == " "
+            ? null
+            : DateTime.parse(jsonResponse[i]['latestMessageTime']),
+      );
+      if (!metaChatDataArray.contains(metaChatData)) {
+        metaChatDataArray.add(metaChatData);
+      }
     }
     return metaChatDataArray;
   }
@@ -123,10 +125,6 @@ class MessagesSerivce {
       roomID: jsonReponse['roomID'],
       messages: messages,
     );
-    // print("CHATROOM\n");
-    // chatRoom.printChatRoom();
-    // print("\n");
-
     return chatRoom;
   }
 
@@ -135,7 +133,6 @@ class MessagesSerivce {
   }
 
   void disconnectSocket() {
-    print("Socket disconneted");
     _socket.disconnect();
   }
 }

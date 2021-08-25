@@ -30,11 +30,15 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
   late MessagesSerivce _msgService;
   @override
   void initState() {
-    print("here");
-    print(widget.newArtistUIDForMessages);
     _msgService = MessagesSerivce(
         Provider.of<AuthenticationProvider>(context, listen: false));
     _msgService.socketStart();
+    if (this.mounted) {
+      _msgService.socket.on(widget.hairClientProvider!.hairClientProfile.uid,
+          (_) {
+        widget.hairClientProvider!.getUserDataFromBackend();
+      });
+    }
     if (widget.newArtistUIDForMessages != null) {
       _msgService.addNewMessageToUsers(
           widget.hairClientProvider!.hairClientProfile.uid,
@@ -65,6 +69,9 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
         builder: (BuildContext context,
             AsyncSnapshot<List<MetaChatData>> metaChatDataArray) {
           if (metaChatDataArray.hasData) {
+            print("\n");
+            print(metaChatDataArray.data);
+            print("\n");
             return ListView.builder(
               itemCount: widget.hairClientProvider!.hairClientProfile
                   .hairArtistMessagingUids.length,
@@ -75,15 +82,18 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
                   onTap: () {
                     Navigator.of(context)
                         .push(
-                          MaterialPageRoute(
-                            builder: (context) => ChatPage(
-                              metaChatData: metaChatDataArray.data?[index],
-                              fontSizeProvider: _fontSizeProvider,
-                              msgService: _msgService,
-                            ),
-                          ),
-                        )
-                        .then((_) => setState(() {}));
+                      MaterialPageRoute(
+                        builder: (context) => ChatPage(
+                          metaChatData: metaChatDataArray.data?[index],
+                          fontSizeProvider: _fontSizeProvider,
+                          msgService: _msgService,
+                        ),
+                      ),
+                    )
+                        .then((_) {
+                      _msgService.socketStart();
+                      setState(() {});
+                    });
                   },
                 );
               },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'chat_message_model.dart';
+
 class MetaChatData {
   String? receiverUID;
   String? recieverName;
@@ -7,14 +9,18 @@ class MetaChatData {
   String? senderUID;
   String? senderName;
   String? roomID;
+  String? latestMessageTxt;
+  DateTime? latestMessageTime;
 
   MetaChatData({
-    this.receiverUID,
-    this.recieverName,
-    this.receiverPhotoUrl,
-    this.senderUID,
-    this.senderName,
-    this.roomID,
+    @required this.receiverUID,
+    @required this.recieverName,
+    @required this.receiverPhotoUrl,
+    @required this.senderUID,
+    @required this.senderName,
+    @required this.roomID,
+    @required this.latestMessageTxt,
+    @required this.latestMessageTime,
   });
 
   void printCMD() {
