@@ -12,6 +12,8 @@ import 'package:gel/widgets/messages/message_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import 'chat_page.dart';
+
 class MessagesMainPageClient extends StatefulWidget {
   String? newArtistUIDForMessages;
   HairClientProfileProvider? hairClientProvider;
@@ -28,6 +30,7 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
   late MessagesSerivce _msgService;
   @override
   void initState() {
+    print("here");
     print(widget.newArtistUIDForMessages);
     _msgService = MessagesSerivce(
         Provider.of<AuthenticationProvider>(context, listen: false));
@@ -50,9 +53,6 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
   Widget build(BuildContext context) {
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
-
-    print(widget.hairClientProvider!.hairClientProfile.hairArtistMessagingUids);
-
     return Scaffold(
       appBar: UIService.generalAppBar(context, "Messages", null),
       body: FutureBuilder(
@@ -64,16 +64,27 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
             "Client"),
         builder: (BuildContext context,
             AsyncSnapshot<List<MetaChatData>> metaChatDataArray) {
-          print(metaChatDataArray.data);
           if (metaChatDataArray.hasData) {
             return ListView.builder(
               itemCount: widget.hairClientProvider!.hairClientProfile
                   .hairArtistMessagingUids.length,
               itemBuilder: (context, index) {
                 return MessageWidget(
-                  listIndex: index,
                   metaChatData: metaChatDataArray.data?[index],
                   msgService: _msgService,
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(
+                          MaterialPageRoute(
+                            builder: (context) => ChatPage(
+                              metaChatData: metaChatDataArray.data?[index],
+                              fontSizeProvider: _fontSizeProvider,
+                              msgService: _msgService,
+                            ),
+                          ),
+                        )
+                        .then((_) => setState(() {}));
+                  },
                 );
               },
               physics: ScrollPhysics(),

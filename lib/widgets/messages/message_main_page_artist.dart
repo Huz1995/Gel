@@ -8,12 +8,12 @@ import 'package:gel/providers/messages_service.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/hairclient/favourites/favourite_widget.dart';
+import 'package:gel/widgets/messages/chat_page.dart';
 import 'package:gel/widgets/messages/message_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class MessagesMainPageArtitst extends StatefulWidget {
-  String? newArtistUIDForMessages;
   HairArtistProfileProvider? hairArtistProvider;
   MessagesMainPageArtitst({
     @required this.hairArtistProvider,
@@ -45,47 +45,47 @@ class _MessagesMainPageArtitstState extends State<MessagesMainPageArtitst> {
 
   @override
   Widget build(BuildContext context) {
-    final _hairArtistProfileProvider =
-        Provider.of<HairArtistProfileProvider>(context);
     final _fontSizeProvider =
         Provider.of<FontSizeProvider>(context, listen: false);
 
     return Scaffold(
       appBar: UIService.generalAppBar(context, "Messages", null),
-      body:
-          // ListView.builder(
-          //   itemCount: _hairArtistProfileProvider
-          //       .hairArtistProfile.hairClientMessagingUids.length,
-          //   itemBuilder: (context, index) {
-          //     return Text(_hairArtistProfileProvider
-          //         .hairArtistProfile.hairClientMessagingUids[index]);
-          //   },
-          // ),
-          FutureBuilder(
+      body: FutureBuilder(
         future: _msgService.getChatMetaDataForUser(
-            _hairArtistProfileProvider
-                .hairArtistProfile.hairClientMessagingUids,
-            _hairArtistProfileProvider.hairArtistProfile.about.name,
-            _hairArtistProfileProvider.hairArtistProfile.uid,
+            widget
+                .hairArtistProvider!.hairArtistProfile.hairClientMessagingUids,
+            widget.hairArtistProvider!.hairArtistProfile.about.name,
+            widget.hairArtistProvider!.hairArtistProfile.uid,
             "Artist"),
         builder: (BuildContext context,
             AsyncSnapshot<List<MetaChatData>> metaChatDataArray) {
           print(metaChatDataArray.data);
           if (metaChatDataArray.hasData) {
-            return ListView.builder(
-              itemCount: _hairArtistProfileProvider
-                  .hairArtistProfile.hairClientMessagingUids.length,
-              itemBuilder: (context, index) {
-                return MessageWidget(
-                  listIndex: index,
-                  metaChatData: metaChatDataArray.data?[index],
-                  msgService: _msgService,
-                );
-              },
-              physics: ScrollPhysics(),
+            return ListView(
+              children: (metaChatDataArray.data as List)
+                  .map(
+                    (metaChatData) => MessageWidget(
+                      metaChatData: metaChatData,
+                      msgService: _msgService,
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                  metaChatData: metaChatData,
+                                  fontSizeProvider: _fontSizeProvider,
+                                  msgService: _msgService,
+                                ),
+                              ),
+                            )
+                            .then((_) => setState(() {}));
+                      },
+                    ),
+                  )
+                  .toList(),
             );
           }
-          return Text("");
+          return Text("Hellor");
         },
       ),
     );

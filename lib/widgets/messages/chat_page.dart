@@ -8,38 +8,95 @@ import 'package:gel/models/meta_chat_model.dart';
 import 'package:gel/providers/messages_service.dart';
 import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatPage extends StatefulWidget {
   late MetaChatData? metaChatData;
   late FontSizeProvider? fontSizeProvider;
   late MessagesSerivce? msgService;
 
-  ChatPage({this.metaChatData, this.fontSizeProvider, this.msgService});
+  ChatPage({
+    this.metaChatData,
+    this.fontSizeProvider,
+    this.msgService,
+  });
 
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
+  List<Message> messages = [];
+  ScrollController scontroller = ScrollController();
+  late IO.Socket _socket;
   late ChatRoom _chatRoom;
-  List<Message> messages = [
-    Message(txtMsg: '323', roomID: "sdsd", receiverUID: "sender"),
-    Message(txtMsg: "Hello, Will", receiverUID: "receiver"),
-    Message(txtMsg: "How have you been?", receiverUID: "receiver"),
-    Message(
-        txtMsg: "Hey Kriss, I am doing fine dude. wbu?", receiverUID: "sender"),
-    Message(txtMsg: "ehhhh, doing OK.", receiverUID: "receiver"),
-    Message(txtMsg: "Is there any thing wrong?", receiverUID: "sender"),
-  ];
+
   @override
   void initState() {
-    widget.msgService!.socketStart();
-    widget.msgService!.getChatRoom(widget.metaChatData!.roomID!);
+    getAndSetChatRoom();
+    widget.msgService!.disconnectSocket();
+    animateListViewToBottom();
+
+    try {
+      _socket = IO.io("http://192.168.0.11:3000", <String, dynamic>{
+        'transports': ['websocket'],
+        'autoConnect': false,
+      });
+      _socket.connect();
+      _socket.on('connect', (_) => print("connect: ${_socket.id}"));
+    } catch (error) {
+      print(error.toString());
+    }
+    _socket.on(widget.metaChatData!.senderUID!, (incommingMessage) {
+      Message messageObj = Message(
+        roomID: incommingMessage['room1'],
+        txtMsg: incommingMessage['txtMsg'],
+        receiverUID: incommingMessage['receiverUID'],
+        senderUID: incommingMessage['senderUID'],
+        time: DateTime.parse(incommingMessage['time']),
+      );
+      if (this.mounted) {
+        setState(() {
+          messages.add(messageObj);
+        });
+      }
+      messageObj.printMessage();
+    });
     super.initState();
+  }
+
+  void getAndSetChatRoom() async {
+    var dummy =
+        await widget.msgService!.getChatRoom(widget.metaChatData!.roomID!);
+    setState(() {
+      _chatRoom = dummy;
+      messages = _chatRoom.messages!;
+    });
+  }
+
+  void animateListViewToBottom() {
+    Timer(
+      Duration(milliseconds: 10),
+      () => scontroller.animateTo(
+        scontroller.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 500),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _socket.destroy();
+    widget.msgService!.socketStart();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!
+        .addPostFrameCallback((_) => animateListViewToBottom());
+
     final _controller = TextEditingController();
     return Scaffold(
       appBar: UIService.generalAppBar(
@@ -96,6 +153,7 @@ class _ChatPageState extends State<ChatPage> {
           Expanded(
             child: Container(
               child: ListView.builder(
+                controller: scontroller,
                 itemCount: messages.length,
                 shrinkWrap: true,
                 padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -105,15 +163,19 @@ class _ChatPageState extends State<ChatPage> {
                     padding: EdgeInsets.only(
                         left: 16, right: 16, top: 10, bottom: 10),
                     child: Align(
-                      alignment: (messages[index].receiverUID == "receiver"
-                          ? Alignment.topLeft
-                          : Alignment.topRight),
+                      alignment: (messages[index].receiverUID ==
+                              widget.metaChatData!.receiverUID
+                          ? Alignment.topRight
+                          : Alignment.topLeft),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: (messages[index].receiverUID == "receiver"
-                              ? Theme.of(context).primaryColor.withOpacity(0.5)
-                              : Theme.of(context).accentColor.withOpacity(0.5)),
+                          color: (messages[index].receiverUID ==
+                                  widget.metaChatData!.receiverUID
+                              ? Theme.of(context).accentColor.withOpacity(0.5)
+                              : Theme.of(context)
+                                  .primaryColor
+                                  .withOpacity(0.5)),
                         ),
                         padding: EdgeInsets.all(16),
                         child: Text(
@@ -173,8 +235,22 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                         FloatingActionButton(
                           onPressed: () {
-                            print(_controller.value.text);
-                            _controller.clear();
+                            if (_controller.value.text != "") {
+                              Message messageObj = Message(
+                                roomID: _chatRoom.roomID,
+                                txtMsg: _controller.value.text,
+                                receiverUID: widget.metaChatData!.receiverUID,
+                                senderUID: widget.metaChatData!.senderUID,
+                                time: DateTime.now(),
+                              );
+                              widget.msgService!.sendMessage(messageObj);
+                              setState(() {
+                                messages.add(messageObj);
+                              });
+                              messageObj.printMessage();
+                              print(_controller.value.text);
+                              _controller.clear();
+                            }
                           },
                           child: Icon(
                             Icons.send,

@@ -7,6 +7,7 @@ import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/general_profile/hair_artist_profile_display.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class FavouriteWidget extends StatelessWidget {
   late int? listIndex;
@@ -35,17 +36,22 @@ class FavouriteWidget extends StatelessWidget {
         ),
       ),
       child: Container(
-        padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+        //padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
+        child: Container(
+          margin: EdgeInsets.all(10),
+          height: 100,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).primaryColor.withOpacity(0.5),
           ),
-          color: Theme.of(context).primaryColor.withOpacity(0.2),
           child: Row(
             children: <Widget>[
               Expanded(
                 child: Row(
                   children: <Widget>[
+                    SizedBox(
+                      width: 16,
+                    ),
                     UIService.getProfilePicIcon(
                         hasProfilePic:
                             (hairArtistUserProfile!.profilePhotoUrl != null),
@@ -61,22 +67,30 @@ class FavouriteWidget extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              hairArtistUserProfile!.about.name,
-                              style: _fontSizeProvider.headline4,
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 20, 0, 0),
+                              child: Text(
+                                hairArtistUserProfile!.about.name,
+                                style: _fontSizeProvider.headline4,
+                              ),
                             ),
                             SizedBox(
-                              height: 6,
+                              height: 10,
                             ),
-                            // Text(
-                            //   widget.messageText,
-                            //   style: TextStyle(
-                            //       fontSize: 13,
-                            //       color: Colors.grey.shade600,
-                            //       fontWeight: widget.isMessageRead
-                            //           ? FontWeight.bold
-                            //           : FontWeight.normal),
-                            // ),
+                            RatingBarIndicator(
+                              rating: hairArtistUserProfile!.getAverageScore(),
+                              itemBuilder: (context, index) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              itemCount: 5,
+                              itemSize: 30.0,
+                              itemPadding:
+                                  EdgeInsets.symmetric(horizontal: 2.0),
+                            ),
                           ],
                         ),
                       ),
@@ -84,84 +98,10 @@ class FavouriteWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              // Text(
-              //   widget.time,
-              //   style: TextStyle(
-              //       fontSize: 12,
-              //       fontWeight: widget.isMessageRead
-              //           ? FontWeight.bold
-              //           : FontWeight.normal),
-              // ),
             ],
           ),
         ),
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
-  //   final _hairClientProfileProvider =
-  //       Provider.of<HairClientProfileProvider>(context);
-
-  //   return Column(
-  //     children: [
-  //       Container(
-  //         padding: const EdgeInsets.all(10.0),
-  //         height: 215,
-  //         child: Card(
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(30.0),
-  //           ),
-  //           color: listIndex! % 2 == 0
-  //               ? Theme.of(context).primaryColor.withOpacity(0.05)
-  //               : Theme.of(context).accentColor.withOpacity(0.05),
-  //           elevation: 20,
-  //           child: TextButton(
-  //             onPressed: () => Navigator.of(context).push(
-  //               MaterialPageRoute(
-  //                 builder: (context) => HairArtistProfileDisplay(
-  //                   hairArtistUserProfile: hairArtistUserProfile!,
-  //                   hairClientProfileProvider: _hairClientProfileProvider,
-  //                   fontSizeProvider: _fontSizeProvider,
-  //                   isFavOfClient: HairClientProfileProvider.isAFavorite(
-  //                       _hairClientProfileProvider.hairClientProfile,
-  //                       hairArtistUserProfile!),
-  //                   isForDisplay: true,
-  //                   isDisplayForArtist: false,
-  //                 ),
-  //               ),
-  //             ),
-  //             child: Row(
-  //               children: [
-  //                 Container(
-  //                   padding: EdgeInsets.all(16),
-  //                   margin: EdgeInsets.fromLTRB(4, 4, 0, 0),
-  //                   child: Column(
-  //                     children: [
-  //                       UIService.getProfilePicIcon(
-  //                           hasProfilePic:
-  //                               (hairArtistUserProfile!.profilePhotoUrl !=
-  //                                   null),
-  //                           context: context,
-  //                           url: hairArtistUserProfile!.profilePhotoUrl),
-  //                       SizedBox(
-  //                         height: 10,
-  //                       ),
-  //                       Text(
-  //                         hairArtistUserProfile!.about.name,
-  //                         style: _fontSizeProvider.headline4,
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 }

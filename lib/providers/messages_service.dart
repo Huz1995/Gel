@@ -55,6 +55,10 @@ class MessagesSerivce {
     });
   }
 
+  void sendMessage(Message message) {
+    _socket.emit("_sendMessage", message.toObject());
+  }
+
   Future<List<MetaChatData>> getChatMetaDataForUser(List<String> recieverUIDs,
       String senderName, String senderUID, String artistOrClient) async {
     var response = await http.post(
@@ -83,8 +87,12 @@ class MessagesSerivce {
           receiverUID: jsonResponse[i]['receiverUID'],
           recieverName: jsonResponse[i]['receiverName'],
           senderName: senderName,
-          senderUID: senderName,
+          senderUID: senderUID,
           roomID: roomID);
+      // print("CMD\n");
+      // metaChatData.printCMD();
+      // print("\n");
+
       metaChatDataArray.add(metaChatData);
     }
     return metaChatDataArray;
@@ -115,7 +123,10 @@ class MessagesSerivce {
       roomID: jsonReponse['roomID'],
       messages: messages,
     );
-    chatRoom.printChatRoom();
+    // print("CHATROOM\n");
+    // chatRoom.printChatRoom();
+    // print("\n");
+
     return chatRoom;
   }
 

@@ -16,4 +16,8 @@ class MetaChatData {
     this.senderName,
     this.roomID,
   });
+
+  void printCMD() {
+    print("receiverUID: ${receiverUID},senderUID: ${senderUID}");
+  }
 }
