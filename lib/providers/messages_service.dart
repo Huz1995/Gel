@@ -10,6 +10,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
+/*a service used to deal wit the message system between client and artist*/
 class MessagesSerivce {
   late IO.Socket _socket;
   late AuthenticationProvider _auth;
@@ -18,6 +19,10 @@ class MessagesSerivce {
     _auth = auth;
   }
 
+  /*when the client wants to message new artist, the socket will emit the clients
+  uid that wants to speak to artist, the channel isunique depending on the artist uid
+  so the artist will recieve and then add to the client message list containing all the messages
+  the artist is speakin too*/
   Future<void> artistRecieveNewMsgInit(
       HairArtistProfileProvider hairArtistProfileProvider) async {
     _socket.on(
@@ -34,6 +39,7 @@ class MessagesSerivce {
     );
   }
 
+  /*fuction that starts the socket connection*/
   void socketStart() {
     try {
       _socket = IO.io("http://192.168.0.11:3000", <String, dynamic>{
@@ -47,6 +53,9 @@ class MessagesSerivce {
     }
   }
 
+  /*function that emits the uids when the client wants to message to the artist
+  which then stores in the database and sends the client uid to the artist
+  using the fuction 2 above this*/
   void addNewMessageToUsers(String clientId, String artistId) {
     _socket.emit("_storeNewUIDs", {
       'clientUID': clientId,
@@ -54,12 +63,16 @@ class MessagesSerivce {
     });
   }
 
+  /*esnds a message on the send message channel with user sends message*/
   void sendMessage(Message message) {
     _socket.emit("_sendMessage", message.toObject());
   }
 
+  /*this function gets the meta chat data for the user when requested*/
   Future<List<MetaChatData>> getChatMetaDataForUser(List<String> recieverUIDs,
       String senderName, String senderUID, String artistOrClient) async {
+    /*depends on if the artist of client is the sender is requesting the meta data to display on message
+       main page*/
     var response = await http.post(
       Uri.parse(
           "http://192.168.0.11:3000/api/messages/metaChatData${artistOrClient}Sender"),

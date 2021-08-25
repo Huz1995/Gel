@@ -9,6 +9,7 @@ import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/messages/chat_page.dart';
 import 'package:provider/provider.dart';
 
+/*displays meta chat data on message widget*/
 class MessageWidget extends StatelessWidget {
   late MetaChatData? metaChatData;
   late MessagesSerivce? msgService;
@@ -16,7 +17,6 @@ class MessageWidget extends StatelessWidget {
   MessageWidget({this.metaChatData, this.msgService, this.onTap});
 
   Widget build(BuildContext context) {
-    print("ere");
     final _fontSizeProvider = Provider.of<FontSizeProvider>(context);
 
     return GestureDetector(
@@ -38,6 +38,7 @@ class MessageWidget extends StatelessWidget {
                     SizedBox(
                       width: 16,
                     ),
+                    /*get receiver profile pic*/
                     UIService.getProfilePicIcon(
                         hasProfilePic: (metaChatData!.receiverPhotoUrl != null),
                         context: context,
@@ -52,6 +53,7 @@ class MessageWidget extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
+                            /*display reciever name*/
                             Padding(
                               padding: const EdgeInsets.only(top: 20),
                               child: Text(
@@ -62,6 +64,7 @@ class MessageWidget extends StatelessWidget {
                             SizedBox(
                               height: 6,
                             ),
+                            /*display latest mesage*/
                             Container(
                               height: 40,
                               child: Text(
@@ -79,6 +82,7 @@ class MessageWidget extends StatelessWidget {
                   ],
                 ),
               ),
+              /*display the latest message time*/
               Text(
                 metaChatData!.latestMessageTime == null
                     ? " "

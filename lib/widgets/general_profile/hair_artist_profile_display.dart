@@ -120,18 +120,29 @@ class _HairArtistProfileDisplayState extends State<HairArtistProfileDisplay> {
         });
   }
 
+  /*when the client presses the message button to message the artist*/
   void Function()? _onPressMessage() {
+    /*create profile object for the hair client for better reading*/
     HairClientUserProfile profileObj =
         widget._hairClientProfileProvider!.hairClientProfile;
+    /*need to check if the client has messaged the artist before*/
     if (!profileObj.hairArtistMessagingUids
         .contains(widget._hairArtistUserProfile.uid)) {
+      /*if not then add artist uid to the hair client profile, which then calls
+      notify listeners to update the array - message main page listens to this array*/
       widget._hairClientProfileProvider!
           .addArtistUidToMessageList(widget._hairArtistUserProfile.uid);
+      /*set the navigation of the bottom chat bar to the message widget*/
       widget._hairClientProfileProvider!.setHairClientBottomNavBarState(1);
+      /*this tells the provider there is a new artist we want to message to,
+      calls notify listeners and the client main page passes this info to the messages main page
+      widget when navigating to call the addNewMessageToUsers function which emits the uids to the socket
+      so the artist knows and the uids are stored in the db*/
       widget._hairClientProfileProvider!
           .setnewArtistUIDForMessages(widget._hairArtistUserProfile.uid);
       Navigator.of(context).pop();
     } else {
+      /*if not new then just go to the message page*/
       Navigator.of(context).pop();
       widget._hairClientProfileProvider!.setHairClientBottomNavBarState(1);
     }

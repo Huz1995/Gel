@@ -10,6 +10,7 @@ import 'package:gel/providers/text_size_provider.dart';
 import 'package:gel/providers/ui_service.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+/*this widget displays the messages for the user*/
 class ChatPage extends StatefulWidget {
   late MetaChatData? metaChatData;
   late FontSizeProvider? fontSizeProvider;
@@ -33,10 +34,13 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void initState() {
+    /*get the latest chat room from the backend*/
     getAndSetChatRoom();
+    /*disconnect socket from previous page*/
     widget.msgService!.disconnectSocket();
+    /*go the bottom of the page ie last message*/
     animateListViewToBottom();
-
+    /*start a new socket*/
     try {
       _socket = IO.io("http://192.168.0.11:3000", <String, dynamic>{
         'transports': ['websocket'],
@@ -47,6 +51,9 @@ class _ChatPageState extends State<ChatPage> {
     } catch (error) {
       print(error.toString());
     }
+    /*whenever the other user is sending a message on this channel then
+    add the message to the list message list and set the state to re render the list
+    the message will be stored in the chat room on the server*/
     _socket.on(widget.metaChatData!.senderUID!, (incommingMessage) {
       Message messageObj = Message(
         roomID: incommingMessage['room1'],
@@ -65,6 +72,7 @@ class _ChatPageState extends State<ChatPage> {
     super.initState();
   }
 
+  /*this sets the chat room*/
   void getAndSetChatRoom() async {
     var dummy =
         await widget.msgService!.getChatRoom(widget.metaChatData!.roomID!);
@@ -85,6 +93,7 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
+  /*disconnects this chat socket and starts the other socket*/
   @override
   void dispose() {
     _socket.disconnect();
@@ -153,6 +162,7 @@ class _ChatPageState extends State<ChatPage> {
         children: [
           Expanded(
             child: Container(
+              /*message bubbles from sender or reciever perspective*/
               child: ListView.builder(
                 controller: scontroller,
                 itemCount: messages.length,
@@ -190,6 +200,7 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
           ),
+          /*this is the text field and submission button*/
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Stack(
@@ -203,22 +214,22 @@ class _ChatPageState extends State<ChatPage> {
                     color: Colors.white,
                     child: Row(
                       children: <Widget>[
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () {},
+                        //   child: Container(
+                        //     height: 30,
+                        //     width: 30,
+                        //     decoration: BoxDecoration(
+                        //       color: Theme.of(context).primaryColor,
+                        //       borderRadius: BorderRadius.circular(30),
+                        //     ),
+                        //     child: Icon(
+                        //       Icons.add,
+                        //       color: Colors.white,
+                        //       size: 20,
+                        //     ),
+                        //   ),
+                        // ),
                         SizedBox(
                           width: 15,
                         ),
@@ -235,8 +246,11 @@ class _ChatPageState extends State<ChatPage> {
                           width: 15,
                         ),
                         FloatingActionButton(
+                          /*sending a message*/
                           onPressed: () {
+                            /*make sure it is not empty*/
                             if (_controller.value.text != "") {
+                              /*create a new msg object from the text field value*/
                               Message messageObj = Message(
                                 roomID: _chatRoom.roomID,
                                 txtMsg: _controller.value.text,
@@ -244,12 +258,13 @@ class _ChatPageState extends State<ChatPage> {
                                 senderUID: widget.metaChatData!.senderUID,
                                 time: DateTime.now(),
                               );
+                              /*emit message on socket so the receiver can get it or stores in db*/
                               widget.msgService!.sendMessage(messageObj);
+                              /*add this to the list so the user can see it on the ui and set state*/
                               setState(() {
                                 messages.add(messageObj);
                               });
-                              messageObj.printMessage();
-                              print(_controller.value.text);
+                              /*wipe the text field*/
                               _controller.clear();
                             }
                           },

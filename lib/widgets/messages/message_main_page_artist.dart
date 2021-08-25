@@ -13,6 +13,7 @@ import 'package:gel/widgets/messages/message_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+/*widget that deals with the messenging from the artist side*/
 class MessagesMainPageArtitst extends StatefulWidget {
   HairArtistProfileProvider? hairArtistProvider;
   MessagesMainPageArtitst({
@@ -29,16 +30,21 @@ class _MessagesMainPageArtitstState extends State<MessagesMainPageArtitst> {
 
   @override
   void initState() {
+    /*create a messenging service*/
     _msgService = MessagesSerivce(
         Provider.of<AuthenticationProvider>(context, listen: false));
     widget.hairArtistProvider!.getUserDataFromBackend();
     _msgService.socketStart();
+    /*this channel allows this widget to know whenever the client is sending a message to 
+     the reciever ie this artist, when it does it will just get data from the back end to reset
+     and display the new meta chat data for this widget, ie the latest text and time*/
     if (this.mounted) {
       _msgService.socket.on(widget.hairArtistProvider!.hairArtistProfile.uid,
           (_) {
         widget.hairArtistProvider!.getUserDataFromBackend();
       });
     }
+    /*socket that allows the artist to know weahter a new client wants to messge them*/
     _msgService.artistRecieveNewMsgInit(widget.hairArtistProvider!);
     super.initState();
   }
@@ -49,6 +55,7 @@ class _MessagesMainPageArtitstState extends State<MessagesMainPageArtitst> {
     super.dispose();
   }
 
+/*same as client widget bur form artist perspective*/
   @override
   Widget build(BuildContext context) {
     final _fontSizeProvider =

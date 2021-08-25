@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'chat_message_model.dart';
 
+/*model used for the message widget*/
 class MetaChatData {
   String? receiverUID;
   String? recieverName;
