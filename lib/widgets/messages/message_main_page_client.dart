@@ -79,11 +79,14 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
             "Client"),
         builder: (BuildContext context,
             AsyncSnapshot<List<MetaChatData>> metaChatDataArray) {
+          /*if the data is not null ie loading is done*/
           if (metaChatDataArray.hasData) {
             return ListView.builder(
               itemCount: widget.hairClientProvider!.hairClientProfile
                   .hairArtistMessagingUids.length,
               itemBuilder: (context, index) {
+                /*pass the msg service, an on tap function that renders the chat page when client clicks on the
+                message widget, and the meta chat data*/
                 return MessageWidget(
                   metaChatData: metaChatDataArray.data?[index],
                   msgService: _msgService,
@@ -98,6 +101,7 @@ class _MessagesMainPageClientState extends State<MessagesMainPageClient> {
                         ),
                       ),
                     )
+                        /*we call then so when the user pops of chat page we start socket and set the state to reset widget*/
                         .then((_) {
                       _msgService.socketStart();
                       setState(() {});

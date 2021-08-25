@@ -84,10 +84,13 @@ class MessagesSerivce {
         HttpHeaders.authorizationHeader: _auth.idToken,
       },
     );
+    /*we get the meta data back as raw json*/
     var jsonResponse = (convert.jsonDecode(response.body) as List);
     List<MetaChatData> metaChatDataArray = [];
-    print(jsonResponse);
+    /*convert to meta data objects*/
     for (int i = 0; i < jsonResponse.length; i++) {
+      /*the roomID is clientUID + " " + artistUID* so need artistOrClient to decide who is the sender
+      to create the roomID*/
       String roomID;
       if (artistOrClient == "Artist") {
         roomID = jsonResponse[i]['receiverUID'] + " " + senderUID;
@@ -102,6 +105,7 @@ class MessagesSerivce {
         senderUID: senderUID,
         roomID: roomID,
         latestMessageTxt: jsonResponse[i]['latestMessageTxt'],
+        /*cant parse if no message as time = ' ' from server*/
         latestMessageTime: jsonResponse[i]['latestMessageTime'] == " "
             ? null
             : DateTime.parse(jsonResponse[i]['latestMessageTime']),
@@ -110,9 +114,13 @@ class MessagesSerivce {
         metaChatDataArray.add(metaChatData);
       }
     }
+    metaChatDataArray
+        .sort((a, b) => a.latestMessageTime!.compareTo(b.latestMessageTime!));
     return metaChatDataArray;
   }
 
+  /*function that gets chat room when the user clicks on a message widget
+  that contains the meta chat data*/
   Future<ChatRoom> getChatRoom(String roomId) async {
     var response = await http.get(
       Uri.parse("http://192.168.0.11:3000/api/messages/chatroom/" + roomId),
@@ -122,6 +130,7 @@ class MessagesSerivce {
     );
     var jsonReponse = convert.jsonDecode(response.body);
     var jsonMessages = jsonReponse['messages'] as List;
+    /*need to create message objects out of the messages*/
     List<Message> messages = [];
     for (int i = 0; i < jsonMessages.length; i++) {
       Message message = Message(
