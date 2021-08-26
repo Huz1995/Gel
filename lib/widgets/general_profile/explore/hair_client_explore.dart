@@ -21,9 +21,15 @@ class HairClientExplore extends StatefulWidget {
   _HairClientExploreState createState() => _HairClientExploreState();
 }
 
-class _HairClientExploreState extends State<HairClientExplore> {
+class _HairClientExploreState extends State<HairClientExplore>
+    with AutomaticKeepAliveClientMixin {
   /*init controllers*/
-  late GoogleMapController _googleMapController;
+  //late GoogleMapController _googleMapController;
+  Completer<GoogleMapController> _googleMapController = Completer();
+
+  @override
+  bool get wantKeepAlive => true;
+
   FloatingSearchBarController _floatingSearchBarController =
       FloatingSearchBarController();
   late MapHairArtistRetrievalProvider _harp;
@@ -53,7 +59,8 @@ class _HairClientExploreState extends State<HairClientExplore> {
   /*function that takes in a location and moves to location using
   the controller*/
   Future<void> _moveMapToLocation(Location location) async {
-    _googleMapController.animateCamera(
+    final GoogleMapController controller = await _googleMapController.future;
+    controller.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(location.lat!, location.lng!),
@@ -159,7 +166,8 @@ class _HairClientExploreState extends State<HairClientExplore> {
           myLocationEnabled: true,
           myLocationButtonEnabled: false,
           onMapCreated: (GoogleMapController controller) {
-            _googleMapController = controller;
+            // _googleMapController = controller;
+            _googleMapController.complete(controller);
             _onMapCreated();
           },
         ),

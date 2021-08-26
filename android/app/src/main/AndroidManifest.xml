@@ -1,6 +1,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gel">
 
+
+    <queries>
+    <!-- If your app opens https URLs -->
+    <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="https" />
+    </intent>
+    <!-- If your app makes calls -->
+    <intent>
+        <action android:name="android.intent.action.DIAL" />
+        <data android:scheme="tel" />
+    </intent>
+    <!-- If your app emails -->
+    <intent>
+        <action android:name="android.intent.action.SEND" />
+        <data android:mimeType="*/*" />
+    </intent>
+    </queries>
     <!--
     Internet permissions do not affect the `permission_handler` plugin, but are required if your app needs access to
     the internet.
@@ -64,6 +82,9 @@
    <application
         android:label="Gel"
         android:icon="@mipmap/ic_launcher">
+                      <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAb8xDllLuty9PuJRgXl7HG4vB3QXhKKbU"
+               />
 
         <!-- facebook authentication config -->
         <meta-data android:name="com.facebook.sdk.ApplicationId" 
@@ -85,24 +106,6 @@
         </activity>
         <!-- facebook authentication config -->
 
-
-        <queries>
-        <!-- If your app opens https URLs -->
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="https" />
-        </intent>
-        <!-- If your app makes calls -->
-        <intent>
-            <action android:name="android.intent.action.DIAL" />
-            <data android:scheme="tel" />
-        </intent>
-        <!-- If your app emails -->
-        <intent>
-            <action android:name="android.intent.action.SEND" />
-            <data android:mimeType="*/*" />
-        </intent>
-        </queries>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -127,9 +130,7 @@
               android:name="io.flutter.embedding.android.SplashScreenDrawable"
               android:resource="@drawable/launch_background"
               />
-              <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyBugDfKHiLLQKGsYs6gR_2ABuy6FwSBFOE"
-               />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -139,6 +140,6 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
-            android:value="2" />
+            android:value="2" />   
     </application>
 </manifest>
