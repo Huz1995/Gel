@@ -32,12 +32,13 @@ class _ReviewWidgetState extends State<ReviewWidget> {
           } else
             print("nothing");
         },
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+        child: Container(
+          margin: EdgeInsets.all(10),
+          height: 100,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).primaryColor.withOpacity(0.5),
           ),
-          color: Theme.of(context).cardColor.withOpacity(0),
-          elevation: 20,
           child: Row(
             children: [
               Container(

@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gel/models/location.dart';
 import 'package:gel/models/place_search.dart';
+import 'package:gel/providers/custom_dialogs.dart';
 import 'package:gel/providers/hair_client_profile_provider.dart';
 import 'package:gel/providers/map_hair_artists_retrieval.dart';
 import 'package:gel/providers/map_places_provider.dart';
 import 'package:gel/providers/text_size_provider.dart';
+import 'package:gel/providers/ui_service.dart';
 import 'package:gel/widgets/general_profile/hair_artist_profile_display.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -48,7 +50,7 @@ class _HairClientExploreState extends State<HairClientExplore>
               print(pos);
               Location location =
                   Location(lat: pos.latitude, lng: pos.longitude);
-              _moveMapToLocation(location);
+              _moveMapToLocation(location, null);
             },
           );
         }
@@ -58,13 +60,13 @@ class _HairClientExploreState extends State<HairClientExplore>
 
   /*function that takes in a location and moves to location using
   the controller*/
-  Future<void> _moveMapToLocation(Location location) async {
+  Future<void> _moveMapToLocation(Location location, double? zoom) async {
     final GoogleMapController controller = await _googleMapController.future;
     controller.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(location.lat!, location.lng!),
-          zoom: 10,
+          zoom: zoom == null ? 10 : zoom,
         ),
       ),
     );
@@ -112,7 +114,7 @@ class _HairClientExploreState extends State<HairClientExplore>
         var location =
             await _mapLocationProvider.getPlaceDetails(result!.placeId!);
         /*move the map to the location*/
-        _moveMapToLocation(location);
+        _moveMapToLocation(location, 12);
         /*closed the place list from the search bar*/
         _floatingSearchBarController.close();
         /*use the hair artist retrival provider to get hair artists
@@ -125,27 +127,42 @@ class _HairClientExploreState extends State<HairClientExplore>
           /*the provider with iterate for each hair artist profile, so send this to
           to on tap funnction to create the hair artist user display widget*/
           onTap: (userProfile) => () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => HairArtistProfileDisplay(
-                  hairArtistUserProfile: userProfile,
-                  /*if the hair artist display is coming from the artist route of the map
+            CustomDialogs.showMyDialogThreeButtons(
+              context: context,
+              title: Text("Get Directions"),
+              body: [
+                Text("Get directions to artist or navigate to their page")
+              ],
+              buttonOnechild: Text("Back"),
+              buttonOneOnPressed: () => Navigator.of(context).pop(),
+              buttonTwochild: Text("Direction"),
+              buttonTwoOnPressed: () => print("Getting directions"),
+              buttonThreechild: Text("Artist Profile"),
+              buttonThreeOnPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => HairArtistProfileDisplay(
+                      hairArtistUserProfile: userProfile,
+                      /*if the hair artist display is coming from the artist route of the map
                   we dont need hair artist provider*/
-                  hairClientProfileProvider: isDisplayForArtist!
-                      ? null
-                      : widget._hairClientProfileProvider,
-                  fontSizeProvider: _fontSizeProvider,
-                  /*if the hair artist display is coming from the artist route of the map
+                      hairClientProfileProvider: isDisplayForArtist!
+                          ? null
+                          : widget._hairClientProfileProvider,
+                      fontSizeProvider: _fontSizeProvider,
+                      /*if the hair artist display is coming from the artist route of the map
                   we dont need too check if artist if favorite of the client*/
-                  isFavOfClient: isDisplayForArtist
-                      ? null
-                      : HairClientProfileProvider.isAFavorite(
-                          widget._hairClientProfileProvider!.hairClientProfile,
-                          userProfile),
-                  isForDisplay: true,
-                  isDisplayForArtist: isDisplayForArtist,
-                ),
-              ),
+                      isFavOfClient: isDisplayForArtist
+                          ? null
+                          : HairClientProfileProvider.isAFavorite(
+                              widget._hairClientProfileProvider!
+                                  .hairClientProfile,
+                              userProfile),
+                      isForDisplay: true,
+                      isDisplayForArtist: isDisplayForArtist,
+                    ),
+                  ),
+                );
+              },
             );
           },
         );
