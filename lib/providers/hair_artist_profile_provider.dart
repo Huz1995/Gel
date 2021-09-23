@@ -96,8 +96,9 @@ class HairArtistProfileProvider extends ChangeNotifier {
     for (int i = 0; i < reviewList.length; i++) {
       /*itr through list and get reviwer details*/
       var response = await http.get(
-        Uri.parse("http://192.168.0.11:3000/api/hairClientProfile/reviewer/" +
-            reviewList[i]['reviewerUID']),
+        Uri.parse(
+            "https://gel-backend.herokuapp.com/api/hairClientProfile/reviewer/" +
+                reviewList[i]['reviewerUID']),
         headers: {
           HttpHeaders.authorizationHeader: loggedInUserIdToken,
         },
@@ -123,7 +124,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
   Future<void> getUserDataFromBackend() async {
     /*issue a get req to hairArtistProfile to get their information to display*/
     var response = await http.get(
-      Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/" +
+      Uri.parse("https://gel-backend.herokuapp.com/api/hairArtistProfile/" +
           _auth.firebaseAuth.currentUser!.uid),
       headers: {
         HttpHeaders.authorizationHeader: _loggedInUserIdToken,
@@ -156,7 +157,8 @@ class HairArtistProfileProvider extends ChangeNotifier {
         _userProfile.addPhotoUrl(photoUrl);
         /*send the url to backend and store in mongodb for persistance*/
         await http.put(
-          Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/photos"),
+          Uri.parse(
+              "https://gel-backend.herokuapp.com/api/hairArtistProfile/photos"),
           body: {
             'uid': _userProfile.uid,
             'photoUrl': photoUrl,
@@ -188,7 +190,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
           /*send the url to backend and store in mongodb for persistance*/
           await http.put(
             Uri.parse(
-                "http://192.168.0.11:3000/api/hairArtistProfile/profilepicture"),
+                "https://gel-backend.herokuapp.com/api/hairArtistProfile/profilepicture"),
             body: {
               'uid': _userProfile.uid,
               'photoUrl': photoUrl,
@@ -212,7 +214,7 @@ class HairArtistProfileProvider extends ChangeNotifier {
       /*remove from the database*/
       http.delete(
         Uri.parse(
-            "http://192.168.0.11:3000/api/hairArtistProfile/profilepicture"),
+            "https://gel-backend.herokuapp.com/api/hairArtistProfile/profilepicture"),
         body: {
           'uid': _userProfile.uid,
         },
@@ -235,9 +237,10 @@ class HairArtistProfileProvider extends ChangeNotifier {
   /*about ui form updates the object aabout data, take that data and store in backend*/
   Future<void> setAboutDetails() async {
     await http.put(
-      Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/about/" +
-          _userProfile.uid +
-          "/"),
+      Uri.parse(
+          "https://gel-backend.herokuapp.com/api/hairArtistProfile/about/" +
+              _userProfile.uid +
+              "/"),
       body: _userProfile.about.toObject(),
       headers: {
         HttpHeaders.authorizationHeader: _loggedInUserIdToken,
@@ -254,7 +257,8 @@ class HairArtistProfileProvider extends ChangeNotifier {
       () async {
         _userProfile.deletePhotoUrl(url);
         http.delete(
-          Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/photos"),
+          Uri.parse(
+              "https://gel-backend.herokuapp.com/api/hairArtistProfile/photos"),
           body: {
             'uid': _userProfile.uid,
             'photoUrl': url,
@@ -271,9 +275,10 @@ class HairArtistProfileProvider extends ChangeNotifier {
   /*function that takes in lat,lng and stores it in the databse*/
   Future<void> updateHairArtistLocation(double lat, double lng) async {
     await http.put(
-      Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/location/" +
-          _userProfile.uid +
-          "/"),
+      Uri.parse(
+          "https://gel-backend.herokuapp.com/api/hairArtistProfile/location/" +
+              _userProfile.uid +
+              "/"),
       body: {
         'lat': lat.toString(),
         'lng': lng.toString(),

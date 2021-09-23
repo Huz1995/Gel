@@ -31,7 +31,7 @@ class MapHairArtistRetrievalProvider with ChangeNotifier {
   Future<void> getHairArtistsAtLocation(Location location) async {
     _searchedHairArtists = [];
     var response = await http.post(
-      Uri.parse("http://192.168.0.11:3000/api/searchHairArtists/"),
+      Uri.parse("https://gel-backend.herokuapp.com/api/searchHairArtists/"),
       body: {
         'lat': location.lat.toString(),
         'lng': location.lng.toString(),

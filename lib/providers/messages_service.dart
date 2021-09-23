@@ -42,7 +42,7 @@ class MessagesSerivce {
   /*fuction that starts the socket connection*/
   void socketStart() {
     try {
-      _socket = IO.io("http://192.168.0.11:3000", <String, dynamic>{
+      _socket = IO.io("https://gel-backend.herokuapp.com", <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': false,
       });
@@ -75,7 +75,7 @@ class MessagesSerivce {
        main page*/
     var response = await http.post(
       Uri.parse(
-          "http://192.168.0.11:3000/api/messages/metaChatData${artistOrClient}Sender"),
+          "https://gel-backend.herokuapp.com/api/messages/metaChatData${artistOrClient}Sender"),
       body: {
         'senderUID': senderUID,
         'recieverUIDs': recieverUIDs.toString(),
@@ -123,7 +123,8 @@ class MessagesSerivce {
   that contains the meta chat data*/
   Future<ChatRoom> getChatRoom(String roomId) async {
     var response = await http.get(
-      Uri.parse("http://192.168.0.11:3000/api/messages/chatroom/" + roomId),
+      Uri.parse(
+          "https://gel-backend.herokuapp.com/api/messages/chatroom/" + roomId),
       headers: {
         HttpHeaders.authorizationHeader: _auth.idToken,
       },

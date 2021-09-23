@@ -42,7 +42,7 @@ class RegistrationOptions extends StatelessWidget {
           child: FacebookAuthButton(
             onPressed: () async {
               try {
-                await _authenticationProvider.facebookRegistration();
+                await _authenticationProvider.facebookRegistration(context);
               } catch (error) {
                 return CustomDialogs.showMyDialogOneButton(
                   context: context,
@@ -74,7 +74,7 @@ class RegistrationOptions extends StatelessWidget {
             text: "Register with Google",
             onPressed: () async {
               try {
-                await _authenticationProvider.googleRegistration();
+                await _authenticationProvider.googleRegistration(context);
               } catch (error) {
                 if (error.toString() !=
                     "Null check operator used on a null value") {

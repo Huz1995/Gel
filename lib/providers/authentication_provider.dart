@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:gel/models/both_type_user_auth_model.dart';
 import 'package:gel/models/login_auth_model.dart';
+import 'package:gel/providers/custom_dialogs.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -13,6 +14,7 @@ class AuthenticationProvider with ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FacebookLogin _facebookSignIn = FacebookLogin();
   late StreamController<bool> _streamController;
+  bool _isAuthenticating = false;
   late String? _idToken;
   bool _isLoggedIn = false;
   bool _isHairArtist = false;
@@ -46,7 +48,7 @@ class AuthenticationProvider with ChangeNotifier {
           registerData.setUID(_auth.currentUser!.uid);
           await http.post(
             Uri.parse(
-                "http://192.168.0.11:3000/api/authentication/registration"),
+                "https://gel-backend.herokuapp.com/api/authentication/registration"),
             body: registerData.toObject(),
           );
           /*set isLogged in and hairArtist booleans so main.dart can render correct screen
@@ -110,13 +112,14 @@ class AuthenticationProvider with ChangeNotifier {
     registerData.setPhotoURL(photoURL);
     /*Send the data to the bak end*/
     var response = await http.get(
-      Uri.parse("http://192.168.0.11:3000/api/authentication/" +
+      Uri.parse("https://gel-backend.herokuapp.com/api/authentication/" +
           _auth.currentUser!.uid),
     );
     /*the data base will check is user is already registered and end response*/
     if (response.body == "User does not exist") {
       await http.post(
-        Uri.parse("http://192.168.0.11:3000/api/authentication/registration"),
+        Uri.parse(
+            "https://gel-backend.herokuapp.com/api/authentication/registration"),
         body: registerData.toObject(),
       );
       /*set isLogged in and hairArtist booleans so main.dart can render correct screen
@@ -146,7 +149,7 @@ class AuthenticationProvider with ChangeNotifier {
   }
 
   /*function that allows user to reg with google*/
-  Future<void> googleRegistration() async {
+  Future<void> googleRegistration(BuildContext context) async {
     final AuthCredential credential = await _googleGetAuthCredential();
     try {
       await _auth.signInWithCredential(credential);
@@ -154,14 +157,21 @@ class AuthenticationProvider with ChangeNotifier {
       throw e.toString();
     }
     try {
+      CustomDialogs.authDiag(
+        context: context,
+        title: Text("Registering"),
+        body: [Text("Please wait")],
+      );
       await _registerUser(_auth.currentUser!.photoURL!);
+      Navigator.of(context, rootNavigator: true).pop();
     } catch (e) {
+      Navigator.of(context, rootNavigator: true).pop();
       throw e.toString();
     }
   }
 
   /*function that allows user to reg with google*/
-  Future<void> facebookRegistration() async {
+  Future<void> facebookRegistration(BuildContext context) async {
     final FacebookLoginResult result = await _facebookSignIn.logIn(['email']);
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
@@ -173,8 +183,15 @@ class AuthenticationProvider with ChangeNotifier {
           throw e.toString();
         }
         try {
+          CustomDialogs.authDiag(
+            context: context,
+            title: Text("Registering"),
+            body: [Text("Please wait")],
+          );
           await _registerUser(_auth.currentUser!.photoURL!);
+          Navigator.of(context, rootNavigator: true).pop();
         } catch (e) {
+          Navigator.of(context, rootNavigator: true).pop();
           throw e.toString();
         }
         break;
@@ -199,7 +216,7 @@ class AuthenticationProvider with ChangeNotifier {
     /*need to query the database to see if user is hair artist or client logs in
       to render the correct screen*/
     var response = await http.get(
-      Uri.parse("http://192.168.0.11:3000/api/authentication/" +
+      Uri.parse("https://gel-backend.herokuapp.com/api/authentication/" +
           _auth.currentUser!.uid),
     );
     _isHairArtist = (response.body == 'true');
@@ -214,7 +231,7 @@ class AuthenticationProvider with ChangeNotifier {
     /*check if user exists in the back end before as google/fb will just login, need 
     to register first*/
     var response = await http.get(
-      Uri.parse("http://192.168.0.11:3000/api/authentication/" +
+      Uri.parse("https://gel-backend.herokuapp.com/api/authentication/" +
           _auth.currentUser!.uid),
     );
     /*if the user exists then log in the user*/
@@ -237,7 +254,7 @@ class AuthenticationProvider with ChangeNotifier {
   }
 
   /*function that logsin with google*/
-  Future<void> loginWithGoogle() async {
+  Future<void> loginWithGoogle(BuildContext context) async {
     final AuthCredential credential = await _googleGetAuthCredential();
     try {
       await _auth.signInWithCredential(credential);
@@ -245,14 +262,21 @@ class AuthenticationProvider with ChangeNotifier {
       throw e.toString();
     }
     try {
+      CustomDialogs.authDiag(
+        context: context,
+        title: Text("Logging In"),
+        body: [Text("Please wait")],
+      );
       await _loginUser();
+      Navigator.of(context, rootNavigator: true).pop();
     } catch (e) {
+      Navigator.of(context, rootNavigator: true).pop();
       throw e.toString();
     }
   }
 
   /*function that logs in with facebook*/
-  Future<void> loginWithFacebook() async {
+  Future<void> loginWithFacebook(BuildContext context) async {
     final FacebookLoginResult result = await _facebookSignIn.logIn(['email']);
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
@@ -264,8 +288,15 @@ class AuthenticationProvider with ChangeNotifier {
           throw e.toString();
         }
         try {
+          CustomDialogs.authDiag(
+            context: context,
+            title: Text("Logging In"),
+            body: [Text("Please wait")],
+          );
           await _loginUser();
+          Navigator.of(context, rootNavigator: true).pop();
         } catch (e) {
+          Navigator.of(context, rootNavigator: true).pop();
           throw e.toString();
         }
         break;

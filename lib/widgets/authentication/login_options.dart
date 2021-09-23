@@ -30,7 +30,7 @@ class LoginOptions extends StatelessWidget {
             text: "Login with Facebook",
             onPressed: () async {
               try {
-                await _authenticationProvider.loginWithFacebook();
+                await _authenticationProvider.loginWithFacebook(context);
               } catch (e) {
                 String errMsg = e.toString();
                 return CustomDialogs.showMyDialogOneButton(
@@ -63,7 +63,7 @@ class LoginOptions extends StatelessWidget {
           child: GoogleAuthButton(
             onPressed: () async {
               try {
-                await _authenticationProvider.loginWithGoogle();
+                await _authenticationProvider.loginWithGoogle(context);
               } catch (e) {
                 String errMsg = e.toString();
                 if (errMsg != "Null check operator used on a null value") {

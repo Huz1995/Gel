@@ -60,7 +60,8 @@ class _ReviewWidgetState extends State<ReviewWidget> {
                         hasProfilePic:
                             (widget.review!.reviewerProfilePhotoUrl != null),
                         context: context,
-                        url: widget.review!.reviewerProfilePhotoUrl),
+                        url: widget.review!.reviewerProfilePhotoUrl,
+                        radius: 40),
                     SizedBox(
                       height: 10,
                     ),

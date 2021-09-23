@@ -43,7 +43,7 @@ class HairClientProfileProvider extends ChangeNotifier {
   Future<void> getUserDataFromBackend() async {
     /*issue a get req to hairClientProfile to get their information to display*/
     var response = await http.get(
-      Uri.parse("http://192.168.0.11:3000/api/hairClientProfile/" +
+      Uri.parse("https://gel-backend.herokuapp.com/api/hairClientProfile/" +
           _auth!.firebaseAuth.currentUser!.uid),
       headers: {
         HttpHeaders.authorizationHeader: _auth!.idToken,
@@ -83,9 +83,10 @@ class HairClientProfileProvider extends ChangeNotifier {
   /*function that takes in a name form edit profile widget and then stores in db*/
   Future<void> setName() async {
     await http.put(
-      Uri.parse("http://192.168.0.11:3000/api/hairClientProfile/setName/" +
-          _userProfile.uid +
-          "/"),
+      Uri.parse(
+          "https://gel-backend.herokuapp.com/api/hairClientProfile/setName/" +
+              _userProfile.uid +
+              "/"),
       body: {
         'name': _userProfile.name,
       },
@@ -115,7 +116,7 @@ class HairClientProfileProvider extends ChangeNotifier {
           /*send the url to backend and store in mongodb for persistance*/
           await http.put(
             Uri.parse(
-                "http://192.168.0.11:3000/api/hairClientProfile/profilepicture"),
+                "https://gel-backend.herokuapp.com/api/hairClientProfile/profilepicture"),
             body: {
               'uid': _userProfile.uid,
               'photoUrl': photoUrl,
@@ -139,7 +140,7 @@ class HairClientProfileProvider extends ChangeNotifier {
       /*remove from the database*/
       http.delete(
         Uri.parse(
-            "http://192.168.0.11:3000/api/hairClientProfile/profilepicture"),
+            "https://gel-backend.herokuapp.com/api/hairClientProfile/profilepicture"),
         body: {
           'uid': _userProfile.uid,
         },
@@ -166,7 +167,7 @@ class HairClientProfileProvider extends ChangeNotifier {
     /*just post the uid, the back end will fetch the profile when the client logs on*/
     await http.post(
       Uri.parse(
-          "http://192.168.0.11:3000/api/hairClientProfile/favouriteHairArtists"),
+          "https://gel-backend.herokuapp.com/api/hairClientProfile/favouriteHairArtists"),
       body: {
         'uid': _userProfile.uid,
         'favouriteHairArtists': hairArtist.uid,
@@ -183,7 +184,7 @@ class HairClientProfileProvider extends ChangeNotifier {
     _userProfile.removeFromFavourite(artistUID);
     await http.delete(
       Uri.parse(
-          "http://192.168.0.11:3000/api/hairClientProfile/favouriteHairArtists"),
+          "https://gel-backend.herokuapp.com/api/hairClientProfile/favouriteHairArtists"),
       body: {
         'uid': _userProfile.uid,
         'favouriteHairArtists': artistUID,
@@ -212,7 +213,8 @@ class HairClientProfileProvider extends ChangeNotifier {
     /*take the hair artist user profile and and the review object created by the hair client
     send to the back end so can store the review details in the hair artist profile*/
     var response = await http.post(
-      Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/review"),
+      Uri.parse(
+          "https://gel-backend.herokuapp.com/api/hairArtistProfile/review"),
       body: {
         'hairArtistUid': hairArtistUserProfile.uid,
         'score': review.score.toString(),
@@ -236,7 +238,8 @@ class HairClientProfileProvider extends ChangeNotifier {
   Future<void> removeReviewFromHairArtist(
       HairArtistUserProfile hairArtistUserProfile, Review review) async {
     await http.delete(
-      Uri.parse("http://192.168.0.11:3000/api/hairArtistProfile/review"),
+      Uri.parse(
+          "https://gel-backend.herokuapp.com/api/hairArtistProfile/review"),
       body: {
         'hairArtistUid': hairArtistUserProfile.uid,
         'reviewId': review.id,

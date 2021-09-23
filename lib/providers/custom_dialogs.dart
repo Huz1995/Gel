@@ -125,4 +125,30 @@ class CustomDialogs {
       },
     );
   }
+
+  static Future<void> authDiag({
+    BuildContext? context,
+    Widget? title,
+    List<Widget>? body,
+  }) async {
+    return showDialog<void>(
+      context: context!,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            title: title,
+            content: SingleChildScrollView(
+              child: Column(
+                children: body!,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

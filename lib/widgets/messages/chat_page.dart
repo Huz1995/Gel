@@ -42,7 +42,7 @@ class _ChatPageState extends State<ChatPage> {
     animateListViewToBottom();
     /*start a new socket*/
     try {
-      _socket = IO.io("http://192.168.0.11:3000", <String, dynamic>{
+      _socket = IO.io("https://gel-backend.herokuapp.com", <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': false,
       });
@@ -174,15 +174,15 @@ class _ChatPageState extends State<ChatPage> {
                     padding: EdgeInsets.only(
                         left: 16, right: 16, top: 10, bottom: 10),
                     child: Align(
-                      alignment: (messages[index].receiverUID ==
-                              widget.metaChatData!.receiverUID
+                      alignment: (messages[index].senderUID ==
+                              widget.metaChatData!.senderUID
                           ? Alignment.topRight
                           : Alignment.topLeft),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: (messages[index].receiverUID ==
-                                  widget.metaChatData!.receiverUID
+                          color: (messages[index].senderUID ==
+                                  widget.metaChatData!.senderUID
                               ? Theme.of(context).accentColor.withOpacity(0.5)
                               : Theme.of(context)
                                   .primaryColor

@@ -38,10 +38,11 @@ class FavouriteWidget extends StatelessWidget {
       child: Container(
         //padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
         child: Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.fromLTRB(1, 10, 1, 10),
           height: 100,
+          width: double.infinity,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(0),
             color: Theme.of(context).primaryColor.withOpacity(0.5),
           ),
           child: Row(
